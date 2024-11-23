@@ -31,18 +31,18 @@
 <script setup>
 import { ElMessage } from 'element-plus';
 import { ref } from 'vue';
-import { loginAPI } from '@/apis/user'
+import { useUserStore } from '@/stores/userStore';
 import 'element-plus/theme-chalk/el-message.css';
 import router from '@/router';
 
 const formRef = ref(null)
+const userStore = useUserStore()
 
 const user_form = ref({
     email: '',
     password: '',
 })
 
-// 定义规则，还有不完善的地方
 const rules = {
     email: [
         { required: true, message: "用户名不能为空", trigger: 'blur'}
@@ -53,13 +53,12 @@ const rules = {
 }
 
 
-// 表单校验，如果输入的账号和密码符合规则就提交
+// 登陆函数
 const doLogin = () => {
     const { email, password } = user_form.value
     formRef.value.validate(async (valid) => {
         if (valid) {
-            const res = await loginAPI({email, password})
-            console.log(res)
+            await userStore.getUserInfo({email, password})
             ElMessage({ type: "success", message: "登陆成功"})
             router.replace({path: '/'})
         }

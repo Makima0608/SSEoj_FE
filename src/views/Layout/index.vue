@@ -1,14 +1,12 @@
 <!-- eslint-disable vue/multi-word-component-names -->
  
 <script setup>
-
+import layoutNav from '@/views/Layout/components/layoutNav.vue'
 </script>
 
 <template>
-    <div>
-        我是主页
-    </div>
-    <a href="#" @click="$router.push('login')">登陆</a>
+    <layoutNav />
+    <router-view />
 </template>
 
 <style scoped>

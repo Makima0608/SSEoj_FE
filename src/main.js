@@ -5,7 +5,8 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
-import './mock/mock'
+import './mock/login'
+import './mock/problemset'
 
 const app = createApp(App)
 

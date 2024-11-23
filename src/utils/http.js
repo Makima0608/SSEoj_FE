@@ -14,21 +14,22 @@ httpInstance.interceptors.request.use(config => {
 
 httpInstance.interceptors.response.use(
     res => {
-        if (res.data.code != 200) {
+        if (res.data.err != null) {
             ElMessage({
                 type: 'warning',
-                message: res.data.message   //根据api更改
+                message: res.data.msg   //根据api更改
             })
             return Promise.reject(res)
         }
-        else
+        else {
+            console.log(res.data)
             return res.data
-            
+        }  
     }, 
     e => {
     ElMessage({
         type: 'warning',
-        message: e.response.data.message   //根据api更改
+        message: e.response.data.msg   //根据api更改
     })
     console.log(e)
     return Promise.reject(e)
