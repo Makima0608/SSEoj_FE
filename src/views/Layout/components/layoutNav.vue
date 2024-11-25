@@ -7,7 +7,7 @@
             <el-menu-item index="/problemlist">题单</el-menu-item>
             <el-menu-item index="/discussion">讨论</el-menu-item>
         </el-menu>
-        <template v-if="flag">
+        <template v-if="userStore.isAuthenticated()">
             <div class="userInfo">
                 <el-popover :show-arrow="false">
                     <template #reference>
@@ -28,24 +28,20 @@
         <template v-else>
             <ul class="notAuth">
                 <a href="/login">登录</a>
-                <a href="/login">注册</a>
                 <a href="#">帮助</a>
             </ul>
         </template>
 
     </div>
-    <button @click="console.log($route.path)">1111</button>
-
-    <!-- <el-avatar :size="80" class="avatar" /> -->
+    <button @click="console.log(!!userStore.userInfo.value)">
+        111
+    </button>
 </template>
 
 <script setup>
 import { useUserStore } from '@/stores/userStore';
 import { ref } from 'vue';
 const userStore = useUserStore()
-
-// 暂时代替是否登录的变量
-const flag = ref(true) 
 
 </script>
 
@@ -54,12 +50,13 @@ const flag = ref(true)
     display: flex;
     justify-content: space-between;
     margin-top: 60px;
+    margin-bottom: 20px;
     margin-left: auto;
     margin-right: auto;
     background-color: #282727;
     border-radius: 10px;
     width: 85%;
-    min-width: 600px;
+    min-width: 800px;
 }
 
 .el-menu {

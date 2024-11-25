@@ -15,10 +15,17 @@ export const useUserStore = defineStore('user', () => {
         userInfo.value = {}
     }
 
+    const isAuthenticated = () => {
+        return !!userInfo.value && !!userInfo.value.id
+    }
+
     return {
         userInfo,
         getUserInfo,
-        clearUserInfo
+        clearUserInfo,
+        isAuthenticated,
     }
 
+}, {
+    persist: true,
 })

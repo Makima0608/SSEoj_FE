@@ -8,7 +8,7 @@ Mock.mock('http://localhost:8000/api/identity/login/', 'post', (options) => {
       err: null,
       data: {
         id: 1,
-        name: 'Chitanda'
+        username: 'Chitanda'
       }
     };
   } else {
