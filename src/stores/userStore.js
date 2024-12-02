@@ -15,6 +15,7 @@ export const useUserStore = defineStore('user', () => {
 
     const clearUserInfo = () => {
         userInfo.value = {}
+
     }
 
     const isAuthenticated = () => {
