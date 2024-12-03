@@ -5,6 +5,8 @@ import Home from '@/views/Home/index.vue'
 import ProblemSet from '@/views/ProblemSet/index.vue'
 import ProblemList from '@/views/ProblemList/index.vue'
 import Discussion from '@/views/Discussion/index.vue'
+import Problem from '@/views/Problem/index.vue'
+import NotFound from '@/views/General/NotFound.vue'
 
 
 const router = createRouter({
@@ -36,6 +38,14 @@ const router = createRouter({
       path: '/login',
       component: Login,
     },
+    {
+      path: '/problem/:id',
+      component: Problem,
+    },
+    {
+      path: '/:patchMatch(.*)*',
+      component: NotFound
+    }
   ],
 })
 

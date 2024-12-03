@@ -84,7 +84,7 @@ const doLogin = () => {
     const { email, password } = user_form.value
     formRef.value.validate(async (valid) => {
         if (valid) {
-            await userStore.getUserInfo({ email, password })
+            await userStore.getUserInfo(email, password)
             ElMessage({ type: "success", message: "登陆成功" })
             router.replace({ path: '/' })
         }

@@ -14,7 +14,7 @@
             </div>
             <div class="problemset">
                 <div class="table">
-                    <el-table :data="problemset" stripe :row-style="{ height: '70px' }">
+                    <el-table :data="problemsetStore.problemset" stripe :row-style="{ height: '70px' }" @row-click="rowSelected">
                         <el-table-column prop="status" label="Status" width="80" />
                         <el-table-column prop="problem_id" label="Id" width="120" />
                         <el-table-column prop="problem_name" label="Name" />
@@ -29,40 +29,64 @@
                     </el-table>
                 </div>
                 <div class="pagination">
-                    <el-pagination layout="prev, pager, next, jumper" v-model:current-page="currentPage" :total="total"
-                        :background="true" :page-size="pageSize" />
+                    <el-pagination layout="prev, pager, next, jumper" v-model:current-page="currentPage" :total="problemsetStore.total"
+                        :background="true" :page-size="pageSize" @current-change="handleCurrentChange" />
                 </div>
             </div>
         </div>
-
     </div>
+    <el-button @click="console.log(query)">route</el-button>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
-import { getProblemAPI } from '@/apis/problemset'
-import { getDifficultColor } from '@/utils/color';
+import { computed, onMounted, ref } from 'vue';
+import { useProblemsetStore } from '@/stores/problemsetStore';
+import { getDifficultColor } from '@/utils/color'
+import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 
-const problemset = ref([])
-const total = ref(100)
+const router = useRouter()
+const problemsetStore = useProblemsetStore()
+
 const currentPage = ref(1)
-const pageSize = ref(50)
+const pageSize = ref(30)
+const keyword = ref(undefined)
+const min_diff = ref(undefined), max_diff = ref(undefined)
+const tags = ref(undefined)
 
-const getProblemSet = async () => {
-    const res = await getProblemAPI()
-    console.log(res)
-    total.value = res.data.total
-    problemset.value = res.data.problems
-}
+const query = useRoute().query
+
+const params = computed(() => ({
+    page_num: currentPage.value || 1,
+    page_size: pageSize.value || 30,
+    keyword: keyword.value || undefined,
+    min_difficulty: min_diff.value || undefined,
+    max_difficulty: max_diff.value || undefined,
+    tags: tags.value || undefined
+}))
+
+
 
 onMounted(() => {
-    getProblemSet()
+    problemsetStore.getProblemSet(params.value)
 })
+
+
 
 const searchBoxRef = ref(null)
 const changeWidth = () => {
     searchBoxRef.value.style.width = '300px'
     console.log(11)
+}
+
+const handleCurrentChange = (val) => {
+    console.log(`current page: ${val}`)
+    console.log(params.value);
+    problemsetStore.getProblemSet(params.value)
+}
+
+const rowSelected = (row) => {
+    router.replace(`/problem/${row.problem_id}`)
 }
 
 
@@ -97,6 +121,7 @@ const changeWidth = () => {
     z-index: 1000;
     flex-shrink: 1;
 }
+
 /* .search-box{
     width: 100px;
     height: 40px;
@@ -132,7 +157,7 @@ const changeWidth = () => {
     flex-direction: column;
     justify-content: space-between;
     width: 99%;
-    padding:0px auto;
+    padding: 0px auto;
 }
 
 .table {
@@ -142,7 +167,8 @@ const changeWidth = () => {
     padding: 20px 20px 30px 20px;
     position: relative;
 }
-.el-table{
+
+.el-table {
     width: 99%;
 }
 

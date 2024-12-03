@@ -29,9 +29,9 @@ export default defineConfig({
     proxy: {
       // 代理所有 /api 开头的请求到后端服务器
       '/api': {
-        target: 'http://192.168.74.173:8000',
+        target: 'http://192.168.12.145:8080',
         changeOrigin: true, // 允许不同源
-        rewrite: (path) => path.replace(/^\/api/, '') // 重写路径，去掉 /api 前缀
+        // rewrite: (path) => path.replace(/^\/api/, '') 
       }
     }
   }

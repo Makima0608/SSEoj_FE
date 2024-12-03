@@ -6,7 +6,7 @@ import router from '@/router';
 
 
 const httpInstance = axios.create({
-    baseURL: 'http://localhost:8000',
+    baseURL: 'http://localhost:8080',
     timeout: 5000,
 })
 
@@ -19,7 +19,7 @@ httpInstance.interceptors.response.use(
         if (res.data.err != null) {
             ElMessage({
                 type: 'warning',
-                message: res.data.msg   //根据api更改
+                message: res.data.msg   
             })
             return Promise.reject(res)
         }
@@ -30,15 +30,15 @@ httpInstance.interceptors.response.use(
     },
     e => {
         const useStore = useUserStore()
+        console.log(e.response)
         ElMessage({
             type: 'warning',
-            message: e.response.data.msg   //根据api更改
+            message: e.response.data.msg   
         })
         if (e.response.state === 401) {
             useStore.clearUserInfo()
             router.push('/')
         }
-        console.log(e)
         return Promise.reject(e)
     })
 

@@ -1,7 +1,7 @@
 import Mock from 'mockjs';
 
 // 模拟登录接口
-Mock.mock('http://localhost:8000/api/identity/login/', 'post', (options) => {
+Mock.mock('http://localhost:8080/api/identity/login/', 'post', (options) => {
   const body = JSON.parse(options.body);
   if (body.email === 'admin' && body.password === '123456') {
     return {

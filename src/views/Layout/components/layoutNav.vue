@@ -1,4 +1,5 @@
 <template>
+    <div class="title">SSEOJ</div>
     <div class="header">
         <el-menu mode="horizontal" :default-active="$route.path" router="true" background-color="#282727"
             text-color="#ffffff" active-text-color="#ffffff" :ellipsis="false">
@@ -11,18 +12,18 @@
             <div class="userInfo">
                 <el-popover :show-arrow="false">
                     <template #reference>
-                        <el-avatar src="https://avatars.githubusercontent.com/u/72015883?v=4" :size="60" />
+                        <el-avatar :src="userStore.getAvatar()" :size="60" fit="fill" />
                     </template>
                     <template #default>
                         <div class="avatarDropdown">
-                            <p><a href="#">111</a></p>
-                            <p><a href="#">222</a></p>
-                            <p><a href="#">333</a></p>
-                            <p><a href="#">444</a></p>
+                            <p>111</p>
+                            <p>222</p>
+                            <p>333</p>
+                            <p @click="logout">退出登录</p>
                         </div>
                     </template>
                 </el-popover>
-                <span>Chitanda</span>
+                <span>{{ userStore.userInfo.user_name }}</span>
             </div>
         </template>
         <template v-else>
@@ -31,25 +32,29 @@
                 <a href="#">帮助</a>
             </ul>
         </template>
-
     </div>
-    <button @click="console.log(!!userStore.userInfo.value)">
-        111
-    </button>
 </template>
 
 <script setup>
 import { useUserStore } from '@/stores/userStore';
 import { ref } from 'vue';
 const userStore = useUserStore()
+const logout = () => {
+    userStore.clearUserInfo()
+}
 
 </script>
 
 <style scoped>
+.title{
+    width: 85%;
+    font-size: 30px;
+    margin: 5px auto 5px auto;
+}
 .header {
     display: flex;
     justify-content: space-between;
-    margin-top: 60px;
+    margin-top: 15px;
     margin-bottom: 20px;
     margin-left: auto;
     margin-right: auto;
@@ -96,17 +101,14 @@ const userStore = useUserStore()
     justify-content: center;
     border-radius: 5px;
     height: 50px;
+    color: #333;
+    cursor: pointer;
 }
 
 .avatarDropdown p:hover {
     background-color: rgba(20, 20, 20, 0.4);
 }
 
-
-.avatarDropdown a {
-    text-decoration: none;
-    color: #333;
-}
 
 .userInfo {
     display: flex;

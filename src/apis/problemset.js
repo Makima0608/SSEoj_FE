@@ -1,11 +1,8 @@
 import request from '@/utils/http'
 
-export const getProblemAPI = () => {
+export const getProblemSetAPI = (params) => {
     return request({
         url: '/api/problemset/',
-        params: {
-            page: null,
-            page_size: 20,
-        }
+        params ,
     })
 }   
