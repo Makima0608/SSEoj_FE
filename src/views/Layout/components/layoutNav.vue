@@ -50,6 +50,7 @@ const logout = () => {
     width: 85%;
     font-size: 30px;
     margin: 5px auto 5px auto;
+    height: 36px
 }
 .header {
     display: flex;
@@ -62,6 +63,7 @@ const logout = () => {
     border-radius: 10px;
     width: 85%;
     min-width: 800px;
+    height: 60px
 }
 
 .el-menu {

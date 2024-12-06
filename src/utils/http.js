@@ -24,13 +24,13 @@ httpInstance.interceptors.response.use(
             return Promise.reject(res)
         }
         else {
-            console.log(res.data)
+            // console.log(res.data)
             return res.data
         }
     },
     e => {
         const useStore = useUserStore()
-        console.log(e.response)
+        // console.log(e.response)
         ElMessage({
             type: 'warning',
             message: e.response.data.msg   

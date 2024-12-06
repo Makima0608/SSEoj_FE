@@ -7,6 +7,9 @@ import ProblemList from '@/views/ProblemList/index.vue'
 import Discussion from '@/views/Discussion/index.vue'
 import Problem from '@/views/Problem/index.vue'
 import NotFound from '@/views/General/NotFound.vue'
+import Description from '@/views/Problem/components/description.vue'
+import Submissions from '@/views/Problem/components/submissions.vue'
+import Solutions from '@/views/Problem/components/solutions.vue'
 
 
 const router = createRouter({
@@ -41,6 +44,24 @@ const router = createRouter({
     {
       path: '/problem/:id',
       component: Problem,
+      children: [
+        {
+          path: '/problem/:id/',
+          component: Description
+        },
+        {
+          path: '/problem/:id/description',
+          component: Description,
+        },
+        {
+          path: '/problem/:id/submissions',
+          component: Submissions,
+        },
+        {
+          path: '/problem/:id/solutions',
+          component: Solutions,
+        }
+      ]
     },
     {
       path: '/:patchMatch(.*)*',

@@ -1,0 +1,23 @@
+{
+  "id": "4769613",
+  "name": "demo-oj",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "25964417",
+      "name": "复制",
+      "font_class": "fuzhi",
+      "unicode": "e65f",
+      "unicode_decimal": 58975
+    },
+    {
+      "icon_id": "11056884",
+      "name": "添加文件",
+      "font_class": "tianjiawenjian",
+      "unicode": "e66a",
+      "unicode_decimal": 58986
+    }
+  ]
+}

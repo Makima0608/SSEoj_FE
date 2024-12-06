@@ -86,7 +86,7 @@ const handleCurrentChange = (val) => {
 }
 
 const rowSelected = (row) => {
-    router.replace(`/problem/${row.problem_id}`)
+    router.replace(`/problem/${row.problem_id}/description`)
 }
 
 
