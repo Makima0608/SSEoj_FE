@@ -1,12 +1,14 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 
 <template>
+
     <div class="pCard">
         <div class="cardLeft">
             <div class="pId">{{ id }}</div>
-            <div class="pName" :style="{'border-bottom': `3px solid ${getDifficultColor(difficulty)}`}">{{ name }}</div>
+            <div class="pName" :style="{ 'border-bottom': `3px solid ${getDifficultColor(difficulty)}` }">{{ name }}</div>
             <div class="source">题目来源：{{ source }}</div>
-            <div class="difficulty">难度：<span :style="{'color': `${getDifficultColor(difficulty)}`}">Lv.{{ difficulty }}</span></div>
+            <div class="difficulty">难度：<span :style="{ 'color': `${getDifficultColor(difficulty)}` }">Lv.{{ difficulty
+                    }}</span></div>
         </div>
 
         <div class="cardRight">
@@ -37,14 +39,14 @@
         <div v-for="(item, index) in inputs" :key="index" class="sampleBox">
             <div class="inputs">
                 <span>Input #{{ index }}</span>
-                <span class="iconfont icon-fuzhi" @click="copyText(item)"></span>
+                <span class="iconfont icon-fuzhi" style="cursor: pointer;" @click="copyText(item)"></span>
             </div>
-            <div class="sample">{{ item }}</div>
+            <div class="sample" style="font-size: 14px;">{{ item }}</div>
             <div class="outputs">
                 <span>Output #{{ index }}</span>
-                <span class="iconfont icon-fuzhi" @click="copyText(outputs[index])"></span>
+                <span class="iconfont icon-fuzhi" style="cursor: pointer;" @click="copyText(outputs[index])"></span>
             </div>
-            <div class="sample">{{ outputs[index] }}</div>
+            <div class="sample" style="font-size: 14px;">{{ outputs[index] }}</div>
         </div>
     </div>
     <el-divider style="margin-bottom: 10px;" />
@@ -54,23 +56,29 @@
                 <template #title>
                     <div class="node" style="">标签</div>
                 </template>
-                <span v-for="(tag_index, index) in tags" :key="index" class="tag"> {{ tagsStore.idToTags[tag_index].name
-                    }} </span>
+                <!-- <el-tag v-for="(tag_index, index) in tags" :key="index" type="info"
+                :disable-transitions="true" color="#EAEAEA">
+                    {{ tagsStore.idToTags[tag_index]?.name }}
+                </el-tag> -->
+                <el-tag v-for="(tag_index, index) in tags" :key="index" type="info"
+                :disable-transitions="true" color="#EAEAEA">
+                    {{ tagsStore.idToTags[tag_index]?.name }}
+                </el-tag>
+
             </el-collapse-item>
         </el-collapse>
     </div>
 </template>
 
 <script setup>
-import '@/assets/icon/iconfont.css'
-
 import { useRoute } from 'vue-router';
 import { useProblemDescStore } from '@/stores/problemStore';
-import { computed, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { transTime, transMem } from '@/utils/data_calculate';
 import { ElMessage } from 'element-plus';
 import { useTagsStore } from '@/stores/tagsStore';
 import { getDifficultColor } from '@/utils/color';
+import '@/assets/base-el-tag.css'
 
 const route = useRoute()
 const id = route.params.id
@@ -88,12 +96,6 @@ const inputs = ref()
 const outputs = ref()
 const tags = ref()
 
-const diffColor =  computed(() => {
-    console.log({'border-bottom': '1px solid' + getDifficultColor(4)})
-    return {
-        'border-bottom': '1px solid' + getDifficultColor(4)
-    }
-})
 
 const tagsStore = useTagsStore()
 
@@ -149,7 +151,8 @@ const copyText = async (txt) => {
 .cardLeft {
     display: flex;
     flex-direction: column;
-    width: 250px;
+    flex: 1;
+    padding-right: 30px;
 }
 
 .cardRight {
@@ -160,6 +163,7 @@ const copyText = async (txt) => {
 
 .pId {
     font-size: 20px;
+    margin-bottom: 5px;
 }
 
 .pName {
@@ -169,7 +173,8 @@ const copyText = async (txt) => {
     margin-bottom: 6px;
 }
 
-.source, .difficulty {
+.source,
+.difficulty {
     color: #696666;
     font-size: 15px;
 }
@@ -199,9 +204,9 @@ const copyText = async (txt) => {
     margin-bottom: 10px;
 }
 
-.node ~ div {
-    margin-left:10px;
-    margin-right:10px;
+.node~div {
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .node::before {
@@ -232,11 +237,10 @@ const copyText = async (txt) => {
     padding-right: 10px;
 }
 
-.tag {
-    display: inline-block;
-    background-color: #EAEAEA;
+.el-tag {
+    /* background-color: #EAEAEA; */
     border-radius: 8px;
-    padding: 2px 10px 2px 10px;
+    padding: 4px 10px 4px 10px;
     margin: 4px 4px 4px 4px;
     color: black;
 }

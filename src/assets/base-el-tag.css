@@ -1,0 +1,13 @@
+.el-tag {
+    background-color: var(--bg-color, #EAEAEA);
+    border-radius: 10px;
+    padding: 2px 6px 2px 6px;
+    margin-right: 6px;
+    color: black;
+    font-size: 12px;
+}
+
+.el-tag span {
+    padding: 0px;
+    margin: 0px;
+}

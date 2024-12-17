@@ -6,17 +6,25 @@
     font-family: 'Poppins',sans-serif;
 }
 
+.container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    /* background-color: aqua; */
+}
+
 header{
-    position: fixed;
     top:0;
     left: 0;
-    width: 100%;
-    padding: 20px 100px;
+    width: 100vw;
+    padding: 10px 100px;
     background: black;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 99;
+    /* z-index: 99; */
+    transform: translate(-8px, -8px);
 }
 
 body{
@@ -25,6 +33,14 @@ body{
     align-items: center;
     min-height: 100vh;
     background: rgba(255, 255, 255, 0.85);
+}
+
+
+.pane {
+    flex: 1;
+    position: relative;
+    min-height: 660px;
+    min-width: 600px;
 }
 
 .logo{
@@ -36,8 +52,7 @@ body{
 .wrapper{
     left: 50%;
     top: 50%;
-    margin-left: -250px;
-    margin-top: -300px ;
+    transform: translate(-50%, -50%);
     position: absolute;
     width: 550px;
     height: 440px;
@@ -50,8 +65,7 @@ body{
     justify-content: center;
     align-items:center;
     overflow: hidden;
-    transition: height .2s ease;
-    
+    transition: height .2s ease; 
 }
 
 .wrapper.active{
@@ -184,7 +198,8 @@ body{
 
 
 .remember_forgot{
-    font-size: .4em;
+    /* font-size: .4em; */
+    font-size: 10px;
     color: #162938;
     font-weight: 500;
     margin: -15px 0 15px;

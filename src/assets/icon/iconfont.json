@@ -6,6 +6,48 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "42770219",
+      "name": "Comment",
+      "font_class": "comment",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "42769882",
+      "name": "BxsLike",
+      "font_class": "BxsLike",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "42769866",
+      "name": "BxLike",
+      "font_class": "BxLike",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "249349",
+      "name": "LOCK",
+      "font_class": "lock",
+      "unicode": "e69e",
+      "unicode_decimal": 59038
+    },
+    {
+      "icon_id": "34485071",
+      "name": "清空",
+      "font_class": "qingkong",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "5849191",
+      "name": "搜索",
+      "font_class": "sousuo",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
       "icon_id": "25964417",
       "name": "复制",
       "font_class": "fuzhi",
