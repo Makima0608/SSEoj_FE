@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { getProblemListAPI } from "@/apis/problemlist";
 import { ref } from "vue";
 
-export const useProblemlistStore = defineStore('problemset', () => {
+export const useProblemlistStore = defineStore('problemlist', () => {
     const problemlist = ref([])
     const count = ref(0)
 

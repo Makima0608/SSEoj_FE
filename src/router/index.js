@@ -13,6 +13,7 @@ import Solutions from '@/views/Problem/components/solutions.vue'
 import Detail from '@/views/Discussion/detail.vue'
 import User from '@/views/User/index.vue'
 import CreateSolution from '@/views/Solution/createSolution.vue'
+import ProblemlistDetail from '@/views/ProblemList/problemlistDetail.vue'
 
 
 const router = createRouter({
@@ -66,6 +67,10 @@ const router = createRouter({
           component: Solutions,
         }
       ]
+    },
+    {
+      path: '/problemlist/:id',
+      component: ProblemlistDetail
     },
     {
       path: '/user/:id',

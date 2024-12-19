@@ -11,25 +11,34 @@ Mock.mock(/\/api\/problemlist\//, 'get', (options) => {
         return {
             err: null,
             data: {
-                count: 100,
+                "count": 69,
                 "problemlists": [
                     {
-                        "id": 69,
-                        "title": "舞在勇敢舞",
-                        "creator": "ad mollit sed sit",
-                        "problem_count": 52,
-                        "pass_count": 35,
-                        "star_count": 75
+                        "id": 92,
+                        "title": "捶反而此外在惟独圆礼帽可",
+                        "is_star": true,
+                        "user_info": {
+                            "id": 35,
+                            "username": "季建华",
+                            "avatar": "https://avatars.githubusercontent.com/u/37509958"
+                        },
+                        "problem_count": 71,
+                        "pass_count": 60,
+                        "star_count": 25
                     },
                     {
-                        "id": 58,
-                        "title": "嗯最清楚关于每好啊",
-                        "creator": "magna et tempor ad dolor",
-                        "problem_count": 85,
-                        "pass_count": 45,
-                        "star_count": 5
-                    },
-
+                        "id": 42,
+                        "title": "吞倘若喔耶在喔耶",
+                        "is_star": false,
+                        "user_info": {
+                            "id": 100,
+                            "username": "析奕辰",
+                            "avatar": "https://avatars.githubusercontent.com/u/54099049"
+                        },
+                        "problem_count": 70,
+                        "pass_count": 54,
+                        "star_count": 65
+                    }
                 ]
             }
         }
@@ -42,9 +51,14 @@ Mock.mock(/\/api\/problemlist\//, 'get', (options) => {
                 problemlists: [{
                     "id": 45,
                     "title": "尽管虽然扔年度只要全滑撑挖",
-                    "creator": "Duis fugiat id",
+                    "is_star": true,
+                    "user_info": {
+                        "id": 35,
+                        "username": "季建华",
+                        "avatar": "https://avatars.githubusercontent.com/u/37509958"
+                    },
                     "problem_count": 58,
-                    "pass_count": 71,
+                    "pass_count": 10,
                     "star_count": 43
                 }
                 ]

@@ -38,8 +38,8 @@ Mock.mock(/\/api\/problemset\//, 'get', (options) => {
                 count: 100,
                 problems: [{
                     "status": true,
-                    "problem_id": 1002,
-                    "problem_name": "A+B",
+                    "id": 1002,
+                    "name": "A+B",
                     "tags": [
                         3,
                         4

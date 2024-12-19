@@ -23,14 +23,15 @@
 
             <div class="problemset">
                 <div class="table">
-                    <el-table :data="problemsetStore.problemset" stripe :row-style="{ height: '70px' }"
+                    <el-table :data="problemset" stripe :row-style="{ height: '70px' }"
                         @row-click="rowSelected">
                         <el-table-column prop="status" label="状态" width="80" />
                         <el-table-column prop="id" label="编号" width="120" />
-                        <el-table-column prop="id" label="题目名称" />
+                        <el-table-column prop="name" label="题目名称" />
                         <el-table-column label="标签">
                             <template #default="scope">
-                                <span v-for="tagId in scope.row.tags" :key="tagId">{{ tagsStore.idToTag(tagId)+ " " }}</span>
+                                <span v-for="tagId in scope.row.tags" :key="tagId">{{ tagsStore.idToTag(tagId) + " "
+                                    }}</span>
                             </template>
                         </el-table-column>
                         <el-table-column label="通过率">
@@ -49,7 +50,7 @@
                 </div>
                 <div class="pagination">
                     <el-pagination layout="prev, pager, next, jumper" v-model:current-page="currentPage"
-                        :total="problemsetStore.count" :background="true" :page-size="pageSize"
+                        :total="problemCount" :background="true" :page-size="pageSize"
                         @current-change="handleCurrentChange" />
                 </div>
             </div>
@@ -59,16 +60,23 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
-import { useProblemsetStore } from '@/stores/problemsetStore';
+import { computed, onMounted, ref } from 'vue';
+import { getProblemSetAPI } from "@/apis/problemset";
 import { useTagsStore } from '@/stores/tagsStore';
 import { getDifficultColor } from '@/utils/color'
 import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
-const problemsetStore = useProblemsetStore()
 const tagsStore = useTagsStore()
+const problemset = ref([])
+const problemCount = ref(0)
+
+const getProblemSet = async (params) => {
+    const res = await getProblemSetAPI(params)
+    problemCount.value = res.data.count
+    problemset.value = res.data.problems
+}
 
 // 筛选参数
 const currentPage = ref(1)
@@ -123,24 +131,19 @@ const handleOutSideClick = (e) => {
 
 document.addEventListener('click', handleOutSideClick)
 
-const handleCurrentChange = (val) => {
-    console.log(`current page: ${val}`)
-    console.log(params.value);
-    problemsetStore.getProblemSet(params.value)
+const handleCurrentChange = async () => {
+    await getProblemSet(params.value)
 }
 
 const rowSelected = (row) => {
-    router.replace(`/problem/${row.problem_id}/description`)
+    router.push(`/problem/${row.id}/description`)
 }
 
-onMounted(async() => {
-    await problemsetStore.getProblemSet(params.value)
+onMounted(async () => {
+    await getProblemSet(params.value)
     await tagsStore.getTags()
 })
 
-onBeforeUnmount(() => {
-    document.removeEventListener('click', handleOutSideClick)
-})
 
 </script>
 
