@@ -5,10 +5,10 @@
         <div class="container">
             <div class="filter">
                 <div class="search-box" :style="isSearchActive" ref="searchBoxRef" @click="toggleSearchBox">
-                    <!-- <div class="textInput"> -->
                     <span class="iconfont icon-sousuo"></span>
                     <span class="filter-text">搜索</span>
-                    <input class="searchInput" type="text" style="display: none;" placeholder="search something..." v-model="keyword" @keydown.enter="console.log('search', keyword)"/>
+                    <input class="searchInput" type="text" style="display: none;" placeholder="search something..."
+                        v-model="keyword" @keydown.enter="console.log('search', keyword)" />
                     <!-- </div> -->
                 </div>
                 <div class="diff-Filter">
@@ -25,12 +25,21 @@
                 <div class="table">
                     <el-table :data="problemsetStore.problemset" stripe :row-style="{ height: '70px' }"
                         @row-click="rowSelected">
-                        <el-table-column prop="status" label="Status" width="80" />
-                        <el-table-column prop="problem_id" label="Id" width="120" />
-                        <el-table-column prop="problem_name" label="Name" />
-                        <el-table-column prop="tags" label="Tags" />
-                        <el-table-column prop="pass_rate" label="PassRate" />
-                        <el-table-column label="Difficulty">
+                        <el-table-column prop="status" label="状态" width="80" />
+                        <el-table-column prop="id" label="编号" width="120" />
+                        <el-table-column prop="id" label="题目名称" />
+                        <el-table-column label="标签">
+                            <template #default="scope">
+                                <span v-for="tagId in scope.row.tags" :key="tagId">{{ tagsStore.idToTag(tagId)+ " " }}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="通过率">
+                            <template #default="scope">
+                                <span>{{ (scope.row.pass_count / scope.row.attempt_count * 100).toFixed(1) + '%'
+                                    }}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="难度">
                             <template #default="scope">
                                 <span :style="{ color: getDifficultColor(scope.row.difficulty) }">Lv.{{
                                     scope.row.difficulty }}</span>
@@ -40,7 +49,7 @@
                 </div>
                 <div class="pagination">
                     <el-pagination layout="prev, pager, next, jumper" v-model:current-page="currentPage"
-                        :total="problemsetStore.total" :background="true" :page-size="pageSize"
+                        :total="problemsetStore.count" :background="true" :page-size="pageSize"
                         @current-change="handleCurrentChange" />
                 </div>
             </div>
@@ -52,12 +61,14 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useProblemsetStore } from '@/stores/problemsetStore';
+import { useTagsStore } from '@/stores/tagsStore';
 import { getDifficultColor } from '@/utils/color'
 import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
 const problemsetStore = useProblemsetStore()
+const tagsStore = useTagsStore()
 
 // 筛选参数
 const currentPage = ref(1)
@@ -122,8 +133,9 @@ const rowSelected = (row) => {
     router.replace(`/problem/${row.problem_id}/description`)
 }
 
-onMounted(() => {
-    problemsetStore.getProblemSet(params.value)
+onMounted(async() => {
+    await problemsetStore.getProblemSet(params.value)
+    await tagsStore.getTags()
 })
 
 onBeforeUnmount(() => {

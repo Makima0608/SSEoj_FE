@@ -16,6 +16,7 @@ httpInstance.interceptors.request.use(config => {
 
 httpInstance.interceptors.response.use(
     res => {
+        console.log(res)
         if (res.data.err != null) {
             ElMessage({
                 type: 'warning',

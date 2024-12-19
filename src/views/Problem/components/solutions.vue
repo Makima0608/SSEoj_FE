@@ -10,7 +10,6 @@
             <div v-if="selectedTag.length" class="tagNum">{{ selectedTag.length }}</div>
         </div>
         <div class="postSolutionBtn" @click="postSolution">发布题解</div>
-
     </div>
     <div v-if="isPageReady">
         <el-scrollbar>
@@ -101,9 +100,6 @@ const search = async () => {
     reqData.value.page = 1
     await getSolutionList(id, reqData.value)
     isPageReady.value = true
-    // nextTick(() => {
-    //     infiniteScrollRef.value.scrollTo({top: 0, behavior: 'smooth'})
-    // })
 }
 
 const loadSolutions = async () => {

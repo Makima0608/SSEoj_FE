@@ -11,6 +11,7 @@ import Description from '@/views/Problem/components/description.vue'
 import Submissions from '@/views/Problem/components/submissions.vue'
 import Solutions from '@/views/Problem/components/solutions.vue'
 import User from '@/views/User/index.vue'
+import CreateSolution from '@/views/Solution/createSolution.vue'
 
 
 const router = createRouter({
@@ -67,6 +68,10 @@ const router = createRouter({
     {
       path: '/user/:id',
       component: User,
+    },
+    {
+      path: '/solution/:id',
+      component: CreateSolution
     },
     {
       path: '/:patchMatch(.*)*',

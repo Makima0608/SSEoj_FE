@@ -1,7 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 
 <template>
-
     <div class="pCard">
         <div class="cardLeft">
             <div class="pId">{{ id }}</div>
@@ -15,9 +14,7 @@
             <div>时间限制：{{ timeLimit }}</div>
             <div>内存限制：{{ memLimit }}</div>
         </div>
-
     </div>
-
 
     <div>
         <div class="node">题目描述</div>
@@ -56,10 +53,6 @@
                 <template #title>
                     <div class="node" style="">标签</div>
                 </template>
-                <!-- <el-tag v-for="(tag_index, index) in tags" :key="index" type="info"
-                :disable-transitions="true" color="#EAEAEA">
-                    {{ tagsStore.idToTags[tag_index]?.name }}
-                </el-tag> -->
                 <el-tag v-for="(tag_index, index) in tags" :key="index" type="info"
                 :disable-transitions="true" color="#EAEAEA">
                     {{ tagsStore.idToTags[tag_index]?.name }}
@@ -191,6 +184,8 @@ const copyText = async (txt) => {
 .sample {
     background-color: #EEEEEE;
     padding: 5px;
+    white-space: pre-wrap;
+    
 }
 
 .el-divider {

@@ -15,18 +15,18 @@ Mock.mock(/\/api\/problem\/(\d+)\/description/, 'get', function (options) {
     "memory_limit": 32768,
     "sample": {
       "inputs": [
-        "Duis nulla est incididunt",
+        "Duis nulla est incididunt enim anim minim cupidatat enim anim minim cupidatat enim anim minim cupidatat enim anim minim cupidatat",
         "Duis nulla est incididunt"
       ],
       "outputs": [
-        "Excepteur enim anim minim cupidatat",
+        "Excepte\nenim anim minim cupidatat",
         "laborum nisi ullamco dolore reprehenderit"
       ]
     },
     "tags": [
       1,
       2,
-      3
+      3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
     ],
     "source": "est",
     "star_count": 233,
