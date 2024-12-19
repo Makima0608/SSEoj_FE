@@ -7,6 +7,12 @@
     </header>
     <div class="pane">
       <div class="wrapper" :class="{ active }">
+  <div class="container">
+    <header>
+      <h2 class="logo">SSEOJ</h2>
+    </header>
+    <div class="pane">
+      <div class="wrapper" :class="{ active }">
         <!-- Login Form -->
         <div class="form_box login">
           <h2>Login</h2>

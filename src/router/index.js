@@ -10,6 +10,7 @@ import NotFound from '@/views/General/NotFound.vue'
 import Description from '@/views/Problem/components/description.vue'
 import Submissions from '@/views/Problem/components/submissions.vue'
 import Solutions from '@/views/Problem/components/solutions.vue'
+import Detail from '@/views/Discussion/detail.vue'
 import User from '@/views/User/index.vue'
 import CreateSolution from '@/views/Solution/createSolution.vue'
 
@@ -35,8 +36,9 @@ const router = createRouter({
         },
         {
           path: '/discussion',
-          component: Discussion
-        }
+          component: Discussion,
+
+        },
       ]
     },
     {
@@ -74,9 +76,13 @@ const router = createRouter({
       component: CreateSolution
     },
     {
+      path: '/discussion/:id',
+      component: Detail,
+    },
+    {
       path: '/:patchMatch(.*)*',
       component: NotFound
-    }
+    },
   ],
 })
 

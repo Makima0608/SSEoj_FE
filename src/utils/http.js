@@ -20,7 +20,7 @@ httpInstance.interceptors.response.use(
         if (res.data.err != null) {
             ElMessage({
                 type: 'warning',
-                message: res.data.msg   
+                message: res.data.msg
             })
             return Promise.reject(res)
         }
@@ -34,7 +34,7 @@ httpInstance.interceptors.response.use(
         // console.log(e.response)
         ElMessage({
             type: 'warning',
-            message: e.response.data.msg   
+            message: e.response.data.msg
         })
         if (e.response.state === 401) {
             useStore.clearUserInfo()
