@@ -10,6 +10,11 @@ import './mock/login'
 import './mock/problemset'
 import './mock/problem'
 import './mock/tags'
+import './mock/postList'
+import './mock/post'
+
+
+
 
 const app = createApp(App)
 const pinia = createPinia()

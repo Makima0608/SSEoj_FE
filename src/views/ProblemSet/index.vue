@@ -4,7 +4,7 @@
     <div class="wrapper">
         <div class="container">
             <div class="filter">
-                <!-- <div class="search-box" ref="searchBoxRef" @click="changeWidth">    
+                <!-- <div class="search-box" ref="searchBoxRef" @click="changeWidth">
                     <div class="icon"></div>
                     <div class="textInput">
                         <input type="text" placeholder="search something...">
