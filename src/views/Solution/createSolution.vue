@@ -1,22 +1,23 @@
 <template>
     <layoutNav />
-    <div class="solution-header">
-        <span>问题信息</span>
+    <div class="solution-header" v-if="loadComplete">
+        <span>编辑题解：{{ id + '.' + problemDesc.name }}</span>
         <button @click="postSolution">发布题解</button>
     </div>
     <div class="solution-title">
         <input type="text" placeholder="请输入标题" v-model="title">
         <div class="tag-list">
-            <el-tag v-for="tag in selectedTag" :key="tag" closable :disable-transitions="false" type="info" @close="handleClose(tag)" >
+            <el-tag v-for="tag in selectedTag" :key="tag" closable :disable-transitions="false" type="info"
+                @close="handleClose(tag)">
                 {{ tag }}
             </el-tag>
             <el-autocomplete v-if="inputVisible" :fetch-suggestions="tagSearch" v-model="tagKey"
-                :trigger-on-focus="false" @select="handleSelect" @blur="exitInput" ref="autoCompleteRef" style="width: 80px; margin-bottom: 10px;" class="autoComplete">
+                :trigger-on-focus="false" @select="handleSelect" @blur="exitInput" ref="autoCompleteRef"
+                style="width: 80px; margin-bottom: 10px;" class="autoComplete">
             </el-autocomplete>
             <button v-else class="addTagBtn" @click="showInput">+ 添加标签</button>
         </div>
     </div>
-    {{ allTags }}
     <TEditor class="solution-editor" ref="TEditorRef">
         <template #default="{ item }">
             {{ item }}
@@ -29,15 +30,24 @@ import '@/assets/base-el-tag.css'
 import layoutNav from '../Layout/components/layoutNav.vue';
 import { onMounted, ref, nextTick } from 'vue';
 import { useTagsStore } from '@/stores/tagsStore';
+import { useRoute } from 'vue-router';
+import { getProblemDescAPI } from '@/apis/problem';
+import { ElMessage } from 'element-plus';
+
+const loadComplete = ref(false)
 
 const tagsStore = useTagsStore()
 const title = ref("")
-const selectedTag = ref(['tag1', 'tag2', 'tag3'])
+const selectedTag = ref([])
 const allTags = ref()
 const tagKey = ref("")
+
 const TEditorRef = ref(null)
 const inputVisible = ref(false)
 const autoCompleteRef = ref(null)
+const route = useRoute()
+const id = route.query.id
+const problemDesc = ref({})
 
 const postSolution = () => {
     console.log(TEditorRef.value.handleGetContent());
@@ -62,11 +72,15 @@ const exitInput = () => {
 }
 
 const handleSelect = (item) => {
-    if (item) {
+    console.log(selectedTag.value, !selectedTag.value.includes(item))
+    if (item && !selectedTag.value.includes(item.value)) {
         selectedTag.value.push(item.value)
+        inputVisible.value = false
+        tagKey.value = ""
     }
-    inputVisible.value = false
-    tagKey.value = ""
+    else {
+        ElMessage({type:'warning', message:'请勿选择重复tag'})
+    }
 }
 
 const handleClose = (tag) => {
@@ -74,10 +88,34 @@ const handleClose = (tag) => {
 }
 
 const showInput = () => {
+    if (selectedTag.value.length >= 15) {
+        ElMessage({type: 'warning', message:"最多添加15个标签"})
+        return
+    }
     inputVisible.value = true
     nextTick(() => {
         autoCompleteRef.value.focus()
     })
+}
+
+const getProblemDesc = async (id) => {
+    const res = await getProblemDescAPI(id)
+    problemDesc.value = res.data
+}
+
+const setTEditorContent = () => {
+    const content = `
+    <h1>${problemDesc.value.id}.${problemDesc.value.name}</h1>
+    <li><h3>题目描述</h3></li>
+    <p style="padding-left: 40px;">${problemDesc.value.description}</p>
+    <li><h3>输入格式</h3></li>
+    <p style="padding-left: 40px;">${problemDesc.value.input_style}</p>
+    <li><h3>输出格式</h3></li>
+    <p style="padding-left: 40px;">${problemDesc.value.output_style}</p>
+    <li><h3>数据范围</h3></li>
+    <p style="padding-left: 40px;">${problemDesc.value.data_range}</p>
+    <br><hr><br><br>`
+    TEditorRef.value.handleSetContent(content)
 }
 
 
@@ -85,6 +123,9 @@ onMounted(async () => {
     await tagsStore.getTags()
     // console.log(tagsStore.idToTags)
     allTags.value = Object.keys(tagsStore.tagsToID)
+    await getProblemDesc(id)
+    loadComplete.value = true
+    setTEditorContent()
 })
 </script>
 
@@ -135,7 +176,7 @@ onMounted(async () => {
 .tag-list {
     margin-left: auto;
     margin-right: auto;
-    margin-top: 20px;
+    margin-top: 30px;
     width: 95%;
     display: flex;
     justify-items: center;
@@ -149,6 +190,7 @@ onMounted(async () => {
 .tag-list button {
     margin-bottom: 10px;
 }
+
 .autoComplete {
     width: 10px;
 }
@@ -161,14 +203,27 @@ onMounted(async () => {
 ::v-deep .autoComplete .el-input {
     height: 24px;
     font-size: 12px;
+    
 }
+
 ::v-deep .autoComplete .el-input__inner {
     height: 24px;
 }
+:deep(.autoComplete) {
+    --el-border-radius-base: 10px;
+}
+
 .addTagBtn {
+    cursor: pointer;
     width: 80px;
     height: 24px;
-    border-radius: 5px;
+    border-radius: 10px;
+    background-color: #333;
+    transition: .5s;
+}
+
+.addTagBtn:hover {
+    background-color: #EAEAEA
 }
 
 .solution-editor {

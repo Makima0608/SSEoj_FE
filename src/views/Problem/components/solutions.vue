@@ -129,10 +129,12 @@ const toggleLike = (item) => {
 }
 
 const postSolution = () => {
-    nextTick(() => {
-        infiniteScrollRef.value.scrollTo({ top: 0, behavior: 'smooth' })
-    })
-    console.log('click')
+    // nextTick(() => {
+    //     infiniteScrollRef.value.scrollTo({ top: 0, behavior: 'smooth' })
+    // })
+    // console.log('click')
+    const url = `/solution/create/?id=${id}`
+    window.open(url, '_blank')
 }
 
 onMounted(async () => {
@@ -170,9 +172,10 @@ onMounted(async () => {
     align-items: center;
     justify-items: center;
     padding-right: 10px;
+    transition: .2s;
 }
 
-.searchBar:hover {
+.searchBar:hover, .searchBar:focus-within{
     border: 1.1px solid #282727;
 }
 
@@ -209,6 +212,7 @@ onMounted(async () => {
 }
 
 .postSolutionBtn {
+    cursor: pointer;
     display: flex;
     background-color: #008080;
     color: #FFFFFF;
