@@ -7,11 +7,21 @@ export const getProblemDescAPI = (id) => {
     })
 }   
 
-
 // 获取题解列表 API
 export const getSolutionListAPI = (id, params) => {
     return request({
         url: `/api/problem/${id}/solutions`,
         params
+    })
+}
+
+export const likeSolutionAPI = (id, is_good) => {
+    return request({
+        url: '/api/solution/good/',
+        method: 'POST',
+        data: {
+            id: id,
+            is_good: is_good
+        }
     })
 }

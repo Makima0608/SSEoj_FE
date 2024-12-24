@@ -139,8 +139,19 @@ onMounted(async () => {
 }
 
 .solution-header button {
-    width: 80px;
+    width: 100px;
     height: 50px;
+    border-radius: 10px;
+    background-color: #008080;
+    cursor: pointer;
+    border: none;
+    color: #FFFFFF;
+    font-size: 14px;
+    transition: .2s;
+}
+
+.solution-header button:hover{
+    background-color: #009999;
 }
 
 .solution-header span {

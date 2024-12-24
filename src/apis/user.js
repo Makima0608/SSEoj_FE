@@ -11,3 +11,9 @@ export const loginAPI = ({ email, password }) => {
         }
     })
 }
+
+export const getUserInfoAPI = (id) => {
+    return request({
+        url: `/api/user/${id}/info/`
+    })
+}

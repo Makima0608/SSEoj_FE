@@ -26,7 +26,7 @@ Mock.mock(/\/api\/problem\/(\d+)\/description/, 'get', function (options) {
     "tags": [
       1,
       2,
-      3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+      3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
     ],
     "source": "est",
     "star_count": 233,
@@ -100,7 +100,7 @@ Mock.mock(/\/api\/problem\/(\d+)\/solutions/, 'get', (options) => {
         "title": "酒吧每当到朝向",
         "content": "dolor Ut nostrud occaecat",
         "user_info": {
-          "id": 1,
+          "id": 3,
           "username": "太叔梓涵",
           "avatar": "https://avatars.githubusercontent.com/u/2876268"
         },
@@ -117,7 +117,7 @@ Mock.mock(/\/api\/problem\/(\d+)\/solutions/, 'get', (options) => {
         "title": "协议好呸鲁莽快切",
         "content": "amet enim",
         "user_info": {
-          "id": 2,
+          "id": 4,
           "username": "系中海",
           "avatar": "https://avatars.githubusercontent.com/u/44562488"
         },
@@ -136,7 +136,7 @@ Mock.mock(/\/api\/problem\/(\d+)\/solutions/, 'get', (options) => {
         "title": "捡骨碌碌以免画互相 brr 尽管",
         "content": "consectetur Ut magna culpa",
         "user_info": {
-          "id": 3,
+          "id": 5,
           "username": "徭天娇",
           "avatar": "https://avatars.githubusercontent.com/u/10767048"
         },
@@ -158,3 +158,14 @@ Mock.mock(/\/api\/problem\/(\d+)\/solutions/, 'get', (options) => {
     data: data
   }
 });
+
+Mock.mock(/\/api\/solution\/good/, 'post', (options) => {
+  console.log('--mockjs:problem--')
+  console.log(options.url)
+  const body = JSON.parse(options.body);
+  console.log(body)
+  return {
+    err: null,
+    data: 'success'
+  }
+})

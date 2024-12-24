@@ -13,6 +13,7 @@ import Solutions from '@/views/Problem/components/solutions.vue'
 import Detail from '@/views/Discussion/detail.vue'
 import User from '@/views/User/index.vue'
 import CreateSolution from '@/views/Solution/createSolution.vue'
+import SolutionDetail from '@/views/Solution/solutionDetail.vue'
 import ProblemlistDetail from '@/views/ProblemList/problemlistDetail.vue'
 
 
@@ -79,6 +80,10 @@ const router = createRouter({
     {
       path: '/solution/create',
       component: CreateSolution
+    },
+    {
+      path: '/solution/:id',
+      component: SolutionDetail
     },
     {
       path: '/discussion/:id',

@@ -1,6 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 
 <template>
+  
     <el-collapse v-model="activeIndex">
         <el-collapse-item title="Consistency" name="1">
         <div>
@@ -51,6 +52,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import { statusCodeToDesc } from '@/utils/problemStatus';
 
 const activeIndex = ref('1')
 

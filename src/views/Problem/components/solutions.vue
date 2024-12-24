@@ -1,5 +1,9 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
+    <div class="user-info-card" :style="cardStyle" @mouseenter="eneterCard" @mouseleave="hideInfoCard">
+        <UserInfoCard ref="userInfoCardRef"></UserInfoCard>
+    </div>
+    
     <div class="searchHeader">
         <div class="searchBar">
             <input type="text" class="input" v-model="keyword">
@@ -11,6 +15,9 @@
         </div>
         <div class="postSolutionBtn" @click="postSolution">发布题解</div>
     </div>
+
+    
+
     <div v-if="isPageReady">
         <el-scrollbar>
             <ul v-infinite-scroll="loadSolutions" class="solutionList" :infinite-scroll-disabled="disabled"
@@ -18,13 +25,16 @@
                 <li v-for="(item, index) in solutions" :key="index">
                     <div class="solution-item">
                         <div class="title">
-                            <span>{{ item.title }}</span>
-                            <span>{{ item.create_time }}</span>
+                            <span class="solution-title" @click="jumpToSolutionDetail(item.id)">{{ item.title }}</span>
+                            <span class="solution-time">{{ item.create_time }}</span>
+                            <span class="iconfont icon-jiantouarrow487" @click="jumpToSolutionDetail(item.id)"></span>
                         </div>
-                        <div class="userInfo" @click="jumpToUser(item.user_info.id)">
+                        <div class="userInfo" @click="jumpToUser(item.user_info.id)"
+                            @mouseenter="showInfoCard(item, $event)" @mouseleave="hideInfoCard">
                             <el-avatar :size="25" style="font-size: 12px;">KL</el-avatar>
                             <span>{{ item.user_info.username }}</span>
                         </div>
+                        
                         <div class="sol-content">
                             {{ item.content }}
                         </div>
@@ -51,11 +61,14 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed, nextTick } from 'vue';
+import UserInfoCard from '@/components/UserInfoCard.vue';
+
+import { onMounted, ref, computed, nextTick} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { getSolutionListAPI } from '@/apis/problem';
 import { useTagsStore } from '@/stores/tagsStore';
 import { transNum } from '@/utils/data_calculate';
+import { likeSolutionAPI } from '@/apis/problem';
 
 const infiniteScrollRef = ref(null)
 const isLoading = ref(false)
@@ -63,6 +76,10 @@ const noMore = computed(() => solutions.value.length >= count.value)
 const disabled = computed(() => isLoading.value || noMore.value)
 
 const isPageReady = ref(false)
+const hoverUser = ref(null)
+const cardStyle = ref({tansition: ".5s", opacity:"0%"})
+const hideTimer = ref(null);
+const userInfoCardRef = ref(null)
 
 const route = useRoute()
 const router = useRouter()
@@ -123,18 +140,67 @@ const jumpToUser = (id) => {
     userWindow.location.href = userProfileUrl
 }
 
-const toggleLike = (item) => {
+const toggleLike = async (item) => {
+    await likeSolutionAPI(item.id, !item.is_good)
     item.like_count += item.is_good ? -1 : 1
     item.is_good = !item.is_good
 }
 
 const postSolution = () => {
-    // nextTick(() => {
-    //     infiniteScrollRef.value.scrollTo({ top: 0, behavior: 'smooth' })
-    // })
-    // console.log('click')
     const url = `/solution/create/?id=${id}`
     window.open(url, '_blank')
+}
+
+const jumpToSolutionDetail = (id) => {
+    const url = `/solution/${id}`
+    window.open(url, '_blank')
+}
+
+const showInfoCard = (item, event) => {
+    if (hideTimer.value) {
+        clearTimeout(hideTimer.value)
+        hideTimer.value = null
+    }
+
+    hoverUser.value = item.user_info
+    userInfoCardRef.value.displayUserInfo(hoverUser.value.id)
+    
+    const avatarRect = event.target.getBoundingClientRect()
+    const listRect = infiniteScrollRef.value.getBoundingClientRect()
+    const cardHeight = 200;
+    
+    if (avatarRect.bottom + cardHeight > listRect.bottom) {
+        cardStyle.value = {
+            top: `${avatarRect.top - listRect.top - cardHeight/2 - 50}px`,
+        }
+    } 
+    else {
+        cardStyle.value = {
+            top: `${avatarRect.top - listRect.top + cardHeight/2}px`,
+            opacity: 1
+        }
+    }     
+}
+
+const eneterCard = () => {
+    if (hideTimer.value) {
+        clearTimeout(hideTimer.value)
+        hideTimer.value = null
+    }
+}
+
+const hideInfoCard = () => {
+    hideTimer.value = setTimeout(() => {
+        if (hideTimer.value) {
+            clearTimeout(hideTimer.value)
+            hideTimer.value = null
+        }
+        hoverUser.value = null
+        cardStyle.value = {
+            opacity: 0
+        }
+        userInfoCardRef.value.clearUserInfo()
+    }, 300)
 }
 
 onMounted(async () => {
@@ -142,6 +208,7 @@ onMounted(async () => {
     await tagStore.getTags()
     isPageReady.value = true
 })
+
 </script>
 
 
@@ -175,7 +242,8 @@ onMounted(async () => {
     transition: .2s;
 }
 
-.searchBar:hover, .searchBar:focus-within{
+.searchBar:hover,
+.searchBar:focus-within {
     border: 1.1px solid #282727;
 }
 
@@ -228,24 +296,46 @@ onMounted(async () => {
 }
 
 .title {
+    display: flex;
     margin-bottom: 10px;
+    align-items: center;
 }
 
-.title span:last-of-type {
+.title .solution-time {
     color: #BBBBBB;
     font-size: 12px;
+
 }
 
-.title span:first-of-type {
+.title .solution-title {
+    cursor: pointer;
     font-weight: bold;
     margin-right: 10px;
 }
 
-.userInfo {
-    display: flex;
+.title .solution-title:hover {
+    color: #0047AB;
+}
+
+.title .icon-jiantouarrow487 {
+    cursor: pointer;
+    color: black;
+    font-size: 20px;
+    margin-left: auto;
+    transition: .5s;
+}
+
+.title .icon-jiantouarrow487:hover {
+    transform: translateX(4px);
+}
+
+.solution-item .userInfo {
+    display: inline-block;
     font-size: 14px;
     align-items: center;
     margin-bottom: 6px;
+    /* background-color: #0047AB; */
+    width: auto;
 }
 
 .userInfo .el-avatar {
@@ -254,6 +344,14 @@ onMounted(async () => {
 
 .userInfo:hover {
     cursor: pointer;
+}
+
+.user-info-card {
+    position: absolute;
+    transform: translateY(20px);
+    background-color: white;
+    z-index: 1000;
+    transition: opacity .5s;
 }
 
 .sol-content {
@@ -278,7 +376,7 @@ onMounted(async () => {
     padding-top: 10px;
     width: 100%;
     z-index: 100;
-    height: calc(100vh - 280px);
+    height: calc(100vh - 230px);
     overflow: auto;
     /* width: 300px; */
 }
