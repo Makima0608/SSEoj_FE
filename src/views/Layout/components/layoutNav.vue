@@ -37,9 +37,11 @@
 
 <script setup>
 import { useUserStore } from '@/stores/userStore';
+import { ElMessage } from 'element-plus';
 const userStore = useUserStore()
 const logout = () => {
     userStore.clearUserInfo()
+    ElMessage({ type: "success", message: "退出成功" })
 }
 
 </script>

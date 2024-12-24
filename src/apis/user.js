@@ -11,3 +11,10 @@ export const loginAPI = ({ email, password }) => {
         }
     })
 }
+
+export const logoutAPI = () => {
+    return request({
+        url: "/api/identity/logout/",
+        method: 'GET',
+    })
+}

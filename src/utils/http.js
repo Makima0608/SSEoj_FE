@@ -8,6 +8,7 @@ import router from '@/router';
 const httpInstance = axios.create({
     baseURL: 'http://localhost:8080',
     timeout: 5000,
+    withCredentials: true,
 })
 
 httpInstance.interceptors.request.use(config => {
