@@ -17,3 +17,9 @@ export const getUserInfoAPI = (id) => {
         url: `/api/user/${id}/info/`
     })
 }
+export const logoutAPI = () => {
+    return request({
+        url: "/api/identity/logout/",
+        method: 'GET',
+    })
+}
