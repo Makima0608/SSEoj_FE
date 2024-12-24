@@ -8,7 +8,7 @@ import router from '@/router';
 const httpInstance = axios.create({
     baseURL: 'http://localhost:8080',
     timeout: 5000,
-    withCredentials: true
+    withCredentials: true,
 })
 
 httpInstance.interceptors.request.use(config => {
@@ -17,7 +17,6 @@ httpInstance.interceptors.request.use(config => {
 
 httpInstance.interceptors.response.use(
     res => {
-        // console.log(res)
         if (res.data.err != null) {
             ElMessage({
                 type: 'warning',
