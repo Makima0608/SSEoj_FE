@@ -40,7 +40,6 @@
             </el-scrollbar>
             <el-divider />
             <div class="right-footer">
-                <button>测试</button>
                 <button>提交</button>
             </div>
         </div>

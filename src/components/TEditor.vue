@@ -216,7 +216,12 @@ onMounted(() => {
 
 // 设置值
 const handleSetContent = (content) => {
-    tinymce.activeEditor.setContent(content);
+    // console.log('set content', content)
+    const editor = tinymce.activeEditor
+    editor.setContent(content);
+    // editor.focus()
+    // editor.selection.select(editor.getBody(), true);
+    // editor.selection.collapse(false);
 };
 
 // 获取值

@@ -77,7 +77,7 @@ const router = createRouter({
       component: User,
     },
     {
-      path: '/solution/:id',
+      path: '/solution/create',
       component: CreateSolution
     },
     {

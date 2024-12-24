@@ -35,8 +35,13 @@
         </div>
         <el-divider />
         <div>
+            <div class="node">数据范围</div>
+            <div>{{ problemDesc.data_range }}</div>
+        </div>
+        <el-divider />
+        <div>
             <div class="node">输入输出样例</div>
-            <div v-for="(item, index) in problemDesc.inputs" :key="index" class="sampleBox">
+            <div v-for="(item, index) in problemDesc.sample.inputs" :key="index" class="sampleBox">
                 <div class="inputs">
                     <span>Input #{{ index }}</span>
                     <span class="iconfont icon-fuzhi" style="cursor: pointer;" @click="copyText(item)"></span>
@@ -44,9 +49,9 @@
                 <div class="sample" style="font-size: 14px;">{{ item }}</div>
                 <div class="outputs">
                     <span>Output #{{ index }}</span>
-                    <span class="iconfont icon-fuzhi" style="cursor: pointer;" @click="copyText(outputs[index])"></span>
+                    <span class="iconfont icon-fuzhi" style="cursor: pointer;" @click="copyText(problemDesc.sample.outputs[index])"></span>
                 </div>
-                <div class="sample" style="font-size: 14px;">{{ problemDesc.outputs[index] }}</div>
+                <div class="sample" style="font-size: 14px;">{{ problemDesc.sample.outputs[index] }}</div>
             </div>
         </div>
         <el-divider style="margin-bottom: 10px;" />
