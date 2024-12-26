@@ -11,18 +11,19 @@ Mock.mock(/\/api\/problemset\//, 'get', (options) => {
         return {
             err: null,
             data: {
-                total: 100,
+                count: 100,
                 problems: [
                     {
                         "status": true,
-                        "problem_id": 1001,
-                        "problem_name": "你好，世界",
+                        "id": 1001,
+                        "name": "你好，世界",
                         "tags": [
-                            "hash-table",
-                            "math",
-                            "dp"
+                            1,
+                            2,
+                            3
                         ],
-                        "pass_rate": 66.6,
+                        "pass_count": 550,
+                        "attempt_count": 1000,
                         "difficulty": 5
                     },
 
@@ -34,16 +35,17 @@ Mock.mock(/\/api\/problemset\//, 'get', (options) => {
         return {
             err: null,
             data: {
-                total: 100,
+                count: 100,
                 problems: [{
                     "status": true,
-                    "problem_id": 1002,
-                    "problem_name": "A+B",
+                    "id": 1002,
+                    "name": "A+B",
                     "tags": [
-                        "递归",
-                        "链表"
+                        3,
+                        4
                     ],
-                    "pass_rate": 88.8,
+                    "pass_count": 666,
+                    "attempt_count": 1000,
                     "difficulty": 3
                 },
                 ]

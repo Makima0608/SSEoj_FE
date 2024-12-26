@@ -124,8 +124,13 @@ const uploadCode = (code) => {
   editorView.dispatch(transaction);
 }
 
+const getCode = () => {
+  return editorView.state.doc.toString()
+}
+
 defineExpose({
   toggleLanguage,
-  uploadCode
+  uploadCode,
+  getCode
 })
 </script>

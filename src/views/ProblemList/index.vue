@@ -1,5 +1,171 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 
 <template>
-    <div>我是题单</div>
+    <div class="wrapper">
+        <div class="problemlist">
+            <div v-for="plistItem in problemlist" :key="plistItem.id" class="problemlist-item"
+                @click="router.push(`/problemlist/${plistItem.id}`)">
+
+                <div class="problemlist-header">
+                    <span class="problemlist-title">{{ plistItem.id + '.' + plistItem.title }}</span>
+                    <div class="problemlist-star">
+                        <span
+                            :class="plistItem.is_star ? 'iconfont icon-shoucang' : 'iconfont icon-shoucangdanse'"></span>
+                        <span>{{ plistItem.star_count }}</span>
+                    </div>
+                </div>
+                <div class="creator-info" @click="console.log(111)">
+                    <el-avatar :size="30" style="font-size: 12px;">KL</el-avatar>
+                    <span>{{ plistItem.user_info.username }}</span>
+                </div>
+                <div class="progress-num">
+                    <span>进度</span>
+                    <span>{{ plistItem.pass_count + '/' + plistItem.problem_count }}</span>
+                </div>
+                <el-progress :text-inside="true" :stroke-width="20"
+                    :percentage="calcProgress(plistItem.pass_count, plistItem.problem_count)" color="black">
+                </el-progress>
+            </div>
+
+        </div>
+        <div class="pagination">
+            <el-pagination layout="prev, pager, next, jumper" v-model:current-page="currentPage"
+                :total="problemlistCount" :background="true" :page-size="pageSize"
+                @current-change="handleCurrentChange" />
+        </div>
+    </div>
 </template>
+
+<script setup>
+import { computed, onMounted, ref } from 'vue';
+import { getProblemListAPI } from "@/apis/problemlist";
+import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
+const problemlist = ref([])
+const problemlistCount = ref(0)
+
+// 筛选参数
+const currentPage = ref(1)
+const pageSize = ref(30)
+const keyword = ref(undefined)
+const sort_type = ref(undefined)
+
+const params = computed(() => ({
+    page_num: currentPage.value || 1,
+    page_size: pageSize.value || 30,
+    keyword: keyword.value || undefined,
+    sort_type: sort_type.value || "idAsc"
+}))
+
+// 计算进度条
+const calcProgress = (pass_count, problem_count) => {
+    return (pass_count / problem_count * 100).toFixed(1)
+}
+
+const handleCurrentChange = async () => {
+    await getProblemList(params.value)
+}
+
+const getProblemList = async (params) => {
+    const res = await getProblemListAPI(params)
+    console.log(res)
+    problemlistCount.value = res.data.count
+    problemlist.value = res.data.problemlists
+}
+
+onMounted(async () => {
+    console.log(params.value)
+    await getProblemList(params.value)
+    // console.log(problemlistStore.problemlist)
+})
+</script>
+
+<style scoped>
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: auto;
+    width: 85%;
+    margin-bottom: 20px;
+    min-width: 800px;
+}
+
+
+.problemlist {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.problemlist-item {
+    margin-bottom: 20px;
+    padding: 20px 15px;
+    box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.2);
+    width: 400px;
+    height: 180px;
+    border-radius: 10px;
+    transition: .5s;
+    border: 1px solid #DEDCDC;
+    /* display: block; */
+}
+
+.problemlist .problemlist-item:hover {
+    cursor: pointer;
+    transform: translateY(-5px);
+    box-shadow: 2px 2px 6px 0px rgba(0, 0, 0, 0.4);
+}
+
+.problemlist-header {
+    display: flex;
+
+}
+
+.problemlist-title {
+    width: 85%;
+    font-size: 20px;
+    font-weight: bold;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.problemlist-star {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.problemlist-star .icon-shoucangdanse,
+.problemlist .icon-shoucang {
+    font-size: 25px;
+}
+
+.creator-info {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    gap: 6px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.creator-info span:last-of-type {
+    color: #666;
+}
+
+.progress-num {
+    margin: 15px 10px 0px 0px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.el-progress {
+    margin-top: 10px;
+}
+</style>

@@ -11,6 +11,10 @@ import Description from '@/views/Problem/components/description.vue'
 import Submissions from '@/views/Problem/components/submissions.vue'
 import Solutions from '@/views/Problem/components/solutions.vue'
 import Detail from '@/views/Discussion/detail.vue'
+import User from '@/views/User/index.vue'
+import CreateSolution from '@/views/Solution/createSolution.vue'
+import SolutionDetail from '@/views/Solution/solutionDetail.vue'
+import ProblemlistDetail from '@/views/ProblemList/problemlistDetail.vue'
 
 
 const router = createRouter({
@@ -47,10 +51,10 @@ const router = createRouter({
       path: '/problem/:id',
       component: Problem,
       children: [
-        {
-          path: '/problem/:id/',
-          component: Description
-        },
+        // {
+        //   path: '/problem/:id/',
+        //   component: Description
+        // },
         {
           path: '/problem/:id/description',
           component: Description,
@@ -64,6 +68,22 @@ const router = createRouter({
           component: Solutions,
         }
       ]
+    },
+    {
+      path: '/problemlist/:id',
+      component: ProblemlistDetail
+    },
+    {
+      path: '/user/:id',
+      component: User,
+    },
+    {
+      path: '/solution/create',
+      component: CreateSolution
+    },
+    {
+      path: '/solution/:id',
+      component: SolutionDetail
     },
     {
       path: '/discussion/:id',

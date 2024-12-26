@@ -1,117 +1,106 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 
 <template>
-    <div class="pCard">
-        <div class="cardLeft">
-            <div class="pId">{{ id }}</div>
-            <div class="pName" :style="{'border-bottom': `3px solid ${getDifficultColor(difficulty)}`}">{{ name }}</div>
-            <div class="source">题目来源：{{ source }}</div>
-            <div class="difficulty">难度：<span :style="{'color': `${getDifficultColor(difficulty)}`}">Lv.{{ difficulty }}</span></div>
-        </div>
-
-        <div class="cardRight">
-            <div>时间限制：{{ timeLimit }}</div>
-            <div>内存限制：{{ memLimit }}</div>
-        </div>
-
-    </div>
-
-
-    <div>
-        <div class="node">题目描述</div>
-        <div>{{ description }}</div>
-    </div>
-    <el-divider />
-    <div>
-        <div class="node">输入格式</div>
-        <div>{{ inputStyle }}</div>
-    </div>
-    <el-divider />
-    <div>
-        <div class="node">输出格式</div>
-        <div>{{ outputStyle }}</div>
-    </div>
-    <el-divider />
-    <div>
-        <div class="node">输入输出样例</div>
-        <div v-for="(item, index) in inputs" :key="index" class="sampleBox">
-            <div class="inputs">
-                <span>Input #{{ index }}</span>
-                <span class="iconfont icon-fuzhi" @click="copyText(item)"></span>
+    <div v-if="loadComplete">
+        <div class="pCard">
+            <div class="cardLeft">
+                <div class="pId">{{ id }}</div>
+                <div class="pName" :style="{ 'border-bottom': `3px solid ${getDifficultColor(problemDesc.difficulty)}` }">{{ problemDesc.name }}
+                </div>
+                <div class="source">题目来源：{{ problemDesc.source }}</div>
+                <div class="difficulty">难度：<span :style="{ 'color': `${getDifficultColor(problemDesc.difficulty)}` }">Lv.{{
+                    problemDesc.difficulty
+                        }}</span></div>
             </div>
-            <div class="sample">{{ item }}</div>
-            <div class="outputs">
-                <span>Output #{{ index }}</span>
-                <span class="iconfont icon-fuzhi" @click="copyText(outputs[index])"></span>
+
+            <div class="cardRight">
+                <div>时间限制：{{ transTime(problemDesc.time_limit) }}</div>
+                <div>内存限制：{{ transMem(problemDesc.memory_limit) }}</div>
             </div>
-            <div class="sample">{{ outputs[index] }}</div>
+        </div>
+
+        <div>
+            <div class="node">题目描述</div>
+            <div>{{ problemDesc.description }}</div>
+        </div>
+        <el-divider />
+        <div>
+            <div class="node">输入格式</div>
+            <div>{{ problemDesc.input_style }}</div>
+        </div>
+        <el-divider />
+        <div>
+            <div class="node">输出格式</div>
+            <div>{{ problemDesc.output_style }}</div>
+        </div>
+        <el-divider />
+        <div>
+            <div class="node">数据范围</div>
+            <div>{{ problemDesc.data_range }}</div>
+        </div>
+        <el-divider />
+        <div>
+            <div class="node">输入输出样例</div>
+            <div v-for="(item, index) in problemDesc.sample.inputs" :key="index" class="sampleBox">
+                <div class="inputs">
+                    <span>Input #{{ index }}</span>
+                    <span class="iconfont icon-fuzhi" style="cursor: pointer;" @click="copyText(item)"></span>
+                </div>
+                <div class="sample" style="font-size: 14px;">{{ item }}</div>
+                <div class="outputs">
+                    <span>Output #{{ index }}</span>
+                    <span class="iconfont icon-fuzhi" style="cursor: pointer;" @click="copyText(problemDesc.sample.outputs[index])"></span>
+                </div>
+                <div class="sample" style="font-size: 14px;">{{ problemDesc.sample.outputs[index] }}</div>
+            </div>
+        </div>
+        <el-divider style="margin-bottom: 10px;" />
+        <div>
+            <el-collapse style="border: none;">
+                <el-collapse-item style="--el-collapse-header-height:50px; vertical-align: center;">
+                    <template #title>
+                        <div class="node" style="">标签</div>
+                    </template>
+                    <el-tag v-for="(tag_index, index) in problemDesc.tags" :key="index" type="info" :disable-transitions="true"
+                        color="#EAEAEA">
+                        {{ tagsStore.idToTags[tag_index]?.name }}
+                    </el-tag>
+
+                </el-collapse-item>
+            </el-collapse>
         </div>
     </div>
-    <el-divider style="margin-bottom: 10px;" />
-    <div>
-        <el-collapse style="border: none;">
-            <el-collapse-item style="--el-collapse-header-height:50px; vertical-align: center;">
-                <template #title>
-                    <div class="node" style="">标签</div>
-                </template>
-                <span v-for="(tag_index, index) in tags" :key="index" class="tag"> {{ tagsStore.idToTags[tag_index].name
-                    }} </span>
-            </el-collapse-item>
-        </el-collapse>
-    </div>
+
 </template>
 
 <script setup>
-import '@/assets/icon/iconfont.css'
-
 import { useRoute } from 'vue-router';
-import { useProblemDescStore } from '@/stores/problemStore';
-import { computed, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { transTime, transMem } from '@/utils/data_calculate';
 import { ElMessage } from 'element-plus';
 import { useTagsStore } from '@/stores/tagsStore';
 import { getDifficultColor } from '@/utils/color';
+import { getProblemDescAPI } from "@/apis/problem";
+import '@/assets/base-el-tag.css'
 
 const route = useRoute()
+const loadComplete = ref(false)
 const id = route.params.id
 
-const problemDescStore = useProblemDescStore()
-const name = ref()
-const description = ref()
-const inputStyle = ref()
-const outputStyle = ref()
-const timeLimit = ref()
-const memLimit = ref()
-const difficulty = ref()
-const source = ref()
-const inputs = ref()
-const outputs = ref()
-const tags = ref()
-
-const diffColor =  computed(() => {
-    console.log({'border-bottom': '1px solid' + getDifficultColor(4)})
-    return {
-        'border-bottom': '1px solid' + getDifficultColor(4)
-    }
-})
+const problemDesc = ref({})
 
 const tagsStore = useTagsStore()
 
-onMounted(async () => {
-    await problemDescStore.getProblemDesc(id)
-    name.value = problemDescStore.problemDesc.name
-    description.value = problemDescStore.problemDesc.description
-    inputStyle.value = problemDescStore.problemDesc.input_style
-    outputStyle.value = problemDescStore.problemDesc.output_style
-    timeLimit.value = transTime(problemDescStore.problemDesc.time_limit)
-    memLimit.value = transMem(problemDescStore.problemDesc.memory_limit)
-    difficulty.value = problemDescStore.problemDesc.difficulty
-    source.value = problemDescStore.problemDesc.source
-    inputs.value = problemDescStore.problemDesc.sample.inputs
-    outputs.value = problemDescStore.problemDesc.sample.outputs
-    tags.value = problemDescStore.problemDesc.tags
+const getProblemDesc = async (id) => {
+    const res = await getProblemDescAPI(id)
+    problemDesc.value = res.data
+    console.log(problemDesc)
+}
 
+onMounted(async () => {
+    await getProblemDesc(id)
     await tagsStore.getTags()
+    loadComplete.value = true
 })
 
 const copyText = async (txt) => {
@@ -149,7 +138,8 @@ const copyText = async (txt) => {
 .cardLeft {
     display: flex;
     flex-direction: column;
-    width: 250px;
+    flex: 1;
+    padding-right: 30px;
 }
 
 .cardRight {
@@ -160,6 +150,7 @@ const copyText = async (txt) => {
 
 .pId {
     font-size: 20px;
+    margin-bottom: 5px;
 }
 
 .pName {
@@ -169,7 +160,8 @@ const copyText = async (txt) => {
     margin-bottom: 6px;
 }
 
-.source, .difficulty {
+.source,
+.difficulty {
     color: #696666;
     font-size: 15px;
 }
@@ -186,6 +178,8 @@ const copyText = async (txt) => {
 .sample {
     background-color: #EEEEEE;
     padding: 5px;
+    white-space: pre-wrap;
+
 }
 
 .el-divider {
@@ -199,9 +193,9 @@ const copyText = async (txt) => {
     margin-bottom: 10px;
 }
 
-.node ~ div {
-    margin-left:10px;
-    margin-right:10px;
+.node~div {
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .node::before {
@@ -232,11 +226,10 @@ const copyText = async (txt) => {
     padding-right: 10px;
 }
 
-.tag {
-    display: inline-block;
-    background-color: #EAEAEA;
+.el-tag {
+    /* background-color: #EAEAEA; */
     border-radius: 8px;
-    padding: 2px 10px 2px 10px;
+    padding: 4px 10px 4px 10px;
     margin: 4px 4px 4px 4px;
     color: black;
 }

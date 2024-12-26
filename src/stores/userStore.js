@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { loginAPI } from '@/apis/user'
+import { loginAPI, logoutAPI} from '@/apis/user'
 
 export const useUserStore = defineStore('user', () => {
     const userInfo = ref({})
@@ -12,6 +12,7 @@ export const useUserStore = defineStore('user', () => {
     }
 
     const clearUserInfo = () => {
+        logoutAPI()
         userInfo.value = {}
     }
 
