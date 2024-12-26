@@ -1,7 +1,7 @@
 .el-tag {
     background-color: var(--bg-color, #EAEAEA);
     border-radius: 10px;
-    padding: 2px 6px 2px 10px;
+    padding: 2px 8px 2px 8px;
     margin-right: 6px;
     color: black;
     font-size: 12px;

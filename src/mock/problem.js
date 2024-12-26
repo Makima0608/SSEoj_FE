@@ -169,3 +169,32 @@ Mock.mock(/\/api\/solution\/good/, 'post', (options) => {
     data: 'success'
   }
 })
+
+Mock.mock(/\/api\/problem\/(\d+)\/submissions\//, 'get', (options) => {
+  const id = options.url.match(/\/api\/problem\/(\d+)\/submissions/)[1]
+  console.log(`request problem${id} submission`)
+  const data = [
+    {
+      "submit_time": "2024-10-09",
+      "code": "cout << 'Hello World' << endl;'",
+      "language": "C++",
+      "result": 0,
+      "error_info": null,
+      "time_spent": 90,
+      "memory_spent": 20
+    },
+    {
+      "submit_time": "2023-12-31",
+      "code": "print('Hello World')",
+      "language": "Python3",
+      "result": -2,
+      "error_info": "error_info",
+      "time_spent": 3141,
+      "memory_spent": 10299
+    }
+  ]
+  return {
+    err: null,
+    data: data
+  }
+})

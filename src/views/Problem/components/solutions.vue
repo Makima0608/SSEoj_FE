@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-    <div class="user-info-card" :style="cardStyle" @mouseenter="eneterCard" @mouseleave="hideInfoCard">
+    <div class="user-info-card" style="opacity: 0;" :style="cardStyle" @mouseenter="eneterCard" @mouseleave="hideInfoCard">
         <UserInfoCard ref="userInfoCardRef"></UserInfoCard>
     </div>
     
@@ -63,7 +63,7 @@
 <script setup>
 import UserInfoCard from '@/components/UserInfoCard.vue';
 
-import { onMounted, ref, computed, nextTick} from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { getSolutionListAPI } from '@/apis/problem';
 import { useTagsStore } from '@/stores/tagsStore';
@@ -77,7 +77,7 @@ const disabled = computed(() => isLoading.value || noMore.value)
 
 const isPageReady = ref(false)
 const hoverUser = ref(null)
-const cardStyle = ref({tansition: ".5s", opacity:"0%"})
+const cardStyle = ref({transition: ".5s ease-in-out", opacity:"0%"})
 const hideTimer = ref(null);
 const userInfoCardRef = ref(null)
 
@@ -156,30 +156,34 @@ const jumpToSolutionDetail = (id) => {
     window.open(url, '_blank')
 }
 
-const showInfoCard = (item, event) => {
-    if (hideTimer.value) {
-        clearTimeout(hideTimer.value)
-        hideTimer.value = null
-    }
-
-    hoverUser.value = item.user_info
-    userInfoCardRef.value.displayUserInfo(hoverUser.value.id)
+const showInfoCard = async(item, event) => {
     
-    const avatarRect = event.target.getBoundingClientRect()
-    const listRect = infiniteScrollRef.value.getBoundingClientRect()
-    const cardHeight = 200;
+    setTimeout(async () => {
+        if (hideTimer.value) {
+            clearTimeout(hideTimer.value)
+            hideTimer.value = null
+            userInfoCardRef.value.clearUserInfo()
+        }
+        hoverUser.value = item.user_info
+        await userInfoCardRef.value.displayUserInfo(hoverUser.value.id)
+        
+        const avatarRect = event.target.getBoundingClientRect()
+        const listRect = infiniteScrollRef.value.getBoundingClientRect()
+        const cardHeight = 200;
     
-    if (avatarRect.bottom + cardHeight > listRect.bottom) {
-        cardStyle.value = {
-            top: `${avatarRect.top - listRect.top - cardHeight/2 - 50}px`,
-        }
-    } 
-    else {
-        cardStyle.value = {
-            top: `${avatarRect.top - listRect.top + cardHeight/2}px`,
-            opacity: 1
-        }
-    }     
+        if (avatarRect.bottom + cardHeight > listRect.bottom) {
+            cardStyle.value = {
+                top: `${avatarRect.top - listRect.top - cardHeight/2 - 50}px`,
+                opacity: 1
+            }
+        } 
+        else {
+            cardStyle.value = {
+                top: `${avatarRect.top - listRect.top + cardHeight/2}px`,
+                opacity: 1
+            }
+        }  
+    }, 300)    
 }
 
 const eneterCard = () => {
@@ -190,15 +194,15 @@ const eneterCard = () => {
 }
 
 const hideInfoCard = () => {
+    
     hideTimer.value = setTimeout(() => {
         if (hideTimer.value) {
             clearTimeout(hideTimer.value)
             hideTimer.value = null
         }
         hoverUser.value = null
-        cardStyle.value = {
-            opacity: 0
-        }
+        cardStyle.value.opacity = 0
+        cardStyle.value.transition = 'none'
         userInfoCardRef.value.clearUserInfo()
     }, 300)
 }

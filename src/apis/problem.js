@@ -15,6 +15,7 @@ export const getSolutionListAPI = (id, params) => {
     })
 }
 
+// 题解点赞 API
 export const likeSolutionAPI = (id, is_good) => {
     return request({
         url: '/api/solution/good/',
@@ -23,5 +24,12 @@ export const likeSolutionAPI = (id, is_good) => {
             id: id,
             is_good: is_good
         }
+    })
+}
+
+export const getSubmissionsAPI = (id, params) => {
+    return request({
+        url: `/api/problem/${id}/submissions/`,
+        params: params
     })
 }

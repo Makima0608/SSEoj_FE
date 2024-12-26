@@ -6,33 +6,36 @@
     <div class="wrapper">
 
         <!-- 左板块 -->
-        <div class="left-panel" :style="{ width: leftPaneWidth + 'px', minWidth:'400px'}">
+        <div class="left-panel" :style="{ width: leftPaneWidth + 'px', minWidth:'400px'}" v-if="!fullScreen">
             <div class="tags">
                 <div v-for="(tag, index) in tags" :key="index" class="tag" :class="{ active: selectedTag === tag }"
                     @click="selectTag(index)">
                     {{ tag }}
                 </div>
             </div>
-        <el-scrollbar class="content">
-            <div >
-                <router-view></router-view>
-            </div>
-        </el-scrollbar>
+
+                <el-scrollbar class="content">
+                    <router-view></router-view>
+                </el-scrollbar>
+            
         </div>
 
-        <div class="resizer" @mousedown="onMouseDown"></div>
+        <div class="resizer" @mousedown="onMouseDown" v-if="!fullScreen"></div>
 
         <!-- 右板块 -->
         <div class="right-panel">
             <div class="right-header">
-                <el-upload :show-file-list="false" @change="handleFileChange" :limit="1" :on-exceed="handleExceed"
+                <div class="icon-btn">
+                    <el-upload :show-file-list="false" @change="handleFileChange" :limit="1" :on-exceed="handleExceed"
                     :before-upload="beforeFileUpload" :action="''">
-                    <span class="iconfont icon-tianjiawenjian"></span>
-                </el-upload>
-
+                        <span class="iconfont icon-tianjiawenjian"></span>
+                    </el-upload>
+                    <span :class="fullScreen? 'iconfont icon-quxiaoquanping': 'iconfont icon-quanping'" @click="toggleFullScreen"></span>
+                </div>
+                
                 <el-select v-model="langOption" @change="toggleLanguage()">
                     <el-option v-for="item in languageList" :key="item" :label="item" :value="item" class="option" />
-                </el-select>
+                </el-select>   
             </div>
             <el-divider style="border-top: 0px;" />
             <el-scrollbar class="editor">
@@ -166,6 +169,11 @@ const initActiveTags = () => {
     }
 }
 
+const fullScreen = ref(false)
+const toggleFullScreen = () => {
+    fullScreen.value = !fullScreen.value
+}
+
 onMounted(() => {
     initActiveTags()
 })
@@ -182,7 +190,7 @@ watch(
     display: flex;
     flex-direction: row;
     margin: 0 auto;
-    width: 90%;
+    width: 95%;
     height: calc(100vh - 140px);
     min-width: 800px;
     min-height: 500px;
@@ -194,14 +202,13 @@ watch(
     display: flex;
     flex-direction: row;
     /* margin-right: 10px; */
-    height: 100%;
+    height: 100%
     /* height: calc(100vh - 160px); */
 }
 
 .content {
     display: flex;
     flex-direction: column;
-    min-width: 200px;
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.4);
     border-radius: 10px;
     overflow: auto;
@@ -213,7 +220,7 @@ watch(
 }
 
 .tags {
-    position: pos;
+    /* position: pos; */
     display: flex;
     flex-direction: column;
     transform: translate(2px, 40px);
@@ -224,12 +231,12 @@ watch(
     position: relative;
     /* width: 60px; */
     white-space: nowrap;
-    padding: 15px 10px;
-    font-size: 14px;
+    padding: 15px 6px;
+    font-size: 12px;
     text-align: center;
     background-color: #FFF;
     border: 1px #B5B5BE solid;
-    margin-bottom: 8px;
+    margin-bottom: 15px;
     cursor: pointer;
     border-radius: 10px 0 0 10px;
     transition: background-color 0.2s;
@@ -248,6 +255,8 @@ watch(
     flex: 1;
     border-radius: 10px;
     height: 100%;
+    overflow: auto;
+    min-width: 400px;
     /* height: calc(100vh - 160px); */
 }
 
@@ -279,12 +288,20 @@ watch(
     /* margin-bottom: 5px; */
     height: 50px;
 }
+.right-header .icon-btn{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
 .right-header .el-select {
-    max-width: 80px;
+    max-width: 100px;
     --el-border-radius-base: 8px;
     margin-right: 20px;
     --el-input-text-color: black;
+}
+.icon-btn .icon-quanping {
+    font-size: 18px;
 }
 
 .icon-tianjiawenjian {

@@ -11,7 +11,7 @@ export function transMem(m) {
     if (m <= 1024)
         return `${m} KB`
     else
-        return (Math.round(m / 1024)).toString() + ' MB'
+        return (Math.round(m / 1024)).toFixed(1).toString() + ' MB'
 }
 
 export function transNum(n) {

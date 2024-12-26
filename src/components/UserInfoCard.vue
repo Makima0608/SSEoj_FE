@@ -17,25 +17,29 @@
                 <span>{{ transNum(userInfo.subscribing_count) }}</span>
             </div> 
         </div>
-        <div class="info-card-btn">+ 关注TA</div>
+        <div class="info-card-btn" :class="userInfo.is_subscribe? 'info-card-btn2': 'info-card-btn1'" @click="toggleFollow">{{ followText }}</div>
     </div>
 </template>
 
 <script setup>
 import { getUserInfoAPI } from '@/apis/user';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { transNum } from '@/utils/data_calculate';
 
 const userInfo = ref({})
 const loadComplete = ref(false)
-
+const followText = ref(userInfo.value.is_subscribe? '已关注': '+ 关注TA')
+const emit = defineEmits(['update:isFollow'])
+watch(userInfo, (newValue) => {
+    console.log('change')
+    emit('update:isFollow', newValue)
+})
 
 const getUserInfo = async(id) => {
     if (id == undefined)
         return 
     const res = await getUserInfoAPI(id)
     userInfo.value = res.data
-    console.log(userInfo.value)
 }
 
 const displayUserInfo = async(id) => {
@@ -45,6 +49,15 @@ const displayUserInfo = async(id) => {
 
 const clearUserInfo = () => {
     loadComplete.value = false
+}
+const toggleFollow = () => {
+    userInfo.value.is_subscribe = !userInfo.value.is_subscribe
+    if (userInfo.value.is_subscribe) {
+        followText.value = '已关注'
+    }
+    else {
+        followText.value = '+ 关注TA'
+    }
 }
 
 defineExpose({
@@ -62,6 +75,7 @@ defineExpose({
     border-radius: 10px;
     box-shadow: 2px 2px 6px 0px rgba(0, 0, 0, 0.4);
     padding: 0px 18px;
+    overflow: hidden;
 }
 
 .info-card .el-avatar{
@@ -80,7 +94,7 @@ defineExpose({
 }
 .info-card .basic-info .profile{
     margin-top: 10px;
-    font-size: 14px;
+    font-size: 13px;
     height: 20px;
     color: #bbb;
     text-overflow: ellipsis;
@@ -105,11 +119,12 @@ defineExpose({
 }
 .follow-info .divider{
     width: 2px;
-    height: 20px;
-    background-color: #bbb;
+    height: 25px;
+    background-color: #2f2a2a;
 }
 
 .subscribing_count span:last-of-type, .subscribers_count span:last-of-type{
+    margin-top: 3px;
     font-size: 20px;
     font-weight: bold;
 }
@@ -119,12 +134,20 @@ defineExpose({
     justify-content: center;
     align-items: center;
     border: none;
-    border-radius: 3px;
+    border-radius: 6px;
     height: 30px;
     width: 80%;
-    background-color:rgb(19, 120, 201);
+    margin: 15px auto 0px auto;
+    cursor: pointer;
+    transition: background-color .3s ease-in-out;
+}
+.info-card-btn1 {
+    background-color:#1682da;
     color: white;
-    margin: 20px auto 0px auto;
+}
+.info-card-btn2 {
+    background-color: #EEE;
+    color: #BBB;
 }
 
 </style>
