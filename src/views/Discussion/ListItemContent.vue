@@ -22,9 +22,6 @@
 import { ref } from 'vue';
 
 
-const rowSelected = (row) => {
-    router.replace(`/problem/${row.problem_id}/description`)
-}
 
 defineProps({
   avatar: { type: String, required: true }, // 用户头像的 URL
@@ -51,9 +48,9 @@ const time = ref("2024/12/17");
   gap: 10px;
   padding: 10px;
   background: #fff;
-  border-radius: 8px;
+  border-radius: 6px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 100%;
+  width: 99%;
   cursor: pointer;
 
 }
@@ -84,6 +81,7 @@ const time = ref("2024/12/17");
   text-align: left;
   max-width: 100px;
   margin-top:8px;
+  font-weight: bold;
 }
 
 .post_content{

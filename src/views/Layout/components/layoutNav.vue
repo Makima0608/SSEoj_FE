@@ -12,7 +12,7 @@
             <div class="userInfo">
                 <el-popover :show-arrow="false">
                     <template #reference>
-                        <el-avatar :src="userStore.getAvatar()" :size="60" fit="fill">User</el-avatar>
+                        <el-avatar :src="userStore.getAvatar()" :size="60" fit="fill" @click="goToUser(userStore.userInfo.id)">User</el-avatar>
                     </template>
                     <template #default>
                         <div class="avatarDropdown">
@@ -23,7 +23,7 @@
                         </div>
                     </template>
                 </el-popover>
-                <span>{{ userStore.userInfo.user_name }}</span>
+                <span>{{ userStore.userInfo.username }}</span>
             </div>
         </template>
         <template v-else>
@@ -38,11 +38,19 @@
 <script setup>
 import { useUserStore } from '@/stores/userStore';
 import { ElMessage } from 'element-plus';
+import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
 const userStore = useUserStore()
 const logout = () => {
     userStore.clearUserInfo()
     ElMessage({ type: "success", message: "退出成功" })
 }
+
+const goToUser = (userId) => {
+  router.replace(`/user/${userId}`);
+};
 
 </script>
 

@@ -212,6 +212,10 @@ const clearReplyBox = () => {
   margin-right: 10px;
 }
 
+.reply-content p {
+  margin-top:5px;
+}
+
 .reply-item {
   margin-bottom: 10px;
   margin-top: 10px;
