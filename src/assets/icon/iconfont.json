@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "2733966",
+      "name": "描述",
+      "font_class": "miaoshu",
+      "unicode": "e6ed",
+      "unicode_decimal": 59117
+    },
+    {
+      "icon_id": "200970",
+      "name": "3.1转发",
+      "font_class": "31zhuanfa",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "12720627",
+      "name": "描述",
+      "font_class": "miaoshu1",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
       "icon_id": "20466490",
       "name": "取消全屏",
       "font_class": "quxiaoquanping",

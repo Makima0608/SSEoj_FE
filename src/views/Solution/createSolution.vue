@@ -18,15 +18,16 @@
             <button v-else class="addTagBtn" @click="showInput">+ 添加标签</button>
         </div>
     </div>
-    <TEditor class="solution-editor" ref="TEditorRef">
-        <template #default="{ item }">
-            {{ item }}
-        </template>
-    </TEditor>
+
+    <div class="solution-editor">
+        <FEditor ref="FEditorRef"/>
+    </div>
+    
 </template>
 
 <script setup>
 import '@/assets/base-el-tag.css'
+import FEditor from '@/components/FEditor.vue';
 import layoutNav from '../Layout/components/layoutNav.vue';
 import { onMounted, ref, nextTick } from 'vue';
 import { useTagsStore } from '@/stores/tagsStore';
@@ -42,7 +43,7 @@ const selectedTag = ref([])
 const allTags = ref()
 const tagKey = ref("")
 
-const TEditorRef = ref(null)
+const FEditorRef = ref(null)
 const inputVisible = ref(false)
 const autoCompleteRef = ref(null)
 const route = useRoute()
@@ -50,7 +51,7 @@ const id = route.query.id
 const problemDesc = ref({})
 
 const postSolution = () => {
-    console.log(TEditorRef.value.handleGetContent());
+    console.log(FEditorRef.value.getContent());
 }
 
 const createFilter = (queryString) => {
@@ -103,7 +104,7 @@ const getProblemDesc = async (id) => {
     problemDesc.value = res.data
 }
 
-const setTEditorContent = () => {
+const setFEditorContent = () => {
     const content = `
     <h1>${problemDesc.value.id}.${problemDesc.value.name}</h1>
     <li><h3>题目描述</h3></li>
@@ -115,7 +116,7 @@ const setTEditorContent = () => {
     <li><h3>数据范围</h3></li>
     <p style="padding-left: 40px;">${problemDesc.value.data_range}</p>
     <br><hr><br><br>`
-    TEditorRef.value.handleSetContent(content)
+    FEditorRef.value.setContent(content)
 }
 
 
@@ -125,7 +126,7 @@ onMounted(async () => {
     allTags.value = Object.keys(tagsStore.tagsToID)
     await getProblemDesc(id)
     loadComplete.value = true
-    setTEditorContent()
+    setFEditorContent()
 })
 </script>
 

@@ -13,11 +13,9 @@
                     {{ tag }}
                 </div>
             </div>
-
-                <el-scrollbar class="content">
-                    <router-view></router-view>
-                </el-scrollbar>
-            
+            <el-scrollbar class="content">
+                <router-view></router-view>
+            </el-scrollbar>   
         </div>
 
         <div class="resizer" @mousedown="onMouseDown" v-if="!fullScreen"></div>
@@ -32,19 +30,21 @@
                     </el-upload>
                     <span :class="fullScreen? 'iconfont icon-quxiaoquanping': 'iconfont icon-quanping'" @click="toggleFullScreen"></span>
                 </div>
-                
-                <el-select v-model="langOption" @change="toggleLanguage()">
-                    <el-option v-for="item in languageList" :key="item" :label="item" :value="item" class="option" />
-                </el-select>   
+                <div class="right-btn">
+                    <button @click="submitProblem" 
+                            :disabled="submitBtnDisable" 
+                            :style="{opacity: submitBtnDisable? 0.4: 1}"
+                    >提交</button>
+                    <el-select v-model="langOption" @change="toggleLanguage()">
+                        <el-option v-for="item in languageList" :key="item" :label="item" :value="item" class="option" />
+                    </el-select> 
+                </div>
+                 
             </div>
             <el-divider style="border-top: 0px;" />
             <el-scrollbar class="editor">
                 <CodeMirror ref="codeMirror" class="codeMirror"></CodeMirror>
             </el-scrollbar>
-            <el-divider />
-            <div class="right-footer">
-                <button>提交</button>
-            </div>
         </div>
 
     </div>
@@ -59,12 +59,13 @@ import { onMounted, ref, watch } from 'vue';
 import { ElMessage } from 'element-plus';
 import '@/assets/icon/iconfont.css'
 import { useRouter, useRoute } from 'vue-router';
+import { submitProblemAPI } from '@/apis/problem';
 
+// resizer代码
 const leftPaneWidth = ref(500)
 const isDragging = ref(false);
 const initialMouseX = ref(0);
 const initialLeftPanelWidth = ref(0);
-
 const onMouseDown = (e) => {
     isDragging.value = true
     initialMouseX.value = e.clientX
@@ -76,14 +77,12 @@ const onMouseDown = (e) => {
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
 }
-
 const onMouseMove = (e) => {
     if (isDragging.value) {
         const deltaX = e.clientX - initialMouseX.value
         leftPaneWidth.value = initialLeftPanelWidth.value + deltaX
     }
 }
-
 const onMouseUp = () => {
     isDragging.value = false
     document.body.style.userSelect = 'auto'
@@ -102,6 +101,7 @@ const languageStore = useLanguageStore()
 const languageList = languageStore.languageList
 const codeMirror = ref(null)
 
+//切换页面
 const tags = ['题目描述', '题解', '提交记录'];
 const selectedTag = ref(tags[0]);
 const selectTag = (index) => {
@@ -117,14 +117,13 @@ const selectTag = (index) => {
             router.push(`/problem/${id}/submissions`)
             break
     }
-
 };
 
+// 切换语言
 const langOption = ref('C++')
 const toggleLanguage = () => {
     codeMirror.value.toggleLanguage(langOption.value)
 }
-
 
 // 处理上传多个文件
 const handleExceed = () => {
@@ -169,9 +168,25 @@ const initActiveTags = () => {
     }
 }
 
+// 控制全屏
 const fullScreen = ref(false)
 const toggleFullScreen = () => {
     fullScreen.value = !fullScreen.value
+}
+
+// 提交题目
+const submitBtnDisable = ref(false)
+const submitProblem = async() => {
+    submitBtnDisable.value = true
+    const data = {
+        problem_id: id,
+        submit_code: codeMirror.value.getCode(),
+        language: langOption.value
+    }
+    // console.log(data)
+    await submitProblemAPI(data)
+    selectTag(2)
+    submitBtnDisable.value = false
 }
 
 onMounted(() => {
@@ -214,7 +229,7 @@ watch(
     overflow: auto;
     padding: 15px;
     width: 100%;
-    z-index: 100;
+    z-index: 10;
     background-color: white;
     height: 100%;
 }
@@ -241,7 +256,7 @@ watch(
     border-radius: 10px 0 0 10px;
     transition: background-color 0.2s;
     box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.4);
-    z-index: 10;
+    z-index: 5;
 }
 
 .tag.active {
@@ -293,20 +308,45 @@ watch(
     align-items: center;
     gap: 10px;
 }
+.right-header .right-btn{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    margin-right: 20px;
+}
+.right-header .right-btn button{
+    border: none;
+    width: 100px;
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 7px;
+    font-size: 14px;
+    border-radius: 6px;
+    transition: opacity .3s;
+}
+.right-header .right-btn button:hover{
+    cursor: pointer;
+    opacity: 0.4;
+}
 
 .right-header .el-select {
-    max-width: 100px;
+    min-width: 80px;
     --el-border-radius-base: 8px;
-    margin-right: 20px;
     --el-input-text-color: black;
 }
 .icon-btn .icon-quanping {
     font-size: 18px;
 }
+.icon-btn .icon-quanping:hover, .icon-btn .icon-quxiaoquanping:hover{
+    cursor: pointer;
+}
 
 .icon-tianjiawenjian {
     font-size: 20px
 }
+
 
 .resizer {
     background-color: #888;
@@ -325,8 +365,4 @@ watch(
     background-color: blue;
 }
 
-.right-footer {
-    flex: 1;
-    width: 100%;
-}
 </style>

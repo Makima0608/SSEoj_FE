@@ -26,7 +26,45 @@ Mock.mock(/\/api\/problemset\//, 'get', (options) => {
                         "attempt_count": 1000,
                         "difficulty": 5
                     },
-
+                    {
+                        "status": true,
+                        "id": 1001,
+                        "name": "你好，世界",
+                        "tags": [
+                            1,
+                            2,
+                            3
+                        ],
+                        "pass_count": 550,
+                        "attempt_count": 1000,
+                        "difficulty": 5
+                    },
+                    {
+                        "status": true,
+                        "id": 1001,
+                        "name": "你好，世界",
+                        "tags": [
+                            1,
+                            2,
+                            3
+                        ],
+                        "pass_count": 550,
+                        "attempt_count": 1000,
+                        "difficulty": 5
+                    },
+                    {
+                        "status": true,
+                        "id": 1001,
+                        "name": "你好，世界",
+                        "tags": [
+                            1,
+                            2,
+                            3
+                        ],
+                        "pass_count": 550,
+                        "attempt_count": 1000,
+                        "difficulty": 5
+                    }
                 ]
             }
         }

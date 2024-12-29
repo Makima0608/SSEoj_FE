@@ -26,7 +26,7 @@
                     <el-table :data="problemset" stripe :row-style="{ height: '70px' }"
                         @row-click="rowSelected">
                         <el-table-column prop="status" label="状态" width="80" />
-                        <el-table-column prop="id" label="编号" width="120" />
+                        <el-table-column prop="id" label="编号" width="100" />
                         <el-table-column prop="name" label="题目名称" />
                         <el-table-column label="标签">
                             <template #default="scope">
@@ -173,7 +173,7 @@ onMounted(async () => {
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    z-index: 1000;
+    z-index: 10;
     flex-shrink: 1;
     position: relative;
 }

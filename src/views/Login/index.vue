@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="container">
     <header>
@@ -79,6 +80,8 @@ import { ElMessage } from 'element-plus';
 import { useUserStore } from '@/stores/userStore';
 import 'element-plus/theme-chalk/el-message.css';
 import router from '@/router';
+import forge from 'node-forge';
+
 
 // Data properties
 const email = ref('');
@@ -95,6 +98,12 @@ const userStore = useUserStore()
 
 // Methods
 const doLogin = async () => {
+  const publicKeyPem = `-----BEGIN PUBLIC KEY-----
+MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKHP3hnFtL1g3bpgDMFAma1MofY9UmInthR8vK5Q9/dYcfdqvzLFRdRCPdeefqGO+BIFfLeCKJi4odn61XJEvp8CAwEAAQ==
+-----END PUBLIC KEY-----`
+  // const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
+  // const encrypted = forge.util.encode64(publicKey.encrypt(password.value));
+  // console.log(encrypted)
   await userStore.getUserInfo(email.value, password.value)
   ElMessage({ type: "success", message: "登陆成功" })
   router.replace({ path: '/' })

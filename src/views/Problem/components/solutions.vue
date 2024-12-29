@@ -227,7 +227,7 @@ onMounted(async () => {
     min-height: 50px;
     gap: 10px;
     position: relative;
-    z-index: 1000;
+    z-index: 5;
     background-color: white;
     width: 100%;
     border-bottom: 1px solid #777676;
@@ -354,7 +354,7 @@ onMounted(async () => {
     position: absolute;
     transform: translateY(20px);
     background-color: white;
-    z-index: 1000;
+    z-index: 5;
     transition: opacity .5s;
 }
 
@@ -379,7 +379,7 @@ onMounted(async () => {
     position: relative;
     padding-top: 10px;
     width: 100%;
-    z-index: 100;
+    z-index: 1;
     height: calc(100vh - 230px);
     overflow: auto;
     /* width: 300px; */

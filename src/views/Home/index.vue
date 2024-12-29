@@ -79,7 +79,7 @@ const search_query =ref("");
 const count = ref(0)
 const loadedCount = ref(0)
 const loading = ref(false)
-const noMore = computed(() => loadedCount.value  >= 6)//为展示暂定6
+const noMore = computed(() => loadedCount.value  >= postListStore.count)//为展示暂定6
 const disabled = computed(() => loading.value || noMore.value)
 
 const postListStore = usePostListStore();

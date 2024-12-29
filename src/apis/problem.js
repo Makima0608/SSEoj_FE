@@ -5,7 +5,7 @@ export const getProblemDescAPI = (id) => {
     return request({
         url: `/api/problem/${id}/description/`,
     })
-}   
+}
 
 // 获取题解列表 API
 export const getSolutionListAPI = (id, params) => {
@@ -27,9 +27,18 @@ export const likeSolutionAPI = (id, is_good) => {
     })
 }
 
+// 获取提交列表
 export const getSubmissionsAPI = (id, params) => {
     return request({
         url: `/api/problem/${id}/submissions/`,
         params: params
+    })
+}
+
+export const submitProblemAPI = (data) => {
+    return request({
+        url: '/api/problem/submit/',
+        method: 'POST',
+        data: data
     })
 }

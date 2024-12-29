@@ -1,5 +1,6 @@
 import Mock from "mockjs";
 
+// 模拟获取题目描述
 Mock.mock(/\/api\/problem\/(\d+)\/description/, 'get', function (options) {
   const id = options.url.match(/\/api\/problem\/(\d+)\/description/)[1];
   // 根据id生成模拟数据
@@ -49,6 +50,7 @@ Mock.mock(/\/api\/problem\/(\d+)\/description/, 'get', function (options) {
   };
 });
 
+// 模拟获取题解列表
 Mock.mock(/\/api\/problem\/(\d+)\/solutions/, 'get', (options) => {
   console.log(options.url)
   const data = {
@@ -159,6 +161,7 @@ Mock.mock(/\/api\/problem\/(\d+)\/solutions/, 'get', (options) => {
   }
 });
 
+// 模拟点赞题解
 Mock.mock(/\/api\/solution\/good/, 'post', (options) => {
   console.log('--mockjs:problem--')
   console.log(options.url)
@@ -170,6 +173,7 @@ Mock.mock(/\/api\/solution\/good/, 'post', (options) => {
   }
 })
 
+// 模拟获取提交列表
 Mock.mock(/\/api\/problem\/(\d+)\/submissions\//, 'get', (options) => {
   const id = options.url.match(/\/api\/problem\/(\d+)\/submissions/)[1]
   console.log(`request problem${id} submission`)
@@ -196,5 +200,13 @@ Mock.mock(/\/api\/problem\/(\d+)\/submissions\//, 'get', (options) => {
   return {
     err: null,
     data: data
+  }
+})
+
+// 模拟提交题目
+Mock.mock(/\/api\/problem\/submit\//, 'post', (options) => {
+  return {
+    err: null,
+    data: 'success'
   }
 })

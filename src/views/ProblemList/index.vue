@@ -1,6 +1,12 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 
 <template>
+    <div class="header">
+        <div class="searchBar">
+            <input type="text" class="input" v-model="keyword" placeholder="请输入题单标题或编号">
+            <span class="iconfont icon-sousuo" @click="search"></span>
+        </div>
+    </div>
     <div class="wrapper">
         <div class="problemlist">
             <div v-for="plistItem in problemlist" :key="plistItem.id" class="problemlist-item"
@@ -20,13 +26,12 @@
                 </div>
                 <div class="progress-num">
                     <span>进度</span>
-                    <span>{{ plistItem.pass_count + '/' + plistItem.problem_count }}</span>
+                    <span style="font-weight: 500;">{{ plistItem.pass_count + ' / ' + plistItem.problem_count }}</span>
                 </div>
                 <el-progress :text-inside="true" :stroke-width="20"
-                    :percentage="calcProgress(plistItem.pass_count, plistItem.problem_count)" color="black">
+                    :percentage="calcProgress(plistItem.pass_count, plistItem.problem_count)" color="#004D40">
                 </el-progress>
             </div>
-
         </div>
         <div class="pagination">
             <el-pagination layout="prev, pager, next, jumper" v-model:current-page="currentPage"
@@ -83,6 +88,43 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.header{
+    width: 85%;
+    margin: 30px auto;
+}
+.searchBar {
+    width: 400px;
+    height: 40px;
+    display: flex;
+    border: 1px solid #BBBBBB;
+    border-radius: 8px;
+    overflow: auto;
+    flex: 1;
+    gap: 5px;
+    align-items: center;
+    justify-items: center;
+    padding-right: 10px;
+    transition: .2s;
+}
+
+.searchBar:hover,
+.searchBar:focus-within {
+    border: 1.1px solid #282727;
+}
+
+.input {
+    margin: 0;
+    padding: 0px 8px;
+    font-size: 16px;
+    /* background-color: blue; */
+    flex: 1 1 0;
+    border: none;
+    outline: none;
+    height: 100%;
+    min-width: 10px;
+}
+
+
 .wrapper {
     display: flex;
     flex-direction: column;
@@ -106,7 +148,7 @@ onMounted(async () => {
     margin-bottom: 20px;
     padding: 20px 15px;
     box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.2);
-    width: 400px;
+    width: 350px;
     height: 180px;
     border-radius: 10px;
     transition: .5s;
@@ -142,7 +184,7 @@ onMounted(async () => {
 
 .problemlist-star .icon-shoucangdanse,
 .problemlist .icon-shoucang {
-    font-size: 25px;
+    font-size: 20px;
 }
 
 .creator-info {

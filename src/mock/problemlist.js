@@ -1,6 +1,7 @@
 import Mock from 'mockjs'
 
-Mock.mock(/\/api\/problemlist\//, 'get', (options) => {
+// 模拟获取公开题单列表
+Mock.mock(/\/api\/problemlist\/(?!(\d))/, 'get', (options) => {
     console.log(options.url)
     const query = options.url.split('?')[1];
     const params = new URLSearchParams(query);
@@ -67,3 +68,53 @@ Mock.mock(/\/api\/problemlist\//, 'get', (options) => {
     }
 }
 )
+
+// 模拟获取题单详细信息
+Mock.mock(/\/api\/problemlist\/(\d+)\//, 'get', (options) => {
+    const id = options.url.match(/\/api\/problemlist\/(\d+)\//)[1]
+    console.log(options.url, id)
+    const data = {
+        "id": 13,
+        "name": "谈文韬",
+        "summary": "voluptate sed dolor",
+        "star_status": false,
+        "problem_count": 47,
+        "pass_count": 11,
+        "problems": [
+            {
+                "pass_status": false,
+                "id": 59,
+                "name": "单于呈轩",
+                "tags": [
+                    52,
+                    12
+                ],
+                "difficulty": 5,
+                "pass_count": 33,
+                "attempt_count": 85
+            },
+            {
+                "pass_status": true,
+                "id": 35,
+                "name": "浦若汐",
+                "tags": [
+                    5,
+                    73,
+                    82
+                ],
+                "difficulty": 2,
+                "pass_count": 9,
+                "attempt_count": 40
+            }
+        ],
+        "creator_info": {
+            "id": 59,
+            "username": "桐梓诚",
+            "avatar": "https://avatars.githubusercontent.com/u/80031083"
+        }
+    }
+    return {
+        err: null,
+        data: data
+    }
+})

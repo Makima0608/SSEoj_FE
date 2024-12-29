@@ -28,7 +28,7 @@ import { transNum } from '@/utils/data_calculate';
 
 const userInfo = ref({})
 const loadComplete = ref(false)
-const followText = ref(userInfo.value.is_subscribe? '已关注': '+ 关注TA')
+const followText = ref('')
 const emit = defineEmits(['update:isFollow'])
 watch(userInfo, (newValue) => {
     console.log('change')
@@ -44,6 +44,7 @@ const getUserInfo = async(id) => {
 
 const displayUserInfo = async(id) => {
     await getUserInfo(id)
+    followText.value = userInfo.value.is_subscribe? '已关注': '+ 关注TA'
     loadComplete.value = true
 }
 

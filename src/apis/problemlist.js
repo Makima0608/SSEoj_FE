@@ -6,3 +6,9 @@ export const getProblemListAPI = (params) => {
         params,
     })
 }
+
+export const getProblemListDetailAPI = (id) => {
+    return request({
+        url: `/api/problemlist/${id}/`
+    })
+}

@@ -23,7 +23,7 @@
                         </div>
                     </template>
                 </el-popover>
-                <span>{{ userStore.userInfo.user_name }}</span>
+                <span>{{ userStore.userInfo.username }}</span>
             </div>
         </template>
         <template v-else>
