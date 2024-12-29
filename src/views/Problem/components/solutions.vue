@@ -1,9 +1,5 @@
 <!-- eslint-disable vue/multi-word-component-names -->
-<template>
-    <div class="user-info-card" style="opacity: 0;" :style="cardStyle" @mouseenter="eneterCard" @mouseleave="hideInfoCard">
-        <UserInfoCard ref="userInfoCardRef"></UserInfoCard>
-    </div>
-    
+<template>    
     <div class="searchHeader">
         <div class="searchBar">
             <input type="text" class="input" v-model="keyword">
@@ -16,8 +12,6 @@
         <div class="postSolutionBtn" @click="postSolution">发布题解</div>
     </div>
 
-    
-
     <div v-if="isPageReady">
         <el-scrollbar>
             <ul v-infinite-scroll="loadSolutions" class="solutionList" :infinite-scroll-disabled="disabled"
@@ -29,11 +23,23 @@
                             <span class="solution-time">{{ item.create_time }}</span>
                             <span class="iconfont icon-jiantouarrow487" @click="jumpToSolutionDetail(item.id)"></span>
                         </div>
-                        <div class="userInfo" @click="jumpToUser(item.user_info.id)"
-                            @mouseenter="showInfoCard(item, $event)" @mouseleave="hideInfoCard">
-                            <el-avatar :size="25" style="font-size: 12px;">KL</el-avatar>
-                            <span>{{ item.user_info.username }}</span>
-                        </div>
+
+                        <el-popover 
+                            @show="showUserInfoCard(item.user_info.id)"
+                            @hide="userInfo = {}"
+                            popper-style="background:transparent; border:none; box-shadow:none; margin-top:10px"
+                            :show-arrow="false"
+                        >
+                            <template #reference>
+                                <div class="userInfo" @click="jumpToUser(item.user_info.id)">
+                                    <el-avatar :size="25" style="font-size: 12px;" :src="item.avatar">KL</el-avatar>
+                                    <span>{{ item.user_info.username }}</span>
+                                </div>
+                            </template>
+                            <template #default>
+                                <UserInfoCard :userInfo="userInfo" @update:subscribe="toggleFollow"/>
+                            </template>
+                        </el-popover>
                         
                         <div class="sol-content">
                             {{ item.content }}
@@ -69,6 +75,16 @@ import { getSolutionListAPI } from '@/apis/problem';
 import { useTagsStore } from '@/stores/tagsStore';
 import { transNum } from '@/utils/data_calculate';
 import { likeSolutionAPI } from '@/apis/problem';
+import { subscribeUserAPI, getUserInfoAPI } from '@/apis/user';
+
+const userInfo = ref({})
+const showUserInfoCard = async(id) => {
+   if (id == undefined)
+        return 
+   const res = await getUserInfoAPI(id)
+   userInfo.value = res.data
+   console.log(userInfo.value)
+}
 
 const infiniteScrollRef = ref(null)
 const isLoading = ref(false)
@@ -76,10 +92,6 @@ const noMore = computed(() => solutions.value.length >= count.value)
 const disabled = computed(() => isLoading.value || noMore.value)
 
 const isPageReady = ref(false)
-const hoverUser = ref(null)
-const cardStyle = ref({transition: ".5s ease-in-out", opacity:"0%"})
-const hideTimer = ref(null);
-const userInfoCardRef = ref(null)
 
 const route = useRoute()
 const router = useRouter()
@@ -156,55 +168,10 @@ const jumpToSolutionDetail = (id) => {
     window.open(url, '_blank')
 }
 
-const showInfoCard = async(item, event) => {
-    
-    setTimeout(async () => {
-        if (hideTimer.value) {
-            clearTimeout(hideTimer.value)
-            hideTimer.value = null
-            userInfoCardRef.value.clearUserInfo()
-        }
-        hoverUser.value = item.user_info
-        await userInfoCardRef.value.displayUserInfo(hoverUser.value.id)
-        
-        const avatarRect = event.target.getBoundingClientRect()
-        const listRect = infiniteScrollRef.value.getBoundingClientRect()
-        const cardHeight = 200;
-    
-        if (avatarRect.bottom + cardHeight > listRect.bottom) {
-            cardStyle.value = {
-                top: `${avatarRect.top - listRect.top - cardHeight/2 - 50}px`,
-                opacity: 1
-            }
-        } 
-        else {
-            cardStyle.value = {
-                top: `${avatarRect.top - listRect.top + cardHeight/2}px`,
-                opacity: 1
-            }
-        }  
-    }, 300)    
-}
-
-const eneterCard = () => {
-    if (hideTimer.value) {
-        clearTimeout(hideTimer.value)
-        hideTimer.value = null
-    }
-}
-
-const hideInfoCard = () => {
-    
-    hideTimer.value = setTimeout(() => {
-        if (hideTimer.value) {
-            clearTimeout(hideTimer.value)
-            hideTimer.value = null
-        }
-        hoverUser.value = null
-        cardStyle.value.opacity = 0
-        cardStyle.value.transition = 'none'
-        userInfoCardRef.value.clearUserInfo()
-    }, 300)
+const toggleFollow = (msg) => {
+    userInfo.value.is_subscribe = msg
+    userInfo.value.subscribers_count += msg? 1: -1
+    subscribeUserAPI(hoverUserInfo.value.id, msg)
 }
 
 onMounted(async () => {
@@ -336,7 +303,7 @@ onMounted(async () => {
 .solution-item .userInfo {
     display: inline-block;
     font-size: 14px;
-    align-items: center;
+    /* align-items: center; */
     margin-bottom: 6px;
     /* background-color: #0047AB; */
     width: auto;

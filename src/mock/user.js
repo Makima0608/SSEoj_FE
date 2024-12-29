@@ -44,3 +44,11 @@ Mock.mock(/\/api\/user\/(\d+)\/info/, 'get', (options) => {
             }
         }
 })
+
+Mock.mock(/\/api\/user\/subscribe\//, 'post', (options) => {
+    console.log(options.body)
+    return {
+        err: null,
+        data: 'success'
+    }
+})

@@ -34,6 +34,18 @@ export const getCreateProblemListAPI = (id) => {
     })
 }
 
+// 关注用户
+export const subscribeUserAPI = (id, relationship) => {
+    return request({
+        url: '/api/user/subscribe/',
+        method: 'POST',
+        data: {
+            id: id,
+            relationship: relationship
+        }
+    })
+}
+
 export const proflieChangeAPI = () => {
     return request({
         url: "/api/user/profile_change/",

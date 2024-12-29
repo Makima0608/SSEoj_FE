@@ -1,5 +1,5 @@
 <template>
-    <div class="info-card" v-if="loadComplete">
+    <div class="info-card">
         <el-avatar :size="60" :src="userInfo.avatar">KL</el-avatar>
         <div class="basic-info">
             <span class="username">{{ userInfo.username }}</span>
@@ -12,66 +12,35 @@
             </div>
             <div class="divider"></div>
             <div class="subscribing_count">
-                
                 <span>关注</span>
                 <span>{{ transNum(userInfo.subscribing_count) }}</span>
             </div> 
         </div>
-        <div class="info-card-btn" :class="userInfo.is_subscribe? 'info-card-btn2': 'info-card-btn1'" @click="toggleFollow">{{ followText }}</div>
+        <div class="info-card-btn" :class="userInfo?.is_subscribe? 'info-card-btn2': 'info-card-btn1'" @click="toggleFollow">{{ userInfo.is_subscribe? '已关注': '+ 关注TA' }}</div>
     </div>
 </template>
 
 <script setup>
-import { getUserInfoAPI } from '@/apis/user';
-import { ref, watch } from 'vue';
 import { transNum } from '@/utils/data_calculate';
 
-const userInfo = ref({})
-const loadComplete = ref(false)
-const followText = ref('')
-const emit = defineEmits(['update:isFollow'])
-watch(userInfo, (newValue) => {
-    console.log('change')
-    emit('update:isFollow', newValue)
+const props = defineProps({
+    userInfo: {
+        type: Object,
+        default: () => ({})
+    }
 })
 
-const getUserInfo = async(id) => {
-    if (id == undefined)
-        return 
-    const res = await getUserInfoAPI(id)
-    userInfo.value = res.data
-}
-
-const displayUserInfo = async(id) => {
-    await getUserInfo(id)
-    followText.value = userInfo.value.is_subscribe? '已关注': '+ 关注TA'
-    loadComplete.value = true
-}
-
-const clearUserInfo = () => {
-    loadComplete.value = false
-}
+const emit = defineEmits(['update:subscribe'])
 const toggleFollow = () => {
-    userInfo.value.is_subscribe = !userInfo.value.is_subscribe
-    if (userInfo.value.is_subscribe) {
-        followText.value = '已关注'
-    }
-    else {
-        followText.value = '+ 关注TA'
-    }
+    emit('update:subscribe', !props.userInfo.is_subscribe)
 }
-
-defineExpose({
-    displayUserInfo,
-    clearUserInfo
-})
-
 </script>
 
 <style scoped>
 .info-card {
+    background-color: white;
     width: 270px;
-    height: 180px;
+    height: 185px;
     border: 1px solid #DEDCDC;
     border-radius: 10px;
     box-shadow: 2px 2px 6px 0px rgba(0, 0, 0, 0.4);
@@ -80,8 +49,7 @@ defineExpose({
 }
 
 .info-card .el-avatar{
-    /* transform: translateY(-30px); */
-    top: -30px;
+    transform: translateY(-30px);
     position: absolute;
 }
 .info-card .basic-info{
@@ -92,6 +60,7 @@ defineExpose({
 .info-card .basic-info .username{
     font-size: 17px;
     font-weight: bold;
+    color: black;
 }
 .info-card .basic-info .profile{
     margin-top: 10px;
@@ -109,7 +78,7 @@ defineExpose({
     align-items: center;
     justify-content: center;
     gap: 40px;
-    margin-top: 15px;
+    margin-top: 12px;
     font-size: 12px;
 }
 
@@ -128,6 +97,7 @@ defineExpose({
     margin-top: 3px;
     font-size: 20px;
     font-weight: bold;
+    color: black;
 }
 
 .info-card-btn {
@@ -138,7 +108,7 @@ defineExpose({
     border-radius: 6px;
     height: 30px;
     width: 80%;
-    margin: 15px auto 0px auto;
+    margin: 12px auto 0px auto;
     cursor: pointer;
     transition: background-color .3s ease-in-out;
 }
