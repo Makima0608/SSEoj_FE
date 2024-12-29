@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1330721",
+      "name": "对勾1",
+      "font_class": "duigou1",
+      "unicode": "e744",
+      "unicode_decimal": 59204
+    },
+    {
+      "icon_id": "18368038",
+      "name": "叉",
+      "font_class": "cha",
+      "unicode": "e686",
+      "unicode_decimal": 59014
+    },
+    {
       "icon_id": "2733966",
       "name": "描述",
       "font_class": "miaoshu",

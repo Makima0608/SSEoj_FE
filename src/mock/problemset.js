@@ -27,7 +27,7 @@ Mock.mock(/\/api\/problemset\//, 'get', (options) => {
                         "difficulty": 5
                     },
                     {
-                        "status": true,
+                        "status": false,
                         "id": 1001,
                         "name": "你好，世界",
                         "tags": [
@@ -53,7 +53,7 @@ Mock.mock(/\/api\/problemset\//, 'get', (options) => {
                         "difficulty": 5
                     },
                     {
-                        "status": true,
+                        "status": false,
                         "id": 1001,
                         "name": "你好，世界",
                         "tags": [

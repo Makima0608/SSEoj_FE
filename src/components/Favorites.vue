@@ -8,6 +8,8 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue';
+
 
 
 const props = defineProps({
@@ -20,6 +22,9 @@ const emit = defineEmits(['update:isVisible'])
 const closeWindow = () => {
     emit('update:isVisible', false)
 }
+onMounted(() => {
+    console.log("created")
+})
 </script>
 
 <style scoped>

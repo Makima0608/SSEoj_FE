@@ -33,7 +33,6 @@
                 <div class="right-btn">
                     <button @click="submitProblem" 
                             :disabled="submitBtnDisable" 
-                            :style="{opacity: submitBtnDisable? 0.4: 1}"
                     >提交</button>
                     <el-select v-model="langOption" @change="toggleLanguage()">
                         <el-option v-for="item in languageList" :key="item" :label="item" :value="item" class="option" />
@@ -328,6 +327,9 @@ watch(
 }
 .right-header .right-btn button:hover{
     cursor: pointer;
+    opacity: 0.4;
+}
+.right-header .right-btn button:disabled{
     opacity: 0.4;
 }
 

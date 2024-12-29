@@ -1,7 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
    <layoutNav />
-   <Favorites :is-visible="showFavorites" @update:isVisible="showFavorites = false"/>
    <div class="container">
       <div class="header">
          <div class="option-block">
@@ -16,25 +15,39 @@
             </span>
          </div>
          <div class="func-block">
-            <span class="iconfont icon-31zhuanfa"></span>
-            <span class="iconfont icon-shoucangdanse" @click="showFavorites = true"></span>
+            <span class="iconfont icon-31zhuanfa" @click="transferProblemList"></span>
+            <span :class="problemListDetail.star_status?'iconfont icon-shoucang': 'iconfont icon-shoucangdanse'" @click="toggleStar"></span>
          </div>
       </div>
-      <div v-if="showProfile" class="profile">
-         题单简介
+      <div v-if="showProfile && loadComplete" class="profile">
+         <div class="problemlist-info">
+            111
+         </div>
+         <div class="info-panel">
+            <div class="creator-info">
+               <div>创建者</div>
+               <el-avatar :src="problemListDetail.creator_info.avatar">KL</el-avatar>
+               {{ problemListDetail.creator_info.username }}
+            </div>
+            
+         </div>
       </div>
       
       <div v-else class="problemlist">
          <el-table :data="problemListDetail.problems" stripe :row-style="{ height: '70px' }"
             @row-click="rowSelected">
-            <el-table-column prop="status" label="状态" width="80" />
+            <el-table-column label="状态" width="80">
+               <template #default="scope">
+                  <span v-if="scope.row.pass_status" class="iconfont icon-duigou1" style="text-align: center; font-size: 20px;"></span>
+               </template>
+            </el-table-column>
             <el-table-column prop="id" label="编号" width="100" />
             <el-table-column prop="name" label="题目名称" />
             <el-table-column label="标签">
-                  <template #default="scope">
-                     <span v-for="tagId in scope.row.tags" :key="tagId">{{ tagsStore.idToTag(tagId) + " "
-                        }}</span>
-                  </template>
+               <template #default="scope">
+                  <span v-for="tagId in scope.row.tags" :key="tagId">{{ tagsStore.idToTag(tagId) + " "
+                     }}</span>
+               </template>
             </el-table-column>
             <el-table-column label="通过率">
                   <template #default="scope">
@@ -50,27 +63,24 @@
             </el-table-column>
          </el-table>
       </div>
-      
    </div>
-   
 </template>
 
 <script setup>
 import { useRoute, useRouter } from 'vue-router';
 import layoutNav from '../Layout/components/layoutNav.vue';
-import { onMounted, ref, watch } from 'vue';
-import { getProblemListDetailAPI } from '@/apis/problemlist';
+import { onMounted, ref } from 'vue';
+import { getProblemListDetailAPI, starProblemListAPI, transferProblemListAPI } from '@/apis/problemlist';
 import { useTagsStore } from '@/stores/tagsStore';
 import { getDifficultColor } from '@/utils/color';
-import Favorites from '@/components/Favorites.vue';
 
+const loadComplete = ref(false)
 const route = useRoute()
 const router = useRouter()
 const problemlistId = route.params.id
 const problemListDetail = ref({})
 const tagsStore = useTagsStore()
 const showProfile = ref(true)
-const showFavorites = ref(false)
 
 const getProblemListDetail = async() => {
    const res = await getProblemListDetailAPI(problemlistId)
@@ -86,15 +96,23 @@ const selectProfile = () => {
 const selectList = () => {
    showProfile.value = false
 }
-const toggleScroll = (value) => {
-  document.body.style.overflow = value ? 'hidden' : 'auto';
-};
-watch(showFavorites, (newValue) => {
-  toggleScroll(newValue);
-});
+const toggleStar = () => {
+   problemListDetail.value.star_status = !problemListDetail.value.star_status
+   starProblemListAPI(problemListDetail.value.id, problemListDetail.value.star_status)
+}
+const transferProblemList = () => {
+   transferProblemListAPI(problemListDetail.value.id)
+}
+// const toggleScroll = (value) => {
+//   document.body.style.overflow = value ? 'hidden' : 'auto';
+// };
+// watch(showFavorites, (newValue) => {
+//   toggleScroll(newValue);
+// });
 onMounted(async() => {
    await getProblemListDetail()
    await tagsStore.getTags()
+   loadComplete.value = true
 })
 </script>
 
@@ -119,7 +137,6 @@ onMounted(async() => {
    gap: 20px;
    align-items: center;
    border-bottom: 2px solid #BBB;
-   /* box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.4); */
    height: 60px;
 }
 .func-block {
@@ -141,7 +158,7 @@ onMounted(async() => {
    font-size: 18px;
    margin-right: 5px;
 }
-.icon-31zhuanfa, .icon-shoucangdanse {
+.icon-31zhuanfa, .icon-shoucangdanse, .icon-shoucang {
    background-color: #e4f1f3;
    color: rgb(20, 20, 20);
    border: 1px;
@@ -151,6 +168,10 @@ onMounted(async() => {
    height: 43px;
    text-align: center;
    font-size: 25px;
+   cursor: pointer;
+}
+.icon-shoucang{
+   color: #4C4C4E;
 }
 
 
@@ -161,16 +182,27 @@ onMounted(async() => {
    background-color: rgb(189, 182, 182);
 }
 
-
 .problemlist, .profile{
    height: 2000px;
    width: 99%;
-   box-shadow: 0px 2px 6px 0px rgba(146, 143, 143, 0.7);
+   /* box-shadow: 0px 2px 6px 0px rgba(146, 143, 143, 0.7); */
    /* border: 1px solid #BBB; */
    border-radius: 10px;
-   padding: 20px 20px 30px 20px;
    position: relative;
    margin-top: 15px;
+   display: flex;
+   margin-top: 40px;
+}
+.profile .problemlist-info {
+   flex: 1;
+   box-shadow: 0px 2px 6px 0px rgba(146, 143, 143, 0.7);
+   margin-right: 30px;
+   border-radius: 10px;
+}
+.profile .info-panel {
+   border-radius: 10px;
+   width: 300px;
+   height: 200px;
 }
 
 .el-table {

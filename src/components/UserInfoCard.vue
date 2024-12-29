@@ -1,6 +1,6 @@
 <template>
     <div class="info-card" v-if="loadComplete">
-        <el-avatar :size="60">KL</el-avatar>
+        <el-avatar :size="60" :src="userInfo.avatar">KL</el-avatar>
         <div class="basic-info">
             <span class="username">{{ userInfo.username }}</span>
             <span class="profile">{{ userInfo.profile }}</span>

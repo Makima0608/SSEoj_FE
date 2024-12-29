@@ -25,7 +25,12 @@
                 <div class="table">
                     <el-table :data="problemset" stripe :row-style="{ height: '70px' }"
                         @row-click="rowSelected">
-                        <el-table-column prop="status" label="状态" width="80" />
+                        <el-table-column label="状态" width="80">
+                            <template #default="scope">
+                                <span v-if="scope.row.status" class="iconfont icon-duigou1" style="text-align: center; font-size: 20px;"></span>
+                            </template>
+                        </el-table-column>
+
                         <el-table-column prop="id" label="编号" width="100" />
                         <el-table-column prop="name" label="题目名称" />
                         <el-table-column label="标签">

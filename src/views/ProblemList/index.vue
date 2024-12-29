@@ -186,6 +186,10 @@ onMounted(async () => {
 .problemlist .icon-shoucang {
     font-size: 20px;
 }
+.icon-shoucang{
+    color: #4C4C4E;
+}
+
 
 .creator-info {
     display: flex;
