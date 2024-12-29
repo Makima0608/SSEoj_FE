@@ -79,7 +79,11 @@ const search_query =ref("");
 const count = ref(0)
 const loadedCount = ref(0)
 const loading = ref(false)
+<<<<<<< HEAD
 const noMore = computed(() => loadedCount.value  >= postListStore.count)//为展示暂定6
+=======
+const noMore = computed(() => loadedCount.value  >= count.value)//为展示暂定6
+>>>>>>> 4f28b195b7c86fa6d4deed72f64b80274824c55b
 const disabled = computed(() => loading.value || noMore.value)
 
 const postListStore = usePostListStore();
@@ -137,6 +141,7 @@ const filteredPosts = computed(() => {
 const goToDiscussion = (postId) => {
   router.replace(`/discussion/${postId}`);
 };
+
 
 onMounted(async () => {
   await postListStore.getPostList(params.value); // 等待数据加载
@@ -271,18 +276,21 @@ align-items: center; /* 水平居中对齐 */
 }
 
 .menu_main{
+display: flex;
 position: relative;
 top: 5px;
 margin-left: 70px;
 margin-right: 70px;
-width: 90%;
-border-radius: 12px;
+width: 80%;
+/* border-radius: 12px; */
 /* border:none; */
 overflow: hidden;
+/* gap:25%; */
+justify-content: space-between;
 }
 
 .menu_main .el-menu-item{
-margin-right: 465px;
+/* margin-right: 25%; */
 text-align: center; /* 居中显示 */
 font-size:16px;      /* 可选：设置字体大小 */
 }
@@ -331,6 +339,7 @@ margin-top: 1px;
   box-shadow:0 0 5px rgba(0, 0, 0, .5);
   border-radius: 6px;
   min-width: 800px;
+  margin-bottom: 20px;
 }
 
 .wrapper_feedback label{

@@ -148,7 +148,7 @@ const init = reactive({
 
     images_upload_handler: function (blobInfo, success, failure) {
         let file = blobInfo.blob();
-        if (file.size / 1024 > 200) {  // 限制 200KB
+        if (file.size / 1024 > 10000) {  // 限制 200KB
             return Promise.reject({
                 message: "上传失败，图片大小请控制在 200KB 以内",
                 remove: true,
@@ -239,7 +239,7 @@ defineExpose({
   :deep(.tox-tinymce) {
     border: 1px solid #dcdfe6;
     border-radius: 4px;
-   
+
     .tox-statusbar {
       display: none;
     }

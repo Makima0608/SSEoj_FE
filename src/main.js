@@ -12,6 +12,10 @@ import './mock/problem'
 import './mock/tags'
 import './mock/postList'
 import './mock/post'
+import './mock/comment'
+
+
+
 import './mock/problemlist'
 import './mock/user'
 
