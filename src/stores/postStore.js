@@ -9,12 +9,11 @@ export const usePostStore = defineStore('post', () => {
     // 获取帖子详情
     const getPost = async (id) => {
         const res = await getPostAPI(id);
-        post.value = res.data;
+        post.value = {
+          ...res.data,
+          avatar: `data:image/png;base64, ${res.data.avatar}`, // 对 avatar 字段进行解码
+        };
     };
-
-    const getAvatar = () => {
-      return `data:image/png;base64, ${post.value.avatar}`
-    }
 
     // 发布新帖子
     const createPost = async (params) => {
@@ -41,7 +40,6 @@ export const usePostStore = defineStore('post', () => {
         post,
         isPosting,
         getPost,
-        getAvatar,
         createPost,
         likePost
     };

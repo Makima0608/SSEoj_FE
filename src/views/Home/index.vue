@@ -17,20 +17,22 @@
     </div >
   </div>
   <div class="wrapper_post">
-    <el-menu
-      :default-active="'1'"
-      class="menu_main"
-      mode="horizontal"
-      @select="handleSelect"
-      background-color="white"
-      text-color="black"
-      active-text-color="black"
-      :ellipsis="false"
-    >
-      <el-menu-item index="1">热门讨论</el-menu-item>
-      <el-menu-item index="2">你的关注</el-menu-item>
-      <el-menu-item index="3">我的发布</el-menu-item>
-    </el-menu>
+    <div class="menuContainer">
+      <el-menu
+        :default-active="'1'"
+        class="menu_main"
+        mode="horizontal"
+        @select="handleSelect"
+        background-color="white"
+        text-color="black"
+        active-text-color="black"
+        :ellipsis="false"
+      >
+        <el-menu-item index="1">热门讨论</el-menu-item>
+        <el-menu-item index="2">你的关注</el-menu-item>
+        <el-menu-item index="3">我的发布</el-menu-item>
+      </el-menu>
+    </div>
     <div class="infinite-list-wrapper" style="overflow: auto">
         <ul
           v-infinite-scroll="load"
@@ -254,19 +256,25 @@ align-items: center; /* 水平居中对齐 */
 
 }
 
+.menuContainer{
+  min-height: 60px;
+  display: flex;
+  width: 100%;
+}
+
 .menu_main{
 display: flex;
 position: relative;
 top: 5px;
 margin-left: 70px;
 margin-right: 70px;
-width: 80%;
+width: 100%;
 /* border-radius: 12px; */
 /* border:none; */
 overflow: hidden;
 /* gap:25%; */
 justify-content: space-between;
-height: 60px;
+min-height: 60px;
 }
 
 .menu_main .el-menu-item{
