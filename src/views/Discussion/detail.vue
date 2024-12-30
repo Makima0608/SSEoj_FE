@@ -42,7 +42,7 @@
         <!-- 内容容器 -->
         <div class="contentContainer">
           <!-- 使用 v-html 来渲染 HTML 内容 -->
-          <p>{{ postStore.post.post_content }}</p>
+          <div v-html="postStore.post.post_content"></div>
         </div>
       </div>
         <!--评论容器-->

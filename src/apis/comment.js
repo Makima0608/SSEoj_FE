@@ -14,7 +14,7 @@ export const getCommentAPI = (params) => {
 
 export const likeCommentAPI = (params) => {
   return request({
-    url: `/api/post/comment/good`,
+    url: `/api/post/comment/good/`,
     method: 'POST',
     data: {
       is_good:params.is_good,
