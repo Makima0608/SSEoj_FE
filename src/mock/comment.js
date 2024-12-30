@@ -1,13 +1,13 @@
 import Mock from 'mockjs'
 
 Mock.mock(/\api\/post\/(\d+)\/comments/, 'get', (options) => {
-    console.log("Mock Intercepted Request:", options.url);
-
     const query = options.url.split('?')[1];
-    const params = new URLSearchParams(query);
-    const page = params.get('page_num');
-    const page_size = params.get('page_size');
-    console.log({ page, page_size })
+    const id = new URLSearchParams(query);
+
+    const body = JSON.parse(options.body); // 将 JSON 字符串解析为对象
+    const { page, page_size } = body; // 从 body 中提取参数
+
+    console.log({ page, page_size }); // 调试信息，确认接收到的参数
     if (page == 1) {
         return {
             err: null,

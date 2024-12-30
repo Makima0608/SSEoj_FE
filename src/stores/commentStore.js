@@ -6,7 +6,7 @@ export const useCommentStore = defineStore('comment', () => {
   const comments = ref([])
   const count = ref(0)
 
-  const getComments = async (id) => {
+  const getComments = async (params) => {
     const res = await getCommentAPI(params);
     console.log(res);
     count.value = res.data.count; // 更新 .value

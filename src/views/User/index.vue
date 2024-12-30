@@ -92,10 +92,13 @@
           <div class="avatarSetContainer">
             <div class="avartarInputContainer">
               <label>头像</label>
-              <el-avatar :src="userStore.getAvatar()" class="avatarSet" />
+              <!-- 动态更新头像的显示 -->
+              <el-avatar :src="avatarPreview" class="avatarSet" />
             </div>
             <div class="avatarChoose">
-              <el-button type="info" plain @click="changeAvatar">确认修改</el-button>
+              <el-button type="success" plain @click="selectFile">选择文件</el-button>
+              <el-button type="info" plain @click="confirmChange">确认修改</el-button>
+              <input type="file" ref="fileInput" style="display: none" @change="handleFileChange" accept=".jpg,.png" />
             </div>
           </div>
         </div>
@@ -158,6 +161,7 @@ import layoutNav from '@/views/Layout/components/layoutNav.vue';
 import { useUserStore } from '@/stores/userStore';
 import { usePostListStore } from '@/stores/postListStore';
 import ListItemContent from '@/views/Discussion/ListItemContent.vue';
+import { ElMessage } from 'element-plus'; // 引入 Element Plus 提示组件
 
 
 const userStore = useUserStore();
@@ -172,16 +176,21 @@ const formLabelWidth = '100px'
 
 const newUsername = ref('');
 const newProfile = ref('');
-const newAvatar = ref('');
 const oldPassword = ref('');
 const newPassword = ref('');
 const confirmPassword = ref('');
 const verificationCode = ref('');
 const forgetPassword = ref('');
 const email=ref('');
+const avatarPreview = ref(userStore.getAvatar()); // 默认显示当前用户头像
 
 const tryCount = ref(0);
 const passCount = ref(0);
+
+// 文件 Base64 编码
+const selectedFile = ref(null);
+const base64File = ref('');
+const fileInput = ref(null); // 这里不要在方法中重复定义 ref
 
 
 const toggleSetting = () => {
@@ -239,7 +248,7 @@ const changePassword = async () => {
     }
 };
 
-const handleForgotPassword = async (verificationCode, newPassword) => {
+const handleForgotPassword = async (email, verificationCode, newPassword) => {
   try {
     await userStore.passwordForget({email,verificationCode, newPassword});
     alert('密码重置成功！');
@@ -249,6 +258,72 @@ const handleForgotPassword = async (verificationCode, newPassword) => {
   }
 };
 
+const changeAvatar = async () => {
+  if (!base64File.value) {
+    ElMessage.error('请先选择一个文件');
+    return;
+  }
+  try {
+    // 假设 userStore 有一个 updateAvatar 方法用于上传头像
+    console.log(base64File.value);
+    await userStore.updateUserInfo({ avatar: base64File.value });
+    ElMessage.success('头像上传成功');
+  } catch (error) {
+    console.error(error);
+    ElMessage.error('头像上传失败');
+  }
+};
+
+
+//上传头像
+const selectFile = () => {
+  fileInput.value.click(); // 触发 file input 的点击事件
+};
+
+const handleFileChange = async (event) => {
+  const file = event.target.files[0];
+
+  // 检查文件是否存在
+  if (!file) {
+    ElMessage.error('未选择文件');
+    return;
+  }
+
+  // 限制文件类型为 jpg 和 png
+  const validTypes = ['image/jpeg', 'image/png'];
+  if (!validTypes.includes(file.type)) {
+    ElMessage.error('只允许上传 .jpg 和 .png 格式的文件');
+    return;
+  }
+
+  // 将文件转为 Base64
+  const reader = new FileReader();
+  reader.onload = () => {
+    base64File.value = reader.result; // 保存 Base64 编码的文件
+    avatarPreview.value = reader.result; // 实时更新预览头像
+  };
+  reader.onerror = () => {
+    ElMessage.error('文件读取失败');
+  };
+
+  reader.readAsDataURL(file); // 读取文件并转换为 Base64
+};
+
+const confirmChange = async () => {
+  if (!base64File.value) {
+    ElMessage.error('请先选择一个文件');
+    return;
+  }
+
+  try {
+    changeAvatar(); // 调用 API 上传头像
+    ElMessage.success('头像修改成功');
+    avatarPreview.value = base64File.value; // 更新显示的头像
+  } catch (error) {
+    console.error(error);
+    ElMessage.error('头像修改失败');
+  }
+};
 
 onMounted(async () => {
   await postListStore.getPostList(params.value); // 等待数据加载
@@ -328,7 +403,7 @@ onMounted(async () => {
   margin-top: 5px;
   margin-bottom: 0px;
   width: 100%;
-  gap:45%;
+  gap:25%;
 }
 
 .userName{
@@ -358,7 +433,7 @@ onMounted(async () => {
   /* margin-right: 90px; */
   margin-bottom: 30px;
   align-self: self-end;
-  min-width: 200px;
+  min-width: 250px;
 
 
 }
