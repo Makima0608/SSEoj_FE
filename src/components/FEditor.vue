@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import '@opentiny/fluent-editor/style.css';
 import 'mathlive'
 import 'mathlive/static.css'
@@ -61,6 +61,13 @@ function imageHandler(image, callback) {
   xhr.send(data)
 }
 
+const props = defineProps({
+  initialValue: {
+    type: String,
+    default: ''
+  }
+})
+
 onMounted(() => {
   // ssr compat, reference: https://vitepress.dev/guide/ssr-compat#importing-in-mounted-hook
   import('@opentiny/fluent-editor').then((module) => {
@@ -96,6 +103,7 @@ onMounted(() => {
         },
       },
     })
+    mathliveEditor.root.innerHTML = props.initialValue
   })
 }
 )

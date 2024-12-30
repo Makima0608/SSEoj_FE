@@ -5,11 +5,22 @@ import { ref } from "vue";
 export const useTagsStore = defineStore('tags', () => {
     const idToTags = ref({})
     const tagsToID = ref({})
-    const getTags = async() => {
+    const tagTree = ref({})
+    const getTags = async () => {
         const res = await getTagsAPI()
         res.data.forEach(item => {
             tagsToID.value[item.name] = item.id
-            idToTags.value[item.id] = {name: item.name, parent: item.parent}
+            idToTags.value[item.id] = { name: item.name, parent: item.parent }
+            if (item.parent == null) {
+                tagTree.value[item.id] = []
+            }
+            else if (tagTree.value[item.parent] == undefined) {
+                tagTree.value[item.parent] = []
+                tagTree.value[item.parent].push(item.id)
+            }
+            else {
+                tagTree.value[item.parent].push(item.id)
+            }
         });
     }
     const idToTag = (id) => {
@@ -24,6 +35,7 @@ export const useTagsStore = defineStore('tags', () => {
         idToTags,
         tagsToID,
         idToTag,
-        getTags
+        getTags,
+        tagTree
     }
 })

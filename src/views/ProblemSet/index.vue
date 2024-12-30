@@ -11,14 +11,43 @@
                         v-model="keyword" @keydown.enter="console.log('search', keyword)" />
                     <!-- </div> -->
                 </div>
-                <div class="diff-Filter">
-                    <div class="diff-Circle"></div>
-                    <span class="filter-text">难度</span>
-                </div>
-                <div class="alo-Filter">
-                    <div class="tagNum">{{ selectedTag.length }}</div>
-                    <span class="filter-text">算法</span>
-                </div>
+                <el-popover 
+                    :show-arrow="false"
+                    trigger="click"
+                    placement="right"
+                >
+                    <template #reference>
+                        <div class="diff-Filter">
+                            <div class="diff-Circle"></div>
+                            <span class="filter-text">难度</span>
+                        </div>
+                    </template>
+                    <template #default>
+                        
+                    </template>
+                </el-popover>
+                
+                <el-popover 
+                    :show-arrow="false"
+                    trigger="click"
+                    placement="right-start"
+                    popper-style="width: 400px; height: 340px; border-radius:10px;"
+                >
+                    <template #reference>
+                        <div class="alo-Filter" @click="tagsStore.getTagTree">
+                            <div class="tagNum">{{ selectedTag.length }}</div>
+                            <span class="filter-text">算法</span>
+                        </div>
+                    </template>
+                    <template #default>
+                        <tagView :tagTree="tagsStore.tagTree" 
+                            :selectedTag="selectedTag" 
+                            @selectTag="addTag"
+                            @closeTag="deleteTag"
+                        />
+                    </template>
+                </el-popover>
+                
             </div>
 
             <div class="problemset">
@@ -71,6 +100,7 @@ import { useTagsStore } from '@/stores/tagsStore';
 import { getDifficultColor } from '@/utils/color'
 import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
+import tagView from './components/tagView.vue';
 
 const router = useRouter()
 const tagsStore = useTagsStore()
@@ -88,7 +118,7 @@ const currentPage = ref(1)
 const pageSize = ref(30)
 const keyword = ref(undefined)
 const min_diff = ref(undefined), max_diff = ref(undefined)
-const tags = ref(undefined)
+const selectedTag = ref([])
 
 const params = computed(() => ({
     page_num: currentPage.value || 1,
@@ -96,12 +126,11 @@ const params = computed(() => ({
     keyword: keyword.value || undefined,
     min_difficulty: min_diff.value || undefined,
     max_difficulty: max_diff.value || undefined,
-    tags: tags.value || undefined
+    tags: selectedTag.value || undefined
 }))
 
 // filter 部分代码
 const searchBoxRef = ref(null)
-const selectedTag = ref([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
 const isSearchActive = ref({})
 
 const toggleSearchBox = () => {
@@ -144,6 +173,15 @@ const rowSelected = (row) => {
     router.push(`/problem/${row.id}/description`)
 }
 
+const addTag = async(id) => {
+    selectedTag.value.push(id)
+    await getProblemSet(params.value)
+}
+const deleteTag = async(id) => {
+    selectedTag.value = selectedTag.value.filter(item => item != id)
+    await getProblemSet(params.value)
+}
+
 onMounted(async () => {
     await getProblemSet(params.value)
     await tagsStore.getTags()
@@ -161,6 +199,7 @@ onMounted(async () => {
     width: 85%;
     margin-bottom: 20px;
     min-width: 800px;
+    margin-top: 10px;
 }
 
 .container {

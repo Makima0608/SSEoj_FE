@@ -176,7 +176,7 @@ Mock.mock(/\/api\/solution\/good/, 'post', (options) => {
 // 模拟获取提交列表
 Mock.mock(/\/api\/problem\/(\d+)\/submissions\//, 'get', (options) => {
   const id = options.url.match(/\/api\/problem\/(\d+)\/submissions/)[1]
-  console.log(`request problem${id} submission`)
+  console.log(options.url)
   const data = [
     {
       "submit_time": "2024-10-09",

@@ -87,8 +87,8 @@ const loadComplete = ref(false)
 const selectedStatus = ref(0)
 const selectedLanguage = ref('')
 const params = computed(() => ({
-  status: selectedStatus.value || 0,
-  language: selectedLanguage.value || '',
+  status: selectedStatus.value || undefined,
+  language: selectedLanguage.value || undefined,
   sort_type: "time"
 }))
 

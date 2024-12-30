@@ -115,18 +115,19 @@ const setFEditorContent = () => {
     <p style="padding-left: 40px;">${problemDesc.value.output_style}</p>
     <li><h3>数据范围</h3></li>
     <p style="padding-left: 40px;">${problemDesc.value.data_range}</p>
-    <br><hr><br><br>`
-    FEditorRef.value.setContent(content)
+    <br><hr><br>`
+    // FEditorRef.value.setContent(content)
+    return content
 }
 
 
 onMounted(async () => {
-    await tagsStore.getTags()
-    // console.log(tagsStore.idToTags)
-    allTags.value = Object.keys(tagsStore.tagsToID)
-    await getProblemDesc(id)
-    loadComplete.value = true
-    setFEditorContent()
+    // await tagsStore.getTags()
+    // // console.log(tagsStore.idToTags)
+    // allTags.value = Object.keys(tagsStore.tagsToID)
+    // await getProblemDesc(id)
+    // loadComplete.value = true
+    // setFEditorContent()
 })
 </script>
 
@@ -241,5 +242,6 @@ onMounted(async () => {
 .solution-editor {
     margin: 20px auto 0 auto;
     width: 85%;
+    min-height: 600px;
 }
 </style>

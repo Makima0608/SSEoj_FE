@@ -4,8 +4,27 @@
     <div class="header">
         <div class="searchBar">
             <input type="text" class="input" v-model="keyword" placeholder="请输入题单标题或编号">
-            <span class="iconfont icon-sousuo" @click="search"></span>
+            <span class="iconfont icon-sousuo" @click="getProblemList(params)"></span>
         </div>
+        <el-select v-model="sort_type" style="width: 180px;--el-border-color:white;" @change="getProblemList(params)">
+            <el-option
+            v-for="item in selectItem"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+            >
+            <div style="display: flex; justify-content: space-between;">
+                <span>{{ item.label }}</span>
+                <span v-if="item.value == sort_type" class="iconfont icon-duigou"></span>
+            </div>
+            </el-option>
+            <template #label="{label}">
+                <div style="display: flex; align-items: center; font-size: 16px; color: black;">
+                    <span class="iconfont icon-paixu" style="font-size: 20px; margin-right: 6px;"></span>
+                    <span>{{ label }}</span>
+                </div>
+            </template>
+        </el-select>
     </div>
     <div class="wrapper">
         <div class="problemlist">
@@ -55,7 +74,7 @@ const problemlistCount = ref(0)
 const currentPage = ref(1)
 const pageSize = ref(30)
 const keyword = ref(undefined)
-const sort_type = ref(undefined)
+const sort_type = ref('idAsc')
 
 const params = computed(() => ({
     page_num: currentPage.value || 1,
@@ -80,6 +99,33 @@ const getProblemList = async (params) => {
     problemlist.value = res.data.problemlists
 }
 
+const selectItem = [
+    {
+        label: '默认升序',
+        value: 'idAsc'
+    },
+    {
+        label: '默认降序',
+        value: 'idDesc'
+    },
+    {
+        label: '题目数量升序',
+        value: 'countAsc'
+    },
+    {
+        label: '题目数量降序',
+        value: 'countDesc'
+    }, 
+    {
+        label: '收藏数升序',
+        value: 'starAsc'
+    },
+    {
+        label: '收藏数量降序',
+        value: 'starDesc'
+    }
+]
+
 onMounted(async () => {
     console.log(params.value)
     await getProblemList(params.value)
@@ -91,9 +137,12 @@ onMounted(async () => {
 .header{
     width: 85%;
     margin: 30px auto;
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 .searchBar {
-    width: 400px;
+    max-width: 400px;
     height: 40px;
     display: flex;
     border: 1px solid #BBBBBB;
@@ -124,7 +173,6 @@ onMounted(async () => {
     min-width: 10px;
 }
 
-
 .wrapper {
     display: flex;
     flex-direction: column;
@@ -134,7 +182,6 @@ onMounted(async () => {
     margin-bottom: 20px;
     min-width: 800px;
 }
-
 
 .problemlist {
     display: flex;
