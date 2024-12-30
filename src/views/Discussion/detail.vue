@@ -5,12 +5,12 @@
       <div class="information">
         <div class="authorContainer">
           <label>作者</label>
-          <img :src="avatar"  class="avatar" />
-          <p class="authorName">{{ authorName }}</p>
+          <img :src="postStore.post.avatar"  class="avatar" />
+          <p class="authorName">{{ postStore.post.name }}</p>
         </div>
         <div class="timeContainer">
           <label>发布时间</label>
-          <p>{{ postTime }}</p>
+          <p>{{ postStore.post.create_time }}</p>
         </div>
         <el-button type="info" plain class="replyBtn" @click="isReplyVisible = true">回复贴主</el-button>
 
@@ -31,7 +31,7 @@
       <div class="postContainer">
         <!-- 标题 -->
         <div class="titleContainer">
-          <label>{{ postTitle }}</label>
+          <label>{{ postStore.post.post_title }}</label>
           <div class="likeContainer">
             <span v-if="!postStore.post.is_good" class="iconfont icon-BxLike" @click="handleLike()"></span>
             <span v-else class="iconfont icon-BxsLike" @click="handleLike()"></span>
@@ -42,7 +42,7 @@
         <!-- 内容容器 -->
         <div class="contentContainer">
           <!-- 使用 v-html 来渲染 HTML 内容 -->
-          <p v-html="formattedPostContent"></p>
+          <div v-html="postStore.post.post_content"></div>
         </div>
       </div>
         <!--评论容器-->
@@ -92,14 +92,6 @@ const params = route.params
 const id = params.id;
 const postStore= usePostStore();
 const commentStore= useCommentStore();
-// 模拟 API 数据
-const authorName = ref('haha');
-const postTime=ref("2024/12/2");
-const avatar = ref('');
-const postTitle = ref("示例帖子标题");
-const postContent = ref("这是一些示例内容。你可以添加更多文字来测试 contentContainer 的高度自动调整。");
-// 格式化 postContent
-const formattedPostContent = ref('');
 
 const count = ref(0);
 
@@ -119,11 +111,9 @@ const page_params = computed(() => ({
   id: params.id
 }));
 
-
 const input = ref('')
 const isReplyVisible = ref(false); // 控制 replyContainer 的显示和隐藏
 
-// 评论数据
 
 
 // 添加回复逻辑
@@ -154,19 +144,7 @@ onMounted(async () => {
   await commentStore.getComments(page_params.value); // 等待数据加载
   count.value = commentStore.count; // 更新总数
   console.log(commentStore.comments)
-
-
-  // 直接从 postStore.post 中提取数据
-  postTitle.value = postStore.post.post_title;  // 获取标题
-  postContent.value = postStore.post.post_content;  // 获取内容
-  postTime.value = postStore.post.create_time;  // 获取发布时间
-  avatar.value = postStore.post.avatar;  // 获取头像
-  authorName.value = postStore.post.name;  // 获取作者名
-
-  // 将 \n 替换为 <br>，以实现换行
-  formattedPostContent.value = postContent.value.replace(/\n/g, '<br>');
-  console.log(postStore.post.is_good)
-});
+})
 
 </script>
 

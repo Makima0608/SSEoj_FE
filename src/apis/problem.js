@@ -10,7 +10,7 @@ export const getProblemDescAPI = (id) => {
 // 获取题解列表 API
 export const getSolutionListAPI = (id, params) => {
     return request({
-        url: `/api/problem/${id}/solutions`,
+        url: `/api/problem/${id}/solutions/`,
         params
     })
 }

@@ -8,7 +8,6 @@ export const usePostListStore = defineStore('postList', () => {
 
   const getPostList = async (params) => {
     const res = await getPostListAPI(params);
-    console.log(res);
     count.value = res.data.count; // 更新 .value
     postList.value = res.data.post_list; // 更新 .value
 };

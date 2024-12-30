@@ -78,7 +78,7 @@ export const avatarChangeAPI = (avatar) => {
 
 export const passwordChangeAPI = ({id,password_before,password_new}) => {
     return request({
-        url: "/api/user/password_change",
+        url: "/api/user/password_change/",
         method: 'PUT',
         data: {
             id:id,
@@ -88,11 +88,12 @@ export const passwordChangeAPI = ({id,password_before,password_new}) => {
     })
 }
 
-export const passwordForgetAPI = ({password_new,verification_code}) => {
+export const passwordForgetAPI = ({email,password_new,verification_code}) => {
     return request({
-        url: "/api/user/password_forget",
+        url: "/api/user/password_forget/",
         method: 'PUT',
         data: {
+          email:email,
           password_new:password_new,
           verification_code:verification_code
       }
@@ -101,7 +102,7 @@ export const passwordForgetAPI = ({password_new,verification_code}) => {
 
 export const getPracticeAPI= (id) =>{
     return request({
-      url: `/api/user/${id}/practice`,
+      url: `/api/user/${id}/practice/`,
       method: 'GET',
     })
 }
