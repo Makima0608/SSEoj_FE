@@ -16,3 +16,4 @@ export const createSolutionAPI = (data) => {
         data: data
     })
 }
+

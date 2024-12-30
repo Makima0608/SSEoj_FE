@@ -18,7 +18,6 @@
             <button v-else class="addTagBtn" @click="showInput">+ 添加标签</button>
         </div>
     </div>
-
     <div class="solution-editor">
         <FEditor ref="FEditorRef"/>
     </div>

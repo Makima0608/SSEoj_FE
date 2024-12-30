@@ -93,7 +93,8 @@ Mock.mock(/\/api\/problemset\//, 'get', (options) => {
 }
 )
 
-Mock.mock(/\/api\/solution\/create\//, 'post', () => {
+Mock.mock(/\/api\/solution\/create\//, 'post', (options) => {
+    console.log(options)
     return {
         err: null,
         data: 'success'

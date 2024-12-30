@@ -3,6 +3,7 @@ import 'element-plus/theme-chalk/el-message.css';
 import { ElMessage } from 'element-plus';
 import { useUserStore } from '@/stores/userStore';
 import router from '@/router';
+import Cookies from 'js-cookie';
 
 
 const httpInstance = axios.create({
@@ -12,6 +13,9 @@ const httpInstance = axios.create({
 })
 
 httpInstance.interceptors.request.use(config => {
+    const token = Cookies.get('csrftoken')
+    config.headers['X-CSRFToken'] = token
+    console.log(config)
     return config
 }, e => Promise.reject(e))
 
