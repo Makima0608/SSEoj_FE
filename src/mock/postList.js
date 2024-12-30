@@ -22,7 +22,8 @@ Mock.mock(/\/api\/post\/list(\?.*)?/, 'get', (options) => {
                       "avatar": "https://avatars.githubusercontent.com/u/17516427",
                       "like_count": 9,
                       "comment_count": 10,
-                      "is_good": false
+                      "is_good": false,
+                      "create_time":"2024/12/17"
                   },
                   {
                     "post_id": 3,
@@ -30,9 +31,10 @@ Mock.mock(/\/api\/post\/list(\?.*)?/, 'get', (options) => {
                       "user_id": 66,
                       "username": "神人",
                       "avatar": "https://avatars.githubusercontent.com/u/17516427",
-                      "like_count": 9,
+                      "like_count": 2,
                       "comment_count": 10,
-                      "is_good": false
+                      "is_good": false,
+                      "create_time":"2024/12/18"
                   },
                   {
                     "post_id": 4,
@@ -40,9 +42,10 @@ Mock.mock(/\/api\/post\/list(\?.*)?/, 'get', (options) => {
                       "user_id": 66,
                       "username": "神人",
                       "avatar": "https://avatars.githubusercontent.com/u/17516427",
-                      "like_count": 9,
+                      "like_count": 100,
                       "comment_count": 10,
-                      "is_good": false
+                      "is_good": false,
+                      "create_time":"2024/12/22"
                   },
                   {
                     "post_id": 5,
@@ -50,9 +53,10 @@ Mock.mock(/\/api\/post\/list(\?.*)?/, 'get', (options) => {
                       "user_id": 66,
                       "username": "aaaaaaaaaa",
                       "avatar": "https://avatars.githubusercontent.com/u/17516427",
-                      "like_count": 9,
+                      "like_count": 33,
                       "comment_count": 10,
-                      "is_good": false
+                      "is_good": false,
+                      "create_time":"2024/12/7"
                   },
                   {
                     "post_id": 6,
@@ -60,9 +64,10 @@ Mock.mock(/\/api\/post\/list(\?.*)?/, 'get', (options) => {
                       "user_id": 66,
                       "username": "神人",
                       "avatar": "https://avatars.githubusercontent.com/u/17516427",
-                      "like_count": 9,
+                      "like_count": 91,
                       "comment_count": 10,
-                      "is_good": false
+                      "is_good": false,
+                      "create_time":"2024/12/1"
                   },
                   {
                     "post_id": 7,
@@ -72,7 +77,8 @@ Mock.mock(/\/api\/post\/list(\?.*)?/, 'get', (options) => {
                       "avatar": "https://avatars.githubusercontent.com/u/17516427",
                       "like_count": 9,
                       "comment_count": 10,
-                      "is_good": false
+                      "is_good": false,
+                      "create_time":"2024/2/17"
                   },
                   {
                     "post_id": 8,
@@ -82,7 +88,8 @@ Mock.mock(/\/api\/post\/list(\?.*)?/, 'get', (options) => {
                       "avatar": "https://avatars.githubusercontent.com/u/17516427",
                       "like_count": 9,
                       "comment_count": 10,
-                      "is_good": false
+                      "is_good": false,
+                      "create_time":"2024/1/17"
                   },
                   // {
                   //   "post_id": 8,
@@ -142,7 +149,8 @@ Mock.mock(/\/api\/post\/list(\?.*)?/, 'get', (options) => {
                       "avatar": "https://avatars.githubusercontent.com/u/83853740",
                       "like_count": 59,
                       "comment_count": 32,
-                      "is_good": true
+                      "is_good": true,
+                      "create_time":"2024/5/17"
                   }
               ]
             }

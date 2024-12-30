@@ -2,140 +2,133 @@
 
 <template>
   <div class="wrapper">
-      <div class="container">
-          <div class="filter">
-            <el-menu
-              :default-active="'1'"
-              class="menu_sort"
-              mode="vertical"
-              @select="handleSelect"
-              background-color="rgb(200, 200, 200);"
-              text-color="grey"
-              active-text-color="black"
-              :ellipsis="false"
-            >
-              <el-menu-item index="1">按热度</el-menu-item>
-              <el-menu-item index="2">按时间</el-menu-item>
-            </el-menu>
-            <el-button plain type="info" @click="postDiscussion">发布帖子</el-button>
-          </div>
-          <div class="postList">
-            <div class="infinite-list-wrapper" style="overflow: auto">
-              <ul
-                v-infinite-scroll="load"
-                class="list"
-              >
-                <li
-                  v-for="post in filteredPosts"
-                  :key="post.post_id"
-                  class="list-item"
-                  @click="goToDiscussion(post.post_id)"
-                >
-                  <ListItemContent
-                    :avatar="post.avatar"
-                    :title="post.post_title"
-                    :username="post.username"
-                    :time="post.time"
-                    :commentCount="post.comment_count"
-                    :likeCount="post.like_count"
-
-                  />
-                </li>
-              </ul>
-              <!-- <p v-if="loading">Loading...</p>
-              <p v-if="!loading && noMore">No more</p> -->
-            </div>
-          </div>
+    <div class="container">
+      <div class="filter">
+        <el-menu
+          :default-active="'1'"
+          class="menu_sort"
+          mode="vertical"
+          @select="handleSelect"
+          background-color="rgb(200, 200, 200);"
+          text-color="grey"
+          active-text-color="black"
+          :ellipsis="false"
+        >
+          <el-menu-item index="1">按热度</el-menu-item>
+          <el-menu-item index="2">按时间</el-menu-item>
+        </el-menu>
+        <el-button plain type="info" @click="postDiscussion">发布帖子</el-button>
       </div>
-      <div class="pagination">
-          <el-pagination layout="prev, pager, next, jumper" v-model:current-page="currentPage" :total="postListStore.count"
-              :background="true" :page-size="pageSize" @current-change="handleCurrentChange" />
+      <div class="postList">
+        <div class="infinite-list-wrapper" style="overflow: auto">
+          <ul v-infinite-scroll="load" class="list">
+            <li v-for="post in filteredPosts" :key="post.post_id" class="list-item" @click="goToDiscussion(post.post_id)">
+              <ListItemContent
+                :avatar="post.avatar"
+                :title="post.post_title"
+                :username="post.username"
+                :time="post.create_time"
+                :commentCount="post.comment_count"
+                :likeCount="post.like_count"
+              />
+            </li>
+          </ul>
+        </div>
       </div>
+    </div>
+    <div class="pagination">
+      <el-pagination layout="prev, pager, next, jumper" v-model:current-page="currentPage" :total="postListStore.count" :background="true" :page-size="pageSize" @current-change="handleCurrentChange" />
+    </div>
   </div>
-
 </template>
 
 <script setup>
-import { ref, onMounted,computed } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { usePostListStore } from '@/stores/postListStore';
 import ListItemContent from './ListItemContent.vue';
-import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
 
-
-const count = ref(0)
-const loadedCount = ref(0)
-const loading = ref(false)
-const noMore = computed(() => loadedCount.value  >= count.value)
-const disabled = computed(() => loading.value || noMore.value)
-
 const postListStore = usePostListStore();
+const router = useRouter();
+
+const count = ref(0);
+const loadedCount = ref(0);
+const loading = ref(false);
+const noMore = computed(() => loadedCount.value >= count.value);
+const disabled = computed(() => loading.value || noMore.value);
 
 const currentPage = ref(1);
 const pageSize = ref(30);
-const router = useRouter();
-const sortTpye=ref("likeDesc");
+const sortType = ref('likeDesc'); // 默认按热度排序
 
 const load = async () => {
-  if (disabled.value) return; // 防止重复加载
-  loading.value = true; // 设置加载中状态
+  if (disabled.value) return;
+  loading.value = true;
 
   try {
     await postListStore.getPostList(params.value);
-    loadedCount.value = postListStore.postList.length; // 更新已加载数量
-    console.log(loadedCount.value);
-    console.log(count.value);
-    console.log(noMore.value);
-
+    loadedCount.value = postListStore.postList.length;
   } catch (err) {
-    console.error("Error loading data:", err);
+    console.error('Error loading data:', err);
   } finally {
-    loading.value = false; // 加载完成后关闭加载状态
+    loading.value = false;
   }
 };
-
 
 const params = computed(() => ({
   page_num: currentPage.value || 1,
   page_size: pageSize.value || 30,
-  sort_type: sortTpye.value || "likeDesc",
-  keyword: ""
+  sort_type: sortType.value,
+  keyword: ''
 }));
 
-// 动态过滤帖子
+// 处理排序菜单点击
+const handleSelect = (index) => {
+  if (index === '2') {
+    // 如果当前是按时间排序
+    if (sortType.value === 'timeDesc') {
+      sortType.value = 'timeAsc'; // 切换为升序
+    } else {
+      sortType.value = 'timeDesc'; // 切换为降序
+    }
+  }
+};
+
+// 根据排序类型过滤帖子
 const filteredPosts = computed(() => {
-  // // 根据 menu index 动态筛选帖子
-  // if (activeMenuIndex.value === '2') {
-  //   return postListStore.postList.filter(post => post.post_id === 1);
-  // } else if (activeMenuIndex.value === '3') {
-  //   return postListStore.postList.filter(post => post.post_id >= 3&&post.post_id<=6); // 示例
-  // } else if (activeMenuIndex.value === '1') {
-  //   return postListStore.postList; // 或其他逻辑
-  // }
-  // return [];
-  return postListStore.postList;
+  let sortedPosts = [...postListStore.postList];
+
+  if (sortType.value === 'likeDesc') {
+    // 按点赞数降序排序
+    sortedPosts.sort((a, b) => b.like_count - a.like_count);
+  } else if (sortType.value === 'timeDesc') {
+    // 按时间降序排序
+    sortedPosts.sort((a, b) => new Date(b.create_time) - new Date(a.create_time));
+  } else if (sortType.value === 'timeAsc') {
+    // 按时间升序排序
+    sortedPosts.sort((a, b) => new Date(a.create_time) - new Date(b.create_time));
+  }
+
+  return sortedPosts;
 });
 
 const handleCurrentChange = (val) => {
-    console.log(`current page: ${val}`)
-    console.log(params.value);
-    postListStore.getPostList(params.value)
-}
+  postListStore.getPostList(params.value);
+};
 
 const goToDiscussion = (postId) => {
   router.replace(`/discussion/${postId}`);
 };
 
 const postDiscussion = () => {
-    const url = `/discussion/create`
-    window.open(url, '_blank')
-}
+  const url = '/discussion/create';
+  window.open(url, '_blank');
+};
 
 onMounted(async () => {
   await postListStore.getPostList(params.value); // 等待数据加载
   count.value = postListStore.count; // 更新总数
 });
-
 </script>
 
 <style scoped>

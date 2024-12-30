@@ -32,12 +32,6 @@ defineProps({
   commentCount:{ type: Number, required: true}
 });
 
-// const likeCount = ref(0);
-// const commentCount = ref(0);
-const time = ref("2024/12/17");
-// const handleLike = () => {
-//   likeCount.value++;
-// };
 </script>
 
 

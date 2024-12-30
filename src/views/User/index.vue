@@ -59,12 +59,12 @@
         <ul v-else v-infinite-scroll="load" class="list" :infinite-scroll-disabled="disabled">
           <li v-for="post in filteredPosts" :key="post.post_id" class="list-item">
             <ListItemContent
-              :avatar="userStore.getAvatar()"
-              :title="userStore.userInfo.username"
-              :username="userStore.userInfo.username"
-              :time="userStore.userInfo.username"
-              :commentCount="userStore.userInfo.subscribers_count"
-              :likeCount="userStore.userInfo.subscribing_count"
+              :avatar="post.avatar"
+              :title="post.post_title"
+              :username="post.username"
+              :time="post.create_time"
+              :commentCount="post.comment_count"
+              :likeCount="post.like_count"
               v-model="selectedPost"
             />
           </li>

@@ -12,6 +12,10 @@ export const usePostStore = defineStore('post', () => {
         post.value = res.data;
     };
 
+    const getAvatar = () => {
+      return `data:image/png;base64, ${post.value.avatar}`
+    }
+
     // 发布新帖子
     const createPost = async (params) => {
         try {
@@ -37,6 +41,7 @@ export const usePostStore = defineStore('post', () => {
         post,
         isPosting,
         getPost,
+        getAvatar,
         createPost,
         likePost
     };

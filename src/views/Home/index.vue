@@ -46,7 +46,7 @@
               :avatar="post.avatar"
               :title="post.post_title"
               :username="post.username"
-              :time="post.time"
+              :time="post.create_time"
               :commentCount="post.comment_count"
               :likeCount="post.like_count"
               v-model="selectedPost"
@@ -56,11 +56,11 @@
       </div>
     </div>
 
-    <div class="wrapper_feedback">
+    <!-- <div class="wrapper_feedback">
       <label class="feedback_label">有任何问题，欢迎反馈~</label>
       <input class="feedback_input" type="text" required placeholder="here!"/>
       <el-button class="btn_feedback" type="success" plain>Submit</el-button>
-    </div>
+    </div> -->
 </template>
 
 
@@ -240,7 +240,7 @@ white-space: nowrap; /* 禁止文字换行 */
 margin: auto;
 position: relative;
 margin-top: 20px;
-
+margin-bottom: 10px;
 width: 85%;
 min-width: 800px;
 max-height: 800px;
@@ -266,6 +266,7 @@ width: 80%;
 overflow: hidden;
 /* gap:25%; */
 justify-content: space-between;
+height: 60px;
 }
 
 .menu_main .el-menu-item{
