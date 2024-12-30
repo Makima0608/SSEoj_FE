@@ -5,7 +5,7 @@
       <div class="information">
         <div class="authorContainer">
           <label>作者</label>
-          <img :src="postStore.post.avatar"  class="avatar" />
+          <img :src="postStore.getAvatar()"  class="avatar" />
           <p class="authorName">{{ postStore.post.name }}</p>
         </div>
         <div class="timeContainer">

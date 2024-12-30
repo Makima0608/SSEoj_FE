@@ -8,10 +8,16 @@ export const useCommentStore = defineStore('comment', () => {
 
   const getComments = async (params) => {
     const res = await getCommentAPI(params);
-    console.log(res);
     count.value = res.data.count; // 更新 .value
-    comments.value = res.data.comments; // 更新 .value
+    comments.value = res.data.comments.map(comment => {
+      return {
+        ...comment, // 保留其他字段不变
+        avatar: `data:image/png;base64, ${comment.avatar}`, // 对 avatar 字段进行解码
+      };
+    });
+
   };
+
   // 点赞
   const likeComment = async (params) => {
     const res = await likeCommentAPI(params);
