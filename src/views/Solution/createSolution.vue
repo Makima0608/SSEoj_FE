@@ -22,7 +22,7 @@
     <div class="solution-editor">
         <FEditor ref="FEditorRef"/>
     </div>
-    
+
 </template>
 
 <script setup>
@@ -216,7 +216,7 @@ onMounted(async () => {
 ::v-deep .autoComplete .el-input {
     height: 24px;
     font-size: 12px;
-    
+
 }
 
 ::v-deep .autoComplete .el-input__inner {

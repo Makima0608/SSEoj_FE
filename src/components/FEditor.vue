@@ -7,6 +7,14 @@ import 'mathlive/fonts.css'
 
 let mathliveEditor
 
+const props= defineProps({
+  initialValue:{
+    default:"111",
+    type:String
+  }
+})
+
+
 const TOOLBAR_CONFIG = [
   ['undo', 'redo', 'clean', 'format-painter'],
   [
