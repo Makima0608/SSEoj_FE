@@ -32,6 +32,11 @@
         <!-- 标题 -->
         <div class="titleContainer">
           <label>{{ postTitle }}</label>
+          <div class="likeContainer">
+            <span v-if="!postStore.post.is_good" class="iconfont icon-BxLike" @click="handleLike()"></span>
+            <span v-else class="iconfont icon-BxsLike" @click="handleLike()"></span>
+            <label class="likeCount">{{ postStore.post.like_count }}</label>
+          </div>
         </div>
 
         <!-- 内容容器 -->
@@ -43,7 +48,7 @@
         <!--评论容器-->
       <div class="commentsContainer">
         <div class="sortContainer">
-          <label>{{ count }}</label>
+          <label>{{ postStore.post.comment_count }}</label>
           <el-dropdown v-model="selectedItem">
             <span class="el-dropdown-link">
               {{ selectedItem || '排序' }}
@@ -134,7 +139,12 @@ const handleReply = (parentComment, replyContent) => {
 };
 
 const handleCurrentChange = (val) => {
-    commentStore.getComments(page_params.value);
+  commentStore.getComments(page_params.value);
+}
+
+const handleLike= () => {
+  const is_good = postStore.post.is_good
+  postStore.likePost({id, is_good})
 }
 
 
@@ -155,6 +165,7 @@ onMounted(async () => {
 
   // 将 \n 替换为 <br>，以实现换行
   formattedPostContent.value = postContent.value.replace(/\n/g, '<br>');
+  console.log(postStore.post.is_good)
 });
 
 </script>
@@ -208,6 +219,7 @@ onMounted(async () => {
   padding-right: 10px;
 }
 
+
 .authorContainer label{
   display: flex;
   font-size: 15px;
@@ -225,6 +237,11 @@ onMounted(async () => {
 
 }
 
+.authorContainer p{
+  display: flex;
+  align-items: center;
+}
+
 .authorName{
   min-width: 60px;
   text-align: left;
@@ -238,8 +255,8 @@ onMounted(async () => {
   margin-bottom: 10px;
   padding-left: 10px;
   padding-right: 10px;
-
 }
+
 
 .timeContainer label{
   display: flex;
@@ -280,9 +297,34 @@ onMounted(async () => {
 
 /* 标题容器 */
 .titleContainer {
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.titleContainer label {
   font-size: 20px;
   font-weight: bold;
-  margin-bottom: 15px;
+  width: 90%;
+}
+
+
+.likeContainer {
+  align-items: center;
+  cursor: pointer;
+}
+
+.icon-BxLike{
+  color:grey;
+}
+
+.icon-BxsLike{
+  color:grey;
+}
+
+.likeCount {
+  color:grey;
 }
 
 /* 内容容器 */

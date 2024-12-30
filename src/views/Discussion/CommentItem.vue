@@ -7,6 +7,11 @@
         <img :src="comment.avatar" class="avatar" />
         <span class="username">{{ comment.user_name }}</span>
         <span class="time">{{ comment.create_time }}</span>
+        <div class="likeContainer">
+          <span v-if="comment.is_good" class="iconfont icon-BxsLike" @click="handleLike(comment)"></span>
+          <span v-else class="iconfont icon-BxLike" @click="handleLike(comment)"></span>
+          <label class="likeCount">{{ comment.like_count }}</label>
+        </div>
       </div>
       <div class="comment-content">
         <p>{{ comment.comment_content }}</p>
@@ -16,11 +21,16 @@
       <div class="replies-container">
         <!-- 渲染二级评论 -->
         <div v-for="reply in comment.replies" :key="reply.comment_id" class="reply-item">
-          <div>
+          <div class="reply-header">
             <img :src="reply.avatar" class="avatar" />
             <span class="username">{{ reply.user_name }}</span>
             <span class="reply-to" v-if="reply.reply_to_name">Reply to: {{ reply.reply_to_name }}</span>
             <span class="time">{{ reply.create_time }}</span>
+            <div class="likeContainer">
+              <span v-if="reply.is_good" class="iconfont icon-BxsLike" @click="handleLike(reply)"></span>
+              <span v-else class="iconfont icon-BxLike" @click="handleLike(reply)"></span>
+              <label class="likeCount">{{ reply.like_count }}</label>
+            </div>
           </div>
           <div class="reply-content">
             <p>{{ reply.comment_content }}</p>
@@ -45,6 +55,9 @@
 
 <script setup>
 import { ref, watch } from 'vue';
+import { useCommentStore } from '@/stores/commentStore';
+
+const commentStore = useCommentStore()
 
 const props = defineProps({
   commentsData: {
@@ -109,6 +122,13 @@ const clearReplyBox = () => {
   activeReplyUserName.value = '';
   replyInput.value = '';
 };
+
+const handleLike= (params) => {
+  const is_good=params.is_good;
+  const comment_id=params.comment_id;
+  commentStore.likeComment({is_good, comment_id})
+}
+
 </script>
 
 <style scoped>
@@ -131,7 +151,17 @@ const clearReplyBox = () => {
   font-weight: bold;
   border-bottom: grey solid;
   display: flex;
+
 }
+
+.likeContainer{
+ align-self: flex-end;
+ margin: auto;
+ margin-left: 50px;
+ margin-top:10px;
+ cursor: pointer;
+}
+
 
 .comment-content {
   display: flex;
@@ -151,10 +181,15 @@ const clearReplyBox = () => {
   object-fit: cover;
 }
 
+.reply-header{
+  display: flex;
+}
+
 .reply-item .avatar {
   width: 30px;
   height: 30px;
 }
+
 
 .reply-item .username {
   margin-left: 5px;
@@ -177,6 +212,7 @@ const clearReplyBox = () => {
 .comment-header .username {
   margin-left: 10px;
   margin-top: 10px;
+  font-weight: bold;
 }
 
 .comment-header .time {

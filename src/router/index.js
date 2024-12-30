@@ -15,6 +15,7 @@ import User from '@/views/User/index.vue'
 import CreateSolution from '@/views/Solution/createSolution.vue'
 import SolutionDetail from '@/views/Solution/solutionDetail.vue'
 import ProblemlistDetail from '@/views/ProblemList/problemlistDetail.vue'
+import CreateDiscussion from '@/views/Discussion/createDiscussion.vue'
 
 
 const router = createRouter({
@@ -88,6 +89,10 @@ const router = createRouter({
     {
       path: '/discussion/:id',
       component: Detail,
+    },
+    {
+      path: '/discussion/create',
+      component: CreateDiscussion
     },
     {
       path: '/:patchMatch(.*)*',

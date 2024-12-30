@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { loginAPI, logoutAPI, getUserInfoAPI, avatarChangeAPI, usernameChangeAPI, proflieChangeAPI, passwordChangeAPI, passwordForgetAPI } from '@/apis/user'
+import { loginAPI, logoutAPI, getUserInfoAPI, avatarChangeAPI, usernameChangeAPI, proflieChangeAPI, passwordChangeAPI, passwordForgetAPI,getPracticeAPI } from '@/apis/user'
+// import { id } from 'element-plus/es/locale'
 
 export const useUserStore = defineStore('user', () => {
     const userInfo = ref({})
+    const practiceInfo = ref({})
 
     const getUserInfo = async (email, password) => {
         const res = await loginAPI({ email, password })
@@ -48,10 +50,9 @@ export const useUserStore = defineStore('user', () => {
 
             // 如果是修改密码（传入的是旧密码和新密码）
             if (updatedInfo.oldPassword && updatedInfo.newPassword) {
-                await passwordChangeAPI(updatedInfo.oldPassword, updatedInfo.newPassword)
+                await passwordChangeAPI(updateUserInfo.id,updatedInfo.oldPassword, updatedInfo.newPassword)
                 alert('密码修改成功！')
             }
-
             console.log('User info updated successfully:', userInfo.value)
         } catch (error) {
             console.error('Error updating user info:', error)
@@ -59,13 +60,29 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
+    const passwordForget = async (params) => {
+        await passwordForgetAPI(params)
+        alert('重置密码邮件已发送，请查收并修改您的新密码！')
+        console.log('Password forget successfully:', params)
+    }
+
+    const getPractice = async (id) => {
+      const data = await getPracticeAPI(id)
+      practiceInfo.value = data.value
+      console.log("get practice info", practiceInfo.value)
+    }
+
+
     return {
         userInfo,
+        practiceInfo,
         getUserInfo,
         clearUserInfo,
         isAuthenticated,
         getAvatar,
         updateUserInfo,  // 这里暴露 updateUserInfo 方法
+        passwordForget,
+        getPractice
     }
 }, {
     persist: true,
