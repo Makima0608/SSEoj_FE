@@ -2,7 +2,6 @@ import Mock from 'mockjs'
 
 Mock.mock(/\/api\/post\/(\d+)\/information/, 'get', (options) => {
     const id = options.url.match(/\/api\/post\/(\d+)\/information/)[1];
-    console.log(id);
 
     const data = {
       "id":id,
