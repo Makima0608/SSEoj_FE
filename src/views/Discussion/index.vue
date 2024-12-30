@@ -17,6 +17,7 @@
               <el-menu-item index="1">按热度</el-menu-item>
               <el-menu-item index="2">按时间</el-menu-item>
             </el-menu>
+            <el-button plain type="info" @click="postDiscussion">发布帖子</el-button>
           </div>
           <div class="postList">
             <div class="infinite-list-wrapper" style="overflow: auto">
@@ -73,7 +74,7 @@ const postListStore = usePostListStore();
 const currentPage = ref(1);
 const pageSize = ref(30);
 const router = useRouter();
-
+const sortTpye=ref("likeDesc");
 
 const load = async () => {
   if (disabled.value) return; // 防止重复加载
@@ -97,6 +98,8 @@ const load = async () => {
 const params = computed(() => ({
   page_num: currentPage.value || 1,
   page_size: pageSize.value || 30,
+  sort_type: sortTpye.value || "likeDesc",
+  keyword: ""
 }));
 
 // 动态过滤帖子
@@ -122,6 +125,11 @@ const handleCurrentChange = (val) => {
 const goToDiscussion = (postId) => {
   router.replace(`/discussion/${postId}`);
 };
+
+const postDiscussion = () => {
+    const url = `/discussion/create`
+    window.open(url, '_blank')
+}
 
 onMounted(async () => {
   await postListStore.getPostList(params.value); // 等待数据加载
@@ -153,6 +161,12 @@ onMounted(async () => {
     flex-shrink: 1;
 }
 
+.filter .el-button{
+  margin-top: 20px;
+  margin-right: 10px;
+  align-self: flex-end;
+}
+
 .container {
     display: flex;
     padding: 0px auto;
@@ -166,7 +180,7 @@ onMounted(async () => {
     flex-direction: column;
     justify-content: space-between;
     width: 99%;
-    height: 700px;
+    max-height: 700px;
     padding: 0px auto;
     margin-bottom:50px ;
     background:transparent;

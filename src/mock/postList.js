@@ -7,7 +7,7 @@ Mock.mock(/\/api\/post\/list(\?.*)?/, 'get', (options) => {
     const params = new URLSearchParams(query);
     const page = params.get('page_num');
     const page_size = params.get('page_size');
-    console.log({ page, page_size })
+
     if (page == 1) {
         return {
             err: null,
@@ -84,46 +84,46 @@ Mock.mock(/\/api\/post\/list(\?.*)?/, 'get', (options) => {
                       "comment_count": 10,
                       "is_good": false
                   },
-                  {
-                    "post_id": 8,
-                      "post_title": "aiaiai",
-                      "user_id": 1,
-                      "username": "KLmon",
-                      "avatar": "https://avatars.githubusercontent.com/u/17516427",
-                      "like_count": 1,
-                      "comment_count": 10,
-                      "is_good": false
-                  },
-                  {
-                    "post_id": 9,
-                      "post_title": "aiaiai",
-                      "user_id": 1,
-                      "username": "KLmon",
-                      "avatar": "https://avatars.githubusercontent.com/u/17516427",
-                      "like_count": 1,
-                      "comment_count": 10,
-                      "is_good": false
-                  },
-                  {
-                    "post_id": 10,
-                      "post_title": "aiaiai",
-                      "user_id": 1,
-                      "username": "KLmon",
-                      "avatar": "https://avatars.githubusercontent.com/u/17516427",
-                      "like_count": 1,
-                      "comment_count": 10,
-                      "is_good": false
-                  },
-                  {
-                    "post_id": 8,
-                      "post_title": "aiaiai",
-                      "user_id": 1,
-                      "username": "KLmon",
-                      "avatar": "https://avatars.githubusercontent.com/u/17516427",
-                      "like_count": 1,
-                      "comment_count": 10,
-                      "is_good": false
-                  }
+                  // {
+                  //   "post_id": 8,
+                  //     "post_title": "aiaiai",
+                  //     "user_id": 1,
+                  //     "username": "KLmon",
+                  //     "avatar": "https://avatars.githubusercontent.com/u/17516427",
+                  //     "like_count": 1,
+                  //     "comment_count": 10,
+                  //     "is_good": false
+                  // },
+                  // {
+                  //   "post_id": 9,
+                  //     "post_title": "aiaiai",
+                  //     "user_id": 1,
+                  //     "username": "KLmon",
+                  //     "avatar": "https://avatars.githubusercontent.com/u/17516427",
+                  //     "like_count": 1,
+                  //     "comment_count": 10,
+                  //     "is_good": false
+                  // },
+                  // {
+                  //   "post_id": 10,
+                  //     "post_title": "aiaiai",
+                  //     "user_id": 1,
+                  //     "username": "KLmon",
+                  //     "avatar": "https://avatars.githubusercontent.com/u/17516427",
+                  //     "like_count": 1,
+                  //     "comment_count": 10,
+                  //     "is_good": false
+                  // },
+                  // {
+                  //   "post_id": 8,
+                  //     "post_title": "aiaiai",
+                  //     "user_id": 1,
+                  //     "username": "KLmon",
+                  //     "avatar": "https://avatars.githubusercontent.com/u/17516427",
+                  //     "like_count": 1,
+                  //     "comment_count": 10,
+                  //     "is_good": false
+                  // }
               ]
             }
         }

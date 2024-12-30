@@ -6,8 +6,8 @@ export const loginAPI = ({ email, password }) => {
         url: '/api/identity/login/',
         method: 'POST',
         data: {
-            email,
-            password
+            email:email,
+            password:password
         }
     })
 }
@@ -46,37 +46,62 @@ export const subscribeUserAPI = (id, relationship) => {
     })
 }
 
-export const proflieChangeAPI = () => {
+export const proflieChangeAPI = (profile) => {
     return request({
         url: "/api/user/profile_change/",
         method: 'PUT',
+        data:{
+          profile: profile
+        }
     })
 }
 
-export const usernameChangeAPI = () => {
+export const usernameChangeAPI = (username) => {
     return request({
         url: "/api/user/user_name_change/",
         method: 'PUT',
+        data:{
+          username: username
+        }
     })
 }
 
-export const avatarChangeAPI = () => {
+export const avatarChangeAPI = (avatar) => {
     return request({
         url: "/api/user/avatar_change/",
         method: 'PUT',
+        data:{
+          avatar: avatar
+        }
     })
 }
 
-export const passwordChangeAPI = ({ oldPassword, newPassword }) => {
+export const passwordChangeAPI = ({id,password_before,password_new}) => {
     return request({
         url: "/api/user/password_change",
         method: 'PUT',
+        data: {
+            id:id,
+            password_before:password_before,
+            password_new:password_new
+        }
     })
 }
 
-export const passwordForgetAPI = () => {
+export const passwordForgetAPI = ({password_new,verification_code}) => {
     return request({
         url: "/api/user/password_forget",
         method: 'PUT',
+        data: {
+          password_new:password_new,
+          verification_code:verification_code
+      }
+    })
+}
+
+export const getPracticeAPI= (id) =>{
+    return request({
+      url: `/api/user/${id}/practice`,
+      method: 'GET',
     })
 }

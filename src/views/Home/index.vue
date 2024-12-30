@@ -35,7 +35,6 @@
         <ul
           v-infinite-scroll="load"
           class="list"
-          :infinite-scroll-disabled="disabled"
         >
           <li
             v-for="post in filteredPosts"
@@ -54,8 +53,6 @@
             />
           </li>
         </ul>
-        <p v-if="loading">Loading...</p>
-        <p v-if="!loading && noMore">No more</p>
       </div>
     </div>
 
@@ -77,15 +74,12 @@ import { useRouter } from 'vue-router';
 
 const search_query =ref("");
 const count = ref(0)
-const loadedCount = ref(0)
-const loading = ref(false)
-const noMore = computed(() => loadedCount.value  >= count.value)//为展示暂定6
-const disabled = computed(() => loading.value || noMore.value)
-
 const postListStore = usePostListStore();
 
 const currentPage = ref(1);
 const pageSize = ref(30);
+const sortTpye = ref("likeDesc");
+
 
 // 当前选中的 menu index
 const activeMenuIndex = ref('1');
@@ -98,27 +92,16 @@ const handleSelect = (index) => {
 };
 
 const load = async () => {
-  if (disabled.value) return; // 防止重复加载
-  loading.value = true; // 设置加载中状态
+  await postListStore.getPostList(params.value);
+  loadedCount.value = postListStore.postList.length; // 更新已加载数量
 
-  try {
-    await postListStore.getPostList(params.value);
-    loadedCount.value = postListStore.postList.length; // 更新已加载数量
-    console.log(loadedCount.value);
-    console.log(count.value);
-    console.log(noMore.value);
-
-  } catch (err) {
-    console.error("Error loading data:", err);
-  } finally {
-    loading.value = false; // 加载完成后关闭加载状态
-  }
 };
-
 
 const params = computed(() => ({
   page_num: currentPage.value || 1,
   page_size: pageSize.value || 30,
+  sort_type: sortTpye.value || "likeDesc",
+  keyword: ""
 }));
 
 // 动态过滤帖子
@@ -256,11 +239,11 @@ white-space: nowrap; /* 禁止文字换行 */
 .wrapper_post{
 margin: auto;
 position: relative;
-top: 30px;
-bottom: 100px;
+margin-top: 20px;
+
 width: 85%;
 min-width: 800px;
-height: 800px;
+max-height: 800px;
 background:transparent;
 border-radius: 12px;
 backdrop-filter: blur(20px);
@@ -301,6 +284,7 @@ background-color: white;  /* 选中项的背景色 */
 .infinite-list-wrapper {
 position: relative;
 margin-top: 25px; /* 与菜单之间的间距 */
+margin-bottom: 25px; /* 与菜单之间的间距 */
 width: 95%; /* 与 menu_main 的宽度一致 */
 text-align: center;
 height: 80%; /* 自动根据内容调整高度 */

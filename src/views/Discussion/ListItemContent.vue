@@ -9,7 +9,7 @@
       <div class="like-container">
         <span class="time">{{ time }}</span>
 
-        <span class="iconfont icon-BxLike" @click="handleLike"></span>
+        <span class="iconfont icon-BxLike" ></span>
         <span class="like-count">{{ likeCount }}</span>
         <span class="iconfont icon-comment"></span>
         <span class="comment-count">{{ commentCount }}</span>
@@ -112,9 +112,6 @@ const time = ref("2024/12/17");
   transition: color 0.2s ease;
 }
 
-.icon-BxLike:hover {
-  color: #ff5722;
-}
 
 .like-count {
   font-size: 12px;
