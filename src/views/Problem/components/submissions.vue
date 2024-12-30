@@ -157,7 +157,7 @@ onMounted(async() => {
 }
 
 .el-collapse{
-  margin-top: 30px;
+  margin-top: 20px;
   --el-collapse-header-height: 60px;
 }
 

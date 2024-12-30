@@ -14,7 +14,7 @@
                 </div>
             </div>
             <el-scrollbar class="content">
-                <router-view></router-view>
+                <router-view :key="routeKey"></router-view>
             </el-scrollbar>   
         </div>
 
@@ -65,6 +65,7 @@ const leftPaneWidth = ref(500)
 const isDragging = ref(false);
 const initialMouseX = ref(0);
 const initialLeftPanelWidth = ref(0);
+const routeKey = ref(0) //用来强制刷新提交列表
 const onMouseDown = (e) => {
     isDragging.value = true
     initialMouseX.value = e.clientX
@@ -184,7 +185,15 @@ const submitProblem = async() => {
     }
     // console.log(data)
     await submitProblemAPI(data)
-    selectTag(2)
+    if (selectedTag.value != tags[2]) {
+        selectTag(2)
+    }   
+    else {
+        if (routeKey.value > 1000)
+            routeKey.value = 0
+        else
+            routeKey.value = routeKey.value + 1
+    }
     submitBtnDisable.value = false
 }
 

@@ -93,6 +93,12 @@ Mock.mock(/\/api\/problemset\//, 'get', (options) => {
 }
 )
 
+Mock.mock(/\/api\/solution\/create\//, 'post', () => {
+    return {
+        err: null,
+        data: 'success'
+    }
+})
 
 // 假设你的 API 路径是这样的，并且带有查询参数
 // const apiPath = '/api/problemset';

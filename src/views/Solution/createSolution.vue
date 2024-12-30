@@ -34,6 +34,7 @@ import { useTagsStore } from '@/stores/tagsStore';
 import { useRoute } from 'vue-router';
 import { getProblemDescAPI } from '@/apis/problem';
 import { ElMessage } from 'element-plus';
+import { createSolutionAPI } from '@/apis/problemset';
 
 const loadComplete = ref(false)
 
@@ -51,7 +52,16 @@ const id = route.query.id
 const problemDesc = ref({})
 
 const postSolution = () => {
-    console.log(FEditorRef.value.getContent());
+    const data = {
+        problem_id: id,
+        title: title.value,
+        content: FEditorRef.value.getContent(),
+        tags: selectedTag.value.map(tagName => {
+            return tagsStore.tagsToID[tagName]
+        })
+    }
+    console.log(data)
+    createSolutionAPI(data)
 }
 
 const createFilter = (queryString) => {
@@ -122,11 +132,10 @@ const setFEditorContent = () => {
 
 
 onMounted(async () => {
-    // await tagsStore.getTags()
-    // // console.log(tagsStore.idToTags)
-    // allTags.value = Object.keys(tagsStore.tagsToID)
-    // await getProblemDesc(id)
-    // loadComplete.value = true
+    await tagsStore.getTags()
+    allTags.value = Object.keys(tagsStore.tagsToID)
+    await getProblemDesc(id)
+    loadComplete.value = true
     // setFEditorContent()
 })
 </script>
