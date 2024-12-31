@@ -17,3 +17,10 @@ export const createSolutionAPI = (data) => {
     })
 }
 
+// 获取题单详细信息
+export const getSolutionDetailAPI = (problem_id, solution_id) => {
+    return request({
+        url: `/api/problem/${problem_id}/solutions/${solution_id}/`
+    })
+}
+

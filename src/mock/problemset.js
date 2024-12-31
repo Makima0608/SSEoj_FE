@@ -1,5 +1,6 @@
 import Mock from 'mockjs'
 
+// 获取题库
 Mock.mock(/\/api\/problemset\//, 'get', (options) => {
     console.log(options.url)
     const query = options.url.split('?')[1];
@@ -93,6 +94,7 @@ Mock.mock(/\/api\/problemset\//, 'get', (options) => {
 }
 )
 
+// 提交题解
 Mock.mock(/\/api\/solution\/create\//, 'post', (options) => {
     console.log(options)
     return {
@@ -100,6 +102,8 @@ Mock.mock(/\/api\/solution\/create\//, 'post', (options) => {
         data: 'success'
     }
 })
+
+// Mock.mock(, ,)
 
 // 假设你的 API 路径是这样的，并且带有查询参数
 // const apiPath = '/api/problemset';

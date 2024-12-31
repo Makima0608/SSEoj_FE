@@ -5,10 +5,27 @@
             <input type="text" class="input" v-model="keyword">
             <span class="iconfont icon-sousuo" @click="search"></span>
         </div>
-        <div class="tagBtn">
-            标签
-            <div v-if="selectedTag.length" class="tagNum">{{ selectedTag.length }}</div>
-        </div>
+        <el-popover 
+            @show="showUserInfoCard(item.user_info.id)"
+            @hide="userInfo = {}"
+            popper-style="width: 400px; height: 300px; border-radius:10px;"
+            :show-arrow="false"
+        >
+            <template #reference>
+                <div class="tagBtn">
+                    标签
+                    <div v-if="selectedTag.length" class="tagNum">{{ selectedTag.length }}</div>
+                </div>
+            </template>
+            <template #default>
+                <tagView 
+                    :selected-tag="selectedTag"
+                    :all-tags="tagList"
+                    @selectTag="addTag"
+                    @closeTag="deleteTag"
+                />
+            </template>
+        </el-popover>
         <div class="postSolutionBtn" @click="postSolution">发布题解</div>
     </div>
 
@@ -67,6 +84,7 @@
 
 <script setup>
 import UserInfoCard from '@/components/UserInfoCard.vue';
+import tagView from './tagView.vue';
 
 import { onMounted, ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -107,9 +125,8 @@ const solutions = ref([])
 const tagList = ref([])
 const count = ref(0)  //题解数
 
-const selectedTag = ref([1, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3])
+const selectedTag = ref([])
 const keyword = ref('')
-
 const tagStore = useTagsStore()
 
 
@@ -122,6 +139,7 @@ const getSolutionList = async () => {
     count.value = res.data.count
 }
 
+// 搜索按钮
 const search = async () => {
     isPageReady.value = false
     reqData.value.keyword = keyword.value
@@ -130,6 +148,7 @@ const search = async () => {
     isPageReady.value = true
 }
 
+// 无限加载列表加载数据
 const loadSolutions = async () => {
     isLoading.value = true
     reqData.value.page++
@@ -143,6 +162,7 @@ const loadSolutions = async () => {
     }, 1000)
 }
 
+// 跳转到其他用户界面
 const jumpToUser = (id) => {
     console.log(id)
     const userWindow = window.open('', '_blank')
@@ -151,26 +171,38 @@ const jumpToUser = (id) => {
     userWindow.location.href = userProfileUrl
 }
 
+// 点赞
 const toggleLike = async (item) => {
     await likeSolutionAPI(item.id, !item.is_good)
     item.like_count += item.is_good ? -1 : 1
     item.is_good = !item.is_good
 }
 
+// 发布题解按钮（跳转）
 const postSolution = () => {
     const url = `/solution/create/?id=${id}`
     window.open(url, '_blank')
 }
 
-const jumpToSolutionDetail = (id) => {
-    const url = `/solution/${id}`
+// 进入题解详细信息页面
+const jumpToSolutionDetail = (sid) => {
+    const url = `/problem/${id}/solution/${sid}`
     window.open(url, '_blank')
 }
 
 const toggleFollow = (msg) => {
     userInfo.value.is_subscribe = msg
     userInfo.value.subscribers_count += msg? 1: -1
-    subscribeUserAPI(hoverUserInfo.value.id, msg)
+    subscribeUserAPI(userInfo.value.id, msg)
+}
+
+const addTag = async(tagId) => {
+    selectedTag.value.push(tagId)
+    await getSolutionList(id, reqData.value)
+}
+const deleteTag = async(tagId) => {
+    selectedTag.value = selectedTag.value.filter(item => item != tagId)
+    await getSolutionList(id, reqData.value)
 }
 
 onMounted(async () => {

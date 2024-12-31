@@ -80,8 +80,6 @@ import { ElMessage } from 'element-plus';
 import { useUserStore } from '@/stores/userStore';
 import 'element-plus/theme-chalk/el-message.css';
 import router from '@/router';
-import forge from 'node-forge';
-
 
 // Data properties
 const email = ref('');
@@ -106,7 +104,9 @@ MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKHP3hnFtL1g3bpgDMFAma1MofY9UmInthR8vK5Q9/dYcfdq
   // console.log(encrypted)
   await userStore.getUserInfo(email.value, password.value)
   ElMessage({ type: "success", message: "登陆成功" })
-  router.replace({ path: '/' })
+  const redirectPath = localStorage.getItem('redirectPath') || '/'
+  router.replace(redirectPath)
+  localStorage.removeItem('redirectPath')
 }
 
 const doRegister = () => {

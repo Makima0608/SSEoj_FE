@@ -23,22 +23,27 @@ const router = createRouter({
   routes: [
     {
       path: '/',
+      name: 'layout',
       component: Layout,
       children: [
         {
           path: '',
+          name: 'home',
           component: Home
         },
         {
           path: '/problemset',
+          name: 'problemst',
           component: ProblemSet
         },
         {
           path: '/problemlist',
+          name: 'problemlist',
           component: ProblemList
         },
         {
           path: '/discussion',
+          name: 'discussion',
           component: Discussion,
 
         },
@@ -46,10 +51,12 @@ const router = createRouter({
     },
     {
       path: '/login',
+      name: 'login',
       component: Login,
     },
     {
       path: '/problem/:id',
+      name: 'problem',
       component: Problem,
       children: [
         // {
@@ -58,47 +65,66 @@ const router = createRouter({
         // },
         {
           path: '/problem/:id/description',
+          name: 'description',
           component: Description,
         },
         {
           path: '/problem/:id/submissions',
+          name: 'submissions',
           component: Submissions,
         },
         {
           path: '/problem/:id/solutions',
+          name: 'solutions',
           component: Solutions,
         }
       ]
     },
     {
       path: '/problemlist/:id',
+      name: 'problemlistDetail',
       component: ProblemlistDetail
     },
     {
       path: '/user/:id',
+      name: 'user',
       component: User,
     },
     {
       path: '/solution/create',
+      name: 'createSolution',
       component: CreateSolution
     },
     {
-      path: '/solution/:id',
+      path: '/problem/:pid/solution/:sid',
+      name: 'solutionDetail',
       component: SolutionDetail
     },
     {
       path: '/discussion/:id',
+      name: 'detail',
       component: Detail,
     },
     {
       path: '/discussion/create',
+      name: 'createDiscussion',
       component: CreateDiscussion
     },
     {
       path: '/:patchMatch(.*)*',
+      name: 'notFound',
       component: NotFound
     },
   ],
 })
+
+router.beforeEach((to, from, next) => {
+  console.log(to, from, next)
+  if (to.name === 'login' && from.name) {
+    console.log(222)
+    localStorage.setItem('redirectPath', from.fullPath);
+  }
+  next();
+});
 
 export default router

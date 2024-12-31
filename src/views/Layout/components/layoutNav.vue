@@ -28,7 +28,7 @@
         </template>
         <template v-else>
             <ul class="notAuth">
-                <a href="/login">登录</a>
+                <a @click="router.push('/login')">登录</a>
                 <a href="#">帮助</a>
             </ul>
         </template>
