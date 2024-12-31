@@ -10,6 +10,7 @@
             @hide="userInfo = {}"
             popper-style="width: 400px; height: 300px; border-radius:10px;"
             :show-arrow="false"
+            trigger="click"
         >
             <template #reference>
                 <div class="tagBtn">
@@ -271,6 +272,7 @@ onMounted(async () => {
     border-radius: 10px;
     padding: 0px 8px;
     font-size: 16px;
+    cursor: pointer;
 }
 
 .tagNum {

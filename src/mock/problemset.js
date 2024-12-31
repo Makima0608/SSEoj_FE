@@ -103,7 +103,31 @@ Mock.mock(/\/api\/solution\/create\//, 'post', (options) => {
     }
 })
 
-// Mock.mock(, ,)
+Mock.mock(/\/api\/problem\/(\d+)\/solutions\/(\d+)\//, 'get', (options) => {
+    console.log(options.url)
+    const data = {
+        "solution": {
+            "solution_id": "99",
+            "solution_title": "平方数之和",
+            "solution_content": "嗷嗷嗷嗷嗷嗷嗷"
+        },
+        "user_info": {
+            "user_id": "666",
+            "user_name": "KLmon",
+            "avatar": "https://sseoj.com/u/avatar_96310528"
+        },
+        "like_count": 80,
+        "comment_count": "180",
+        "create_time": "2025-05-15 02:29:51",
+        "tags": [
+            "force"
+        ]
+    }
+    return {
+        err: null,
+        data: data
+    }
+})
 
 // 假设你的 API 路径是这样的，并且带有查询参数
 // const apiPath = '/api/problemset';

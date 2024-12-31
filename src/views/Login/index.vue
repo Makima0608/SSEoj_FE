@@ -80,6 +80,7 @@ import { ElMessage } from 'element-plus';
 import { useUserStore } from '@/stores/userStore';
 import 'element-plus/theme-chalk/el-message.css';
 import router from '@/router';
+import forge from 'node-forge';
 
 // Data properties
 const email = ref('');
