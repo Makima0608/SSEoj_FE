@@ -10,7 +10,10 @@ export const createPostAPI = (params) => {
   return request({
     url: `/api/post/new/`,
     method: 'POST',
-    data: params,
+    data: {
+      post_title: params.post_title,
+      post_content: params.post_content
+    },
   })
 }
 
