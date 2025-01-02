@@ -106,22 +106,21 @@ Mock.mock(/\/api\/solution\/create\//, 'post', (options) => {
 Mock.mock(/\/api\/problem\/(\d+)\/solutions\/(\d+)\//, 'get', (options) => {
     console.log(options.url)
     const data = {
-        "solution": {
-            "solution_id": "99",
-            "solution_title": "平方数之和",
-            "solution_content": "嗷嗷嗷嗷嗷嗷嗷"
-        },
         "user_info": {
-            "user_id": "666",
-            "user_name": "KLmon",
-            "avatar": "https://sseoj.com/u/avatar_96310528"
+            "id": "111",
+            "username": "素燕",
+            "avatar": "https://avatars.githubusercontent.com/u/15032622"
         },
-        "like_count": 80,
-        "comment_count": "180",
-        "create_time": "2025-05-15 02:29:51",
+        "like_count": 62,
+        "comment_count": "amet tempor ea consectetur",
+        "create_time": "2024-02-19 17:04:56",
         "tags": [
-            "force"
-        ]
+            84,
+            25
+        ],
+        "id": 26,
+        "title": "嗯虽然遍及嗯军营画电器",
+        "content": "dolore dolore qui sed"
     }
     return {
         err: null,

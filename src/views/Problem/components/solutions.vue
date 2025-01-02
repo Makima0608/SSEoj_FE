@@ -6,8 +6,6 @@
             <span class="iconfont icon-sousuo" @click="search"></span>
         </div>
         <el-popover 
-            @show="showUserInfoCard(item.user_info.id)"
-            @hide="userInfo = {}"
             popper-style="width: 400px; height: 300px; border-radius:10px;"
             :show-arrow="false"
             trigger="click"
@@ -187,16 +185,18 @@ const postSolution = () => {
 
 // 进入题解详细信息页面
 const jumpToSolutionDetail = (sid) => {
-    const url = `/problem/${id}/solution/${sid}`
+    const url = `/problem/${id}/solutions/${sid}`
     window.open(url, '_blank')
 }
 
+// 点击关注用户
 const toggleFollow = (msg) => {
     userInfo.value.is_subscribe = msg
     userInfo.value.subscribers_count += msg? 1: -1
     subscribeUserAPI(userInfo.value.id, msg)
 }
 
+// 添加和减少筛选tag
 const addTag = async(tagId) => {
     selectedTag.value.push(tagId)
     await getSolutionList(id, reqData.value)

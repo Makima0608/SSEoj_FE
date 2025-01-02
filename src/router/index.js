@@ -96,7 +96,7 @@ const router = createRouter({
       component: CreateSolution
     },
     {
-      path: '/problem/:pid/solution/:sid',
+      path: '/problem/:pid/solutions/:sid',
       name: 'solutionDetail',
       component: SolutionDetail
     },
