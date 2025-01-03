@@ -14,20 +14,28 @@
             >
                 <template #reference>
                     <div class="userInfo" @click="jumpToUser(userInfo.id)">
-                        <el-avatar :size="25" style="font-size: 12px;" :src="userInfo.avatar">KL</el-avatar>
-                        <span>{{ userInfo.username }}</span>
+                        <el-avatar :size="30" style="font-size: 12px;" :src="userInfo.avatar">KL</el-avatar>
+                        <span style="font-size: 16px;">{{ userInfo.username }}</span>
                     </div>
                 </template>
                 <template #default>
                     <UserInfoCard :userInfo="userInfo" @update:subscribe="toggleFollow"/>
                 </template>
             </el-popover>
-            
+            <div v-html="solutionDetail.content" style="margin-top: 20px;"></div>
         </div>
         <div class="footer">
-
+            <span :class="solutionDetail.is_like? 'iconfont icon-BxsLike':'iconfont icon-BxLike'" @click="toggleLike"></span>
+            <span>{{ transNum(solutionDetail.like_count) }}</span>
+            <span class="iconfont icon-comment"></span>
+            <span>{{ transNum(solutionDetail.comment_count) }}</span>
+            <span class="create-time">发布时间：{{ transformDate(solutionDetail.create_time) }}</span>
         </div>
         <div class="comment">
+            <ReplyEditor />
+        </div>  
+        <div class="comments">
+        
         </div>
     </div>
 </template>
@@ -38,6 +46,12 @@ import { useRoute, useRouter } from 'vue-router';
 import { getSolutionDetailAPI } from '@/apis/problemset';
 import layoutNav from '../Layout/components/layoutNav.vue';
 import { subscribeUserAPI, getUserInfoAPI } from '@/apis/user';
+import { transformDate } from '@/utils/time';
+import { transNum } from '@/utils/data_calculate';
+import { useTagsStore } from '@/stores/tagsStore';
+import { likeSolutionAPI } from '@/apis/problem';
+import ReplyEditor from '@/components/ReplyEditor.vue';
+import TEditor from '@/components/TEditor.vue';
 
 const route = useRoute()
 const router = useRouter()
@@ -46,6 +60,7 @@ const sid = route.params.sid
 const solutionDetail = ref({})
 const userInfo = ref({})
 const userInfoCard = ref({})
+const tagsStore = useTagsStore()
 
 // 跳转到其他用户界面
 const jumpToUser = (id) => {
@@ -70,12 +85,19 @@ const toggleFollow = (msg) => {
     subscribeUserAPI(userInfoCard.value.id, msg)
 }
 
+const toggleLike = () => {
+    solutionDetail.value.is_like = !solutionDetail.value.is_like
+    solutionDetail.value.like_count += solutionDetail.value.is_like? 1: -1
+    likeSolutionAPI(solutionDetail.value.id, solutionDetail.value.is_like)
+}
+
 onMounted(async() => {
     const res = await getSolutionDetailAPI(pid, sid)
     solutionDetail.value = res.data
     const res_info = await getUserInfoAPI(solutionDetail.value.user_info.id)
     userInfo.value = res_info.data
     console.log(userInfo.value)
+    await tagsStore.getTags()
 })
 </script>
 
@@ -84,9 +106,30 @@ onMounted(async() => {
     width: 80%;
     margin: 20px auto;
     border: 1px solid #333;
+    padding: 20px;
+    border-radius: 10px;
+}
+.title {
+    font-size: 22px;
+    font-weight: 500;
 }
 .userInfo {
     display: inline-flex;
     align-items: center;
+    margin-top: 10px;
+}
+
+.icon-BxsLike, .icon-BxLike {
+    font-size: 20px;
+}
+
+.footer {
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+    margin-left: 0px;
+}
+.create-time {
+    color: #BBB
 }
 </style>

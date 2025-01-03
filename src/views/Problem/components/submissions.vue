@@ -24,11 +24,11 @@
             @change="selectedChange"
           >
             <el-option
-                v-for="item in languageList"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              /> 
+              v-for="item in languageList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            /> 
           </el-select>
         </el-col>
         <el-col :span="4">时间</el-col>
@@ -62,7 +62,10 @@
             {{ item.error_info }}
           </div>
           <span>代码</span> <span>{{ item.language }}</span>
-          <div class="code-content">{{ item.code }}</div>
+          <div class="code-content">
+            <span class="iconfont icon-fuzhi" style="cursor: pointer; right:30px" @click="copyText(item.code)"></span>
+            {{ item.code }}
+          </div>
         </div>
       </el-collapse-item>
     </el-collapse>
@@ -77,6 +80,7 @@ import { transMem, transTime } from '@/utils/data_calculate';
 import { useLanguageStore } from '@/stores/basicSetupStore';
 import { statusCodeToDesc } from '@/utils/problemStatus';
 import { transformDate } from '@/utils/time';
+import { ElMessage } from 'element-plus';
 import '@/assets/base-el-tag.css'
 // const statusArrowRef = ref(null)
 // const langArrowRef = ref(null)
@@ -141,6 +145,27 @@ const getStatusColor = (status) => {
     return {color: '#2acf2a'}
   else
     return {color: '#e90f0f'}
+}
+const copyText = async (txt) => {
+  if ('clipboard' in navigator) {
+      try {
+          await navigator.clipboard.writeText(txt);
+          ElMessage({
+              message: '文本已复制到剪贴板',
+              type: 'message',
+          })
+      } catch (err) {
+          ElMessage({
+              message: err,
+              type: 'error',
+          })
+      }
+  } else {
+      ElMessage({
+          message: '当前浏览器不支持 Clipboard API',
+          type: 'error',
+      })
+  }
 }
 
 onMounted(async() => {

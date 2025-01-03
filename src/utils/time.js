@@ -27,12 +27,11 @@ export const transformDate = (dateStr) => {
     const date = new Date(dateStr)
     const today = new Date()
     const delta = Math.abs(today - date)
-    console.log(delta)
     if (delta <= 60 * 1000)
         return '刚刚'
-    else if (delta <= 60 * 60 * 1000)
+    else if (delta < 60 * 60 * 1000)
         return `${Math.ceil(delta / (60 * 1000))}分钟前`
-    else if (delta <= 24 * 60 * 60 * 1000)
+    else if (delta < 24 * 60 * 60 * 1000)
         return `${Math.ceil(delta / (60 * 60 * 1000))}小时前`
     else
         return getDate(dateStr)

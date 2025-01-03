@@ -113,14 +113,15 @@ Mock.mock(/\/api\/problem\/(\d+)\/solutions\/(\d+)\//, 'get', (options) => {
             "avatar": "https://avatars.githubusercontent.com/u/37607428"
         },
         "like_count": 76,
-        "comment_count": "deserunt",
+        "comment_count": 20,
         "create_time": "2024-12-21 05:04:12",
         "tags": [
             22
         ],
         "id": 38,
         "title": "血淋淋成年人关于搜呼遍及尽管同样地",
-        "content": "adipisicing nulla do Lorem"
+        "content": "adipisicing nulla do Lorem",
+        "is_like": true
     }
     return {
         err: null,

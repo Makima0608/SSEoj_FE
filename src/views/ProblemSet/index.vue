@@ -47,7 +47,7 @@
                         />
                     </template>
                 </el-popover>
-                
+                <el-button @click="router.push('/problem/create')">发布题目</el-button>
             </div>
 
             <div class="problemset">
