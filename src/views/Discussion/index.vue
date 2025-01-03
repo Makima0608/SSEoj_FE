@@ -92,6 +92,9 @@ const handleSelect = (index) => {
       sortType.value = 'timeDesc'; // 切换为降序
     }
   }
+  else if(index === '1'){
+    sortType.value = 'likeDesc'; // 按点赞数降序排序
+  }
 };
 
 // 根据排序类型过滤帖子

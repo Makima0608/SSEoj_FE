@@ -91,16 +91,16 @@ Mock.mock(/\/api\/post\/list(\?.*)?/, 'get', (options) => {
                       "is_good": false,
                       "create_time":"2024/1/17"
                   },
-                  // {
-                  //   "post_id": 8,
-                  //     "post_title": "aiaiai",
-                  //     "user_id": 1,
-                  //     "username": "KLmon",
-                  //     "avatar": "https://avatars.githubusercontent.com/u/17516427",
-                  //     "like_count": 1,
-                  //     "comment_count": 10,
-                  //     "is_good": false
-                  // },
+                  {
+                    "post_id": 8,
+                      "post_title": "aiaiai",
+                      "user_id": 1,
+                      "username": "KLmon",
+                      "avatar": "https://avatars.githubusercontent.com/u/17516427",
+                      "like_count": 1,
+                      "comment_count": 10,
+                      "is_good": false
+                  },
                   // {
                   //   "post_id": 9,
                   //     "post_title": "aiaiai",

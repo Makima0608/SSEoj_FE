@@ -19,6 +19,7 @@ import CreateDiscussion from '@/views/Discussion/createDiscussion.vue'
 import CreateProblem from '@/views/ProblemSet/createProblem.vue'
 
 
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -60,10 +61,6 @@ const router = createRouter({
       name: 'problem',
       component: Problem,
       children: [
-        // {
-        //   path: '/problem/:id/',
-        //   component: Description
-        // },
         {
           path: '/problem/:id/description',
           name: 'description',
