@@ -108,7 +108,7 @@
           <div class="nameSetContainer">
             <div class="nameInputContainer">
               <label>用户名</label>
-              <input v-modle="newUsername" type="text" :placeholder="userStore.userInfo.username || 'Nothing here...'"/>
+              <input v-model="newUsername" type="text" :placeholder="userStore.userInfo.username || 'Nothing here...'"/>
             </div>
             <el-button type="info" plain @click="changeUsername">确认修改</el-button>
           </div>
@@ -163,7 +163,9 @@
     <div v-if="activeMenuIndex==='3'" class="problemListContainer">
       <label>我收藏的</label>
       <div class="myStar">
-       <div v-for="plistItem in starProblemList" :key="plistItem.id" class="problemlist-item"
+        <!-- 如果没有任何东西就nothing -->
+        <label v-if="starProblemList.length === 0">Nothing here.....</label>
+        <div v-else v-for="plistItem in starProblemList" :key="plistItem.id" class="problemlist-item"
           @click="router.push(`/problemlist/${plistItem.id}`)">
 
           <div class="problemlist-header">
@@ -190,7 +192,9 @@
 
       <label>我创建的</label>
       <div class="problemlist">
-        <div v-for="plistItem in problemlist" :key="plistItem.id" class="problemlist-item"
+        <!-- 如果没有任何东西就nothing -->
+        <label v-if="problemlist.length === 0">Nothing here.....</label>
+        <div v-else v-for="plistItem in problemlist" :key="plistItem.id" class="problemlist-item"
           @click="router.push(`/problemlist/${plistItem.id}`)">
 
             <div class="problemlist-header">
@@ -251,8 +255,9 @@ import { getProblemListAPI } from "@/apis/problemlist";
 import { useTagsStore } from '@/stores/tagsStore';
 import { getDifficultColor } from '@/utils/color';
 
-
 const router = useRouter()
+const route = useRoute()
+const id = route.params.id
 const tagsStore = useTagsStore()
 const userStore = useUserStore();
 const postListStore = usePostListStore();
@@ -329,7 +334,7 @@ const filteredPosts = computed(() => {
 
 const changeUsername = async () => {
     try {
-        console.log(newUsername)
+        console.log(newUsername.value)
         await userStore.updateUserInfo({ username: newUsername.value });  // 更新本地信息
         alert('用户名修改成功！');
     } catch (error) {
@@ -1018,10 +1023,6 @@ background-color: white;  /* 选中项的背景色 */
   margin-top: -5px;
 }
 
-.myStar{
-  display: flex;
-}
-
 .problemListContainer label{
   font-weight: bold;
   font-size: large;
@@ -1036,6 +1037,7 @@ background-color: white;  /* 选中项的背景色 */
   flex-wrap: wrap;
   gap: 20px;
   column-gap: 40px;
+  min-height: 150px;
   /* background: green; */
 }
 
