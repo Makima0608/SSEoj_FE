@@ -103,24 +103,24 @@ Mock.mock(/\/api\/solution\/create\//, 'post', (options) => {
     }
 })
 
+// 模拟获取详细题解
 Mock.mock(/\/api\/problem\/(\d+)\/solutions\/(\d+)\//, 'get', (options) => {
     console.log(options.url)
     const data = {
         "user_info": {
-            "id": "111",
-            "username": "素燕",
-            "avatar": "https://avatars.githubusercontent.com/u/15032622"
+            "id": 84,
+            "username": "鲍梓妍",
+            "avatar": "https://avatars.githubusercontent.com/u/37607428"
         },
-        "like_count": 62,
-        "comment_count": "amet tempor ea consectetur",
-        "create_time": "2024-02-19 17:04:56",
+        "like_count": 76,
+        "comment_count": "deserunt",
+        "create_time": "2024-12-21 05:04:12",
         "tags": [
-            84,
-            25
+            22
         ],
-        "id": 26,
-        "title": "嗯虽然遍及嗯军营画电器",
-        "content": "dolore dolore qui sed"
+        "id": 38,
+        "title": "血淋淋成年人关于搜呼遍及尽管同样地",
+        "content": "adipisicing nulla do Lorem"
     }
     return {
         err: null,
@@ -128,22 +128,3 @@ Mock.mock(/\/api\/problem\/(\d+)\/solutions\/(\d+)\//, 'get', (options) => {
     }
 })
 
-// 假设你的 API 路径是这样的，并且带有查询参数
-// const apiPath = '/api/problemset';
-
-// // 使用正则表达式来匹配 URL 和查询参数
-// Mock.mock(RegExp(apiPath + ".*"), 'get', (options) => {
-//     console.log('mock', options.url);
-//     const query = options.url.split('?')[1];
-//     const params = new URLSearchParams(query);
-//     const page = params.get('page_num');
-//     const page_size = params.get('page_size');
-//     console.log({page, page_size})
-//     return {
-//         err: null,
-//         data: {
-//             total: null,
-//             problems: null
-//         },
-//     };
-// });

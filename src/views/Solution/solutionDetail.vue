@@ -85,4 +85,8 @@ onMounted(async() => {
     margin: 20px auto;
     border: 1px solid #333;
 }
+.userInfo {
+    display: inline-flex;
+    align-items: center;
+}
 </style>

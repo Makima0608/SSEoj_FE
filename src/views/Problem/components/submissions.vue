@@ -49,7 +49,7 @@
               </el-col>
               <el-col :span="4">{{ transTime(item.time_spent) }}</el-col>
               <el-col :span="4">{{ transMem(item.memory_spent) }}</el-col>
-              <el-col :span="6" class="submit_time" style="color: #CCC;">{{ item.submit_time }}</el-col>
+              <el-col :span="6" class="submit_time" style="color: #CCC;">{{ transformDate(item.submit_time) }}</el-col>
             </el-row>
           </div>
         </template>
@@ -76,6 +76,7 @@ import { useRoute } from 'vue-router';
 import { transMem, transTime } from '@/utils/data_calculate';
 import { useLanguageStore } from '@/stores/basicSetupStore';
 import { statusCodeToDesc } from '@/utils/problemStatus';
+import { transformDate } from '@/utils/time';
 import '@/assets/base-el-tag.css'
 // const statusArrowRef = ref(null)
 // const langArrowRef = ref(null)
@@ -180,6 +181,7 @@ onMounted(async() => {
   border-radius: 6px;
   padding: 10px;
   font-size: 14px;
+  white-space: pre-wrap;
 }
 .submission-list-content > span{
   font-size: 16px;
@@ -198,6 +200,7 @@ onMounted(async() => {
   padding: 10px;
   font-size: 14px;
   margin-bottom: 15px;
+  white-space: pre-wrap;
 }
 .submission-list-content > span:first-of-type{
   padding-right: 10px;

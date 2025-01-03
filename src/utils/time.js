@@ -12,7 +12,7 @@ export const getDate = (dateStr) => {
     const date = new Date(dateStr)
     const y = date.getFullYear()
     const M = date.getMonth() + 1
-    const d = date.getDay()
+    const d = date.getDate()
     return `${y}-${M}-${d}`
 }
 
@@ -23,7 +23,7 @@ export const getTime = (dateStr) => {
     return `${h}:${m}`
 }
 
-export const transformTime = (dateStr) => {
+export const transformDate = (dateStr) => {
     const date = new Date(dateStr)
     const today = new Date()
     const delta = Math.abs(today - date)
@@ -39,5 +39,5 @@ export const transformTime = (dateStr) => {
 }
 
 // transformTime('2024-12-30 09:17:11.098980+00:00')
-const res = transformTime('2024-12-30 22:57:11.098980+00:00')
-console.log(res)
+// const res = transformTime('2025-1-3 10:57:15.098980+00:00')
+// console.log(res)
