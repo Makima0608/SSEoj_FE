@@ -34,6 +34,13 @@ export const getCreateProblemListAPI = (id) => {
     })
 }
 
+// 获取默认题单
+export const getDefaultProblemListAPI = (id) => {
+  return request({
+    url: `/api/user/${id}/default_problemlist`,
+  })
+}
+
 // 关注用户
 export const subscribeUserAPI = (id, relationship) => {
     return request({
@@ -106,3 +113,5 @@ export const getPracticeAPI= (id) =>{
       method: 'GET',
     })
 }
+
+
