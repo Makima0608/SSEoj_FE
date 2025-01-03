@@ -100,10 +100,10 @@ const doLogin = async () => {
   const publicKeyPem = `-----BEGIN PUBLIC KEY-----
 MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKHP3hnFtL1g3bpgDMFAma1MofY9UmInthR8vK5Q9/dYcfdqvzLFRdRCPdeefqGO+BIFfLeCKJi4odn61XJEvp8CAwEAAQ==
 -----END PUBLIC KEY-----`
-  // const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
-  // const encrypted = forge.util.encode64(publicKey.encrypt(password.value));
-  // console.log(encrypted)
-  await userStore.getUserInfo(email.value, password.value)
+  const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
+  const encrypted = forge.util.encode64(publicKey.encrypt(password.value));
+  console.log(encrypted)
+  await userStore.getUserInfo(email.value, encrypted)
   ElMessage({ type: "success", message: "登陆成功" })
   const redirectPath = localStorage.getItem('redirectPath') || '/'
   router.replace(redirectPath)

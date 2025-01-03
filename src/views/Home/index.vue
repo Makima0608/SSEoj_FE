@@ -35,11 +35,11 @@
     </div>
     <div class="infinite-list-wrapper" style="overflow: auto">
         <ul
-          v-infinite-scroll="load"
+          v-infinite-scroll="postListStore.getHotPost"
           class="list"
         >
           <li
-            v-for="post in filteredPosts"
+            v-for="post in postListStore.postList"
             :key="post.post_id"
             class="list-item"
             @click="goToDiscussion(post.post_id)"
@@ -89,15 +89,20 @@ const activeMenuIndex = ref('1');
 const router = useRouter();
 
 // 监听菜单切换
-const handleSelect = (index) => {
+const handleSelect = async (index) => {
   activeMenuIndex.value = index; // 更新当前选中的 menu
+  postListStore.clearPostList();
+  if (index == '1') {
+    await postListStore.getHotPost(); // 等待数据加载
+  } 
+  else if (index == '2') {
+    await postListStore.getSubscribePost(); // 等待数据加载
+  }
+  else {
+    await postListStore.getMyPost(); // 等待数据加载
+  }
 };
 
-const load = async () => {
-  await postListStore.getPostList(params.value);
-  loadedCount.value = postListStore.postList.length; // 更新已加载数量
-
-};
 
 const params = computed(() => ({
   page_num: currentPage.value || 1,
@@ -106,18 +111,6 @@ const params = computed(() => ({
   keyword: ""
 }));
 
-// 动态过滤帖子
-const filteredPosts = computed(() => {
-  // 根据 menu index 动态筛选帖子
-  if (activeMenuIndex.value === '2') {
-    return postListStore.postList.filter(post => post.post_id === 1);
-  } else if (activeMenuIndex.value === '3') {
-    return postListStore.postList.filter(post => post.post_id >= 3&&post.post_id<=6); // 示例
-  } else if (activeMenuIndex.value === '1') {
-    return postListStore.postList; // 或其他逻辑
-  }
-  return [];
-});
 
 const goToDiscussion = (postId) => {
   router.replace(`/discussion/${postId}`);
@@ -125,7 +118,8 @@ const goToDiscussion = (postId) => {
 
 
 onMounted(async () => {
-  await postListStore.getPostList(params.value); // 等待数据加载
+  postListStore.clearPostList();
+  await postListStore.getHotPost(); // 等待数据加载
   count.value = postListStore.count; // 更新总数
 });
 

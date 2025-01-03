@@ -44,7 +44,7 @@ const postDiscussion = async () => {
     }
 
     // 调用 store 方法发布帖子
-    const success = await createPost({ title: title.value, content });
+    const success = await createPost({ post_title: title.value, post_content: content });
     if (success) {
       ElMessage.success('发布成功！');
     } else {
