@@ -65,11 +65,21 @@
         <div class="noticeContainer">
           <label>NOTICE</label>
           <ul v-infinite-scroll="load" class="noticeBar" style="overflow: auto">
-            <li v-for="noticeItem in notices" :key="noticeItem.id" class="infinite-list-item">{{ noticeItem.content }}</li>
+            <li v-for="noticeItem in notices" :key="noticeItem.id" class="infinite-list-item">
+              <span class="noticeId">{{ noticeItem.id }}</span>
+              <span class="noticeContent">{{ noticeItem.content }}</span>
+            </li>
           </ul>
         </div>
         <div class="planContainer">
           <label>SCHEDUL</label>
+          <ul v-infinite-scroll="load" class="plans" style="overflow: auto">
+            <li v-for="plan in testPlan" :key="plan.id" class="infinite-list-item">
+              <span class="planId">{{ plan.id }}</span>
+              <span class="planName">{{ plan.name }}</span>
+              <span v-if="plan.problem_status" class="iconfont icon-duigou1" style="text-align: center; font-size: 20px;"></span>
+            </li>
+          </ul>
         </div>
       </div>
 
@@ -92,7 +102,10 @@ import { usePostListStore } from '@/stores/postListStore';
 import ListItemContent from '../Discussion/ListItemContent.vue';
 import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/userStore';
+import { getStudyPlanAPI } from "@/apis/user";
 
+const userStore = useUserStore();
 const search_query =ref("");
 const count = ref(0)
 const postListStore = usePostListStore();
@@ -101,12 +114,45 @@ const currentPage = ref(1);
 const pageSize = ref(30);
 const sortTpye = ref("likeDesc");
 const searchType = ref('1')
-
+const plan=ref([])
 
 // 当前选中的 menu index
 const activeMenuIndex = ref('1');
 
 const router = useRouter();
+
+const testPlan=ref([
+  {
+    id: 1,
+    name: 'Plan 1',
+    problem_status: true
+  },
+  {
+    id: 2,
+    name: 'Plan 2',
+    problem_status: false
+  },
+  {
+    id: 1,
+    name: 'Plan 1',
+    problem_status: true
+  },
+  {
+    id: 2,
+    name: 'Plan 2',
+    problem_status: false
+  },{
+    id: 1,
+    name: 'Plan 1',
+    problem_status: true
+  },
+  {
+    id: 2,
+    name: 'Plan 2',
+    problem_status: false
+  },
+])
+
 
 // 监听菜单切换
 const handleSelect = async (index) => {
@@ -126,34 +172,36 @@ const handleSelect = async (index) => {
 
 // NOTICE数据
 const notices = ref([
-  { id: 1, content: 'Notice 1' },
-  { id: 2, content: 'Notice 2' },
-  { id: 3, content: 'Notice 3' },
-  { id: 4, content: 'Notice 4' },
-  { id: 5, content: 'Notice 5' },
-  { id: 6, content: 'Notice 6' },
-  { id: 7, content: 'Notice 7' },
-  { id: 8, content: 'Notice 8' },
-  { id: 9, content: 'Notice 9' },
-  { id: 10, content: 'Notice 10' }
+  { id: 1, content: 'Welcome to SSEOJ' },
+  { id: 2, content: 'STAY COOL' },
+  { id: 3, content: 'PROMOTE YOUSELF' },
+  { id: 4, content: 'DO NOT ATTACK OUR WEB PLZZZZ' },
+
 ])
 
-const params = computed(() => ({
-  page_num: currentPage.value || 1,
-  page_size: pageSize.value || 30,
-  sort_type: sortTpye.value || "likeDesc",
-  keyword: ""
-}));
+// const params = computed(() => ({
+//   page_num: currentPage.value || 1,
+//   page_size: pageSize.value || 30,
+//   sort_type: sortTpye.value || "likeDesc",
+//   keyword: ""
+// }));
 
 
 const goToDiscussion = (postId) => {
   router.replace(`/discussion/${postId}`);
 };
 
+// plan
+const getStudyPlan= async(id) => {
+  const res = await getStudyPlanAPI(userStore.userInfo.id)
+  plan.value = res.data.study_plan
+}
 
 onMounted(async () => {
   postListStore.clearPostList();
   await postListStore.getHotPost(); // 等待数据加载
+  await getStudyPlan(userStore.userInfo.id)
+
   count.value = postListStore.count; // 更新总数
 });
 
@@ -260,7 +308,7 @@ list-style: none;
 display: flex;
 align-items: center;
 justify-content: center;
-height: 75px;
+min-height: 75px;
 }
 .infinite-list-wrapper .list-item + .list-item {
 margin-top: 1px;
@@ -283,11 +331,11 @@ margin-top: 1px;
   height: 300px;
   display: flex;
   flex-direction: column;
+  gap:10px;
 }
 
 .noticeBar {
-  height: 90%;
-  width: 90%;
+  height: 85%;
   padding: 0;
   margin: 0;
   list-style: none;
@@ -296,20 +344,35 @@ margin-top: 1px;
   display: flex;
   align-items: center;
   justify-content: left;
-
-  height: 50px;
-  background: var(--el-color-primary-light-9);
+  min-height: 50px;
+  box-shadow:0 0 5px rgba(0, 0, 0, .5);
+  margin-bottom: 10px;
   margin: 10px;
-  color: var(--el-color-primary);
+  cursor: pointer;
+  gap:10px;
 }
-.noticeBar .infinite-list-item + .list-item {
-  margin-top: 10px;
-}
+
 
 .noticeContainer label{
   font-weight: bold;
   font-size: larger;
-  color: gray;
+  color: rgb(160, 206, 99);
+  margin-left: 10px;
+  margin-top: 5px;
+}
+
+.noticeId{
+  font-weight: bold;
+  font-size: larger;
+  color: black;
+  margin-left: 10px;
+  margin-top: 5px;
+}
+
+.noticeContent{
+  font-weight: bold;
+  font-size: large;
+  color: black;
   margin-left: 10px;
   margin-top: 5px;
 }
@@ -322,6 +385,55 @@ margin-top: 1px;
   height: 300px;
   display: flex;
   flex-direction: column;
+}
+
+.planContainer label{
+  font-weight: bold;
+  font-size: larger;
+  color: gray;
+  margin-left: 10px;
+  margin-top: 5px;
+}
+
+.plans {
+  height: 85%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.plans .infinite-list-item{
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  height: 50px;
+  box-shadow:0 0 5px rgba(0, 0, 0, .5);
+  margin-bottom: 10px;
+  margin: 10px;
+  cursor: pointer;
+  gap:10px;
+}
+
+.planId{
+  font-weight: bold;
+  font-size: larger;
+  color: black;
+  margin-left: 10px;
+  margin-top: 5px;
+}
+
+.planName{
+  font-weight: bold;
+  font-size: large;
+  color: black;
+  margin-left: 10px;
+  margin-top: 5px;
+}
+
+.icon-duigou1{
+  color: grey;
+  margin-top: 5px;
+  margin-left: 10px;
 }
 
 </style>

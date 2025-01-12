@@ -18,8 +18,8 @@
         <el-menu-item index="1">我的发布</el-menu-item>
         <el-menu-item index="2">题目收藏</el-menu-item>
         <el-menu-item index="3">我的题单</el-menu-item>
-        <el-menu-item index="4">我的计划</el-menu-item>
-        <el-menu-item index="5">个人设置</el-menu-item>
+        <!-- <el-menu-item index="4">我的计划</el-menu-item> -->
+        <el-menu-item index="4">个人设置</el-menu-item>
       </el-menu>
     </div>
 
@@ -103,7 +103,7 @@
       </div>
     </div>
 
-    <div v-else-if="activeMenuIndex ==='5'" class="setContainer">
+    <div v-else-if="activeMenuIndex ==='4'" class="setContainer">
         <div class="infoSet">
           <div class="nameSetContainer">
             <div class="nameInputContainer">
@@ -193,8 +193,8 @@
       <label>我创建的</label>
       <div class="problemlist">
         <!-- 如果没有任何东西就nothing -->
-        <label v-if="problemlist.length === 0">Nothing here.....</label>
-        <div v-else v-for="plistItem in problemlist" :key="plistItem.id" class="problemlist-item"
+        <label v-if="createdProblemlist.length === 0">Nothing here.....</label>
+        <div v-else v-for="plistItem in createdProblemlist" :key="plistItem.id" class="problemlist-item"
           @click="router.push(`/problemlist/${plistItem.id}`)">
 
             <div class="problemlist-header">
@@ -287,10 +287,11 @@ const base64File = ref('');
 const fileInput = ref(null); // 这里不要在方法中重复定义 ref
 
 // 我的题单
-const problemlist = ref([])
+const createdProblemlist = ref([])
 const problemlistCount = ref(0)
 const defaultProblemlist = ref([]);
 const starProblemList=ref([]);
+
 
 // 筛选参数
 const keyword = ref(undefined)
@@ -336,6 +337,7 @@ const changeUsername = async () => {
     try {
         console.log(newUsername.value)
         await userStore.updateUserInfo({ username: newUsername.value });  // 更新本地信息
+        await getUserInfo();
         alert('用户名修改成功！');
     } catch (error) {
         console.error(error);
@@ -346,6 +348,7 @@ const changeUsername = async () => {
 const changeProfile = async () => {
     try {
         await userStore.updateUserInfo({ profile: newProfile.value });  // 更新简介
+        await getUserInfo();
         alert('简介修改成功！');
     } catch (error) {
         console.error(error);
@@ -382,6 +385,7 @@ const changeAvatar = async () => {
     // 假设 userStore 有一个 updateAvatar 方法用于上传头像
     console.log(base64File.value);
     await userStore.updateUserInfo({ avatar: base64File.value });
+    await getUserInfo();
     ElMessage.success('头像上传成功');
   } catch (error) {
     console.error(error);
@@ -443,22 +447,20 @@ const confirmChange = async () => {
 // 获取创建的题单
 const getCreatedProblemList = async (id) => {
   const res = await getCreateProblemListAPI(id)
-  problemlist.value = res.data.problemlists
+  createdProblemlist.value = res.data.problemlists
 }
 
 // 获取默认的收藏
 const getDefaultProblemList = async (id) => {
   const res = await getDefaultProblemListAPI(id)
-  defaultProblemlist.value = res.data.problemlists
+  console.log(res)
+  defaultProblemlist.value = res.data.problems
 }
 
 // 获取其他收藏
 const getStarProblemList = async (test_params) => {
   const res = await getProblemListAPI(test_params)
-  console.log(res)
-
-  starProblemList.value = res.data.problemlists
-  // console.log(starProblemList)
+  starProblemList.value = res.data.problemlists.filter((problemlist)=> problemlist.is_star===true)
 }
 
 // 计算进度条
@@ -466,22 +468,31 @@ const calcProgress = (pass_count, problem_count) => {
     return (pass_count / problem_count * 100).toFixed(1)
 }
 
+// 重新获取用户
+const getUserInfo = async ()=>{
+  await userStore.getUserInfo(id)
+}
+
 onMounted(async () => {
   await postListStore.getPostList(params.value); // 等待数据加载
-  await userStore.getPractice(userStore.userInfo.id);
-  await getCreatedProblemList(id);
-  await getDefaultProblemList(id);
-  await getStarProblemList(test_params.value);
-  await tagsStore.getTags()
-  count.value = postListStore.count; // 更新总数
-
-   // 遍历 practiceInfo 进行计数
-   userStore.practiceInfo.forEach((practice) => {
+  await userStore.getPractice(id);
+  userStore.practiceInfo.forEach((practice) => {
     tryCount.value++; // 每遍历一个元素，尝试计数加 1
     if (practice.pass_status === true) {
+      console.log(practice.pass_status)
       passCount.value++; // 如果通过状态为 true，计数加 1
     }
   });
+
+  await getStarProblemList(test_params.value);
+  await getDefaultProblemList(id);
+
+
+  await getCreatedProblemList(id);
+  count.value = postListStore.count; // 更新总数
+
+    // 遍历 practiceInfo 进行计数
+
 
 });
 </script>
@@ -655,7 +666,7 @@ border-radius: 6px;
 .menuContainer{
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.4);
   min-width: 150px;
-  height: 320px;
+  height: 250px;
   margin-right: 20px;
   border-radius: 10px;
   display: flex;
