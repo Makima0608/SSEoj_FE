@@ -37,7 +37,7 @@ export const getCreateProblemListAPI = (id) => {
 // 获取默认题单
 export const getDefaultProblemListAPI = (id) => {
   return request({
-    url: `/api/user/${id}/default_problemlist`,
+    url: `/api/user/${id}/default_problemlist/`,
   })
 }
 
@@ -114,4 +114,10 @@ export const getPracticeAPI= (id) =>{
     })
 }
 
+export const getStudyPlanAPI= (id) =>{
+  return request({
+    url: `/api/user/${id}/study_plan/`,
+    method: 'GET',
+  })
+}
 

@@ -20,6 +20,7 @@ import CreateProblem from '@/views/ProblemSet/createProblem.vue'
 
 
 
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -87,6 +88,33 @@ const router = createRouter({
       path: '/user/:id',
       name: 'user',
       component: User,
+      // children:[
+      //   {
+      //     path: '/user/:id/index',
+      //     name:'userIndex',
+      //     component: userIndex,
+      //   },
+      //   {
+      //     path: '/user/:id/myPost',
+      //     name:'userIndex',
+      //     component: userIndex,
+      //   },
+      //   {
+      //     path: '/user/:id/myStar',
+      //     name:'myStar',
+      //     component: myStar,
+      //   },
+      //   {
+      //     path: '/user/:id/myProblemList',
+      //     name:'myProblemList',
+      //     component: myProblemList,
+      //   },
+      //   {
+      //     path: '/user/:id/set',
+      //     name:'set',
+      //     component: set,
+      //   },
+      // ]
     },
     {
       path: '/solution/create',
