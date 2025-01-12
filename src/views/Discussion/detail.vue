@@ -10,7 +10,7 @@
         </div>
         <div class="timeContainer">
           <label>发布时间</label>
-          <p>{{ postStore.post.create_time }}</p>
+          <p>{{ getFullDate(postStore.post.create_time) }}</p>
         </div>
         <el-button type="info" plain class="replyBtn" @click="isReplyVisible = true">回复贴主</el-button>
 
@@ -84,6 +84,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { usePostStore } from '@/stores/postStore';
 import { useCommentStore } from '@/stores/commentStore';
 import CommentItem from '@/views/Discussion/CommentItem.vue';
+import { transformDate, getDate, getFullDate} from '@/utils/time';
 
 
 const route = useRoute()

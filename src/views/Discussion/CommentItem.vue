@@ -6,7 +6,7 @@
       <div class="comment-header">
         <img :src="comment.avatar" class="avatar" />
         <span class="username">{{ comment.user_name }}</span>
-        <span class="time">{{ comment.create_time }}</span>
+        <span class="time">{{ transformDate(comment.create_time) }}</span>
         <div class="likeContainer">
           <span v-if="comment.is_good" class="iconfont icon-BxsLike" @click="handleLike(comment)"></span>
           <span v-else class="iconfont icon-BxLike" @click="handleLike(comment)"></span>
@@ -25,7 +25,7 @@
             <img :src="reply.avatar" class="avatar" />
             <span class="username">{{ reply.user_name }}</span>
             <span class="reply-to" v-if="reply.reply_to_name">Reply to: {{ reply.reply_to_name }}</span>
-            <span class="time">{{ reply.create_time }}</span>
+            <span class="time">{{ transformDate(reply.create_time) }}</span>
             <div class="likeContainer">
               <span v-if="reply.is_good" class="iconfont icon-BxsLike" @click="handleLike(reply)"></span>
               <span v-else class="iconfont icon-BxLike" @click="handleLike(reply)"></span>
@@ -56,6 +56,7 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { useCommentStore } from '@/stores/commentStore';
+import { transformDate, getDate} from '@/utils/time';
 
 const commentStore = useCommentStore()
 

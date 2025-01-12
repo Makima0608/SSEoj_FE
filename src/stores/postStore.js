@@ -11,7 +11,7 @@ export const usePostStore = defineStore('post', () => {
         const res = await getPostAPI(id);
         post.value = {
           ...res.data,
-          avatar: `data:image/png;base64, ${res.data.post.avatar}`, // 对 avatar 字段进行解码
+          avatar: `data:image/png;base64, ${res.data.avatar}`, // 对 avatar 字段进行解码
         };
     };
 

@@ -1,4 +1,5 @@
 export const getFullDate = (dateStr) => {
+   console.log(dateStr)
     const date = new Date(dateStr)
     const y = date.getFullYear()
     const M = date.getMonth() + 1

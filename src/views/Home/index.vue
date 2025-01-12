@@ -4,12 +4,13 @@
   <div class="wrapper">
     <div class="searchContainer">
       <el-input
-        v-model="input4"
+        v-model="search_query"
         style="width: 80%; height: 50%; "
         placeholder="Type something"
+        @keydown.enter="handleSearch"
       >
         <template #prefix>
-          <span class="iconfont icon-sousuo"></span>
+          <span class="iconfont icon-sousuo" @click="handleSearch"></span>
         </template>
       </el-input>
 
@@ -72,7 +73,7 @@
           </ul>
         </div>
         <div class="planContainer">
-          <label>SCHEDUL</label>
+          <label>SCHEDULE</label>
           <ul v-infinite-scroll="load" class="plans" style="overflow: auto">
             <li v-for="plan in testPlan" :key="plan.id" class="infinite-list-item">
               <span class="planId">{{ plan.id }}</span>
@@ -104,6 +105,8 @@ import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/userStore';
 import { getStudyPlanAPI } from "@/apis/user";
+import { getPostListAPI } from '@/apis/postList';
+
 
 const userStore = useUserStore();
 const search_query =ref("");
@@ -115,6 +118,11 @@ const pageSize = ref(30);
 const sortTpye = ref("likeDesc");
 const searchType = ref('1')
 const plan=ref([])
+
+const searchParams = ref({
+  keyword: search_query.value
+})
+
 
 // 当前选中的 menu index
 const activeMenuIndex = ref('1');
@@ -179,14 +187,6 @@ const notices = ref([
 
 ])
 
-// const params = computed(() => ({
-//   page_num: currentPage.value || 1,
-//   page_size: pageSize.value || 30,
-//   sort_type: sortTpye.value || "likeDesc",
-//   keyword: ""
-// }));
-
-
 const goToDiscussion = (postId) => {
   router.replace(`/discussion/${postId}`);
 };
@@ -196,6 +196,25 @@ const getStudyPlan= async(id) => {
   const res = await getStudyPlanAPI(userStore.userInfo.id)
   plan.value = res.data.study_plan
 }
+
+const handleSearch = () => {
+  if (search_query.value.trim()) {
+    if(searchType==='2')
+      // 将搜索内容作为查询参数传递到 /discussion 页面
+      router.push({
+        path: '/discussion',
+        query: { keyword:search_query.value }
+      });
+    else{
+      router.push({
+      path: '/discussion',
+      query: { keyword:search_query.value }
+      });
+    }
+  } else {
+    ElMessage.error('请输入搜索内容！');
+  }
+};
 
 onMounted(async () => {
   postListStore.clearPostList();
