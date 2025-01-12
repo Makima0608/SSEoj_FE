@@ -47,8 +47,10 @@ import { ref, onMounted, computed } from 'vue';
 import { usePostListStore } from '@/stores/postListStore';
 import ListItemContent from './ListItemContent.vue';
 import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router'; // 导入 useRoute
 
 const postListStore = usePostListStore();
+const route = useRoute(); // 使用 useRoute 获取当前路由
 const router = useRouter();
 
 const count = ref(0);
@@ -60,6 +62,8 @@ const disabled = computed(() => loading.value || noMore.value);
 const currentPage = ref(1);
 const pageSize = ref(30);
 const sortType = ref('likeDesc'); // 默认按热度排序
+// 获取 query 参数中的 keyword
+const keyword = computed(() => route.query.keyword || '');
 
 const load = async () => {
   if (disabled.value) return;
@@ -79,7 +83,7 @@ const params = computed(() => ({
   page_num: currentPage.value || 1,
   page_size: pageSize.value || 30,
   sort_type: sortType.value,
-  keyword: ''
+  keyword: keyword.value || '' // 使用从 query 中获取的 keyword
 }));
 
 // 处理排序菜单点击

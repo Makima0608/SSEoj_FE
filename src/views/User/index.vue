@@ -473,6 +473,10 @@ const getUserInfo = async ()=>{
   await userStore.getUserInfo(id)
 }
 
+const rowSelected = (row) => {
+    router.push(`/problem/${row.id}/description`)
+}
+
 onMounted(async () => {
   await postListStore.getPostList(params.value); // 等待数据加载
   await userStore.getPractice(id);
