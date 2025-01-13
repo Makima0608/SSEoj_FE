@@ -74,8 +74,9 @@
         </div>
         <div class="planContainer">
           <label>SCHEDULE</label>
-          <ul v-infinite-scroll="load" class="plans" style="overflow: auto">
-            <li v-for="plan in testPlan" :key="plan.id" class="infinite-list-item">
+          <label v-if="myPlan.length===0">Nothing here...</label>
+          <ul v-else v-infinite-scroll="load" class="plans" style="overflow: auto">
+            <li v-for="plan in myPlan" :key="plan.id" class="infinite-list-item">
               <span class="planId">{{ plan.id }}</span>
               <span class="planName">{{ plan.name }}</span>
               <span v-if="plan.problem_status" class="iconfont icon-duigou1" style="text-align: center; font-size: 20px;"></span>
@@ -117,7 +118,7 @@ const currentPage = ref(1);
 const pageSize = ref(30);
 const sortTpye = ref("likeDesc");
 const searchType = ref('1')
-const plan=ref([])
+const myPlan=ref([])
 
 const searchParams = ref({
   keyword: search_query.value
@@ -194,7 +195,7 @@ const goToDiscussion = (postId) => {
 // plan
 const getStudyPlan= async(id) => {
   const res = await getStudyPlanAPI(userStore.userInfo.id)
-  plan.value = res.data.study_plan
+  myPlan.value = res.data
 }
 
 const handleSearch = () => {
@@ -401,7 +402,8 @@ margin-top: 1px;
   border-radius: 12px;
   backdrop-filter: blur(20px);
   box-shadow:0 0 5px rgba(0, 0, 0, .5);
-  height: 300px;
+  min-height: 100px;
+  max-height: 300px;
   display: flex;
   flex-direction: column;
 }
