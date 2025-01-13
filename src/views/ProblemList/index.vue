@@ -39,7 +39,7 @@
                         <span>{{ plistItem.star_count }}</span>
                     </div>
                 </div>
-                <div class="creator-info" @click="console.log(111)">
+                <div class="creator-info">
                     <el-avatar :size="30" style="font-size: 12px;" :src="getAvatar(plistItem.user_info.avatar)">KL</el-avatar>
                     <span>{{ plistItem.user_info.username }}</span>
                 </div>

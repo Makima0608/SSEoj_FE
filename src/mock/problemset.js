@@ -1,13 +1,12 @@
 import Mock from 'mockjs'
 
 // 获取题库
-Mock.mock(/\/api\/problemset\//, 'get', (options) => {
-    console.log(options.url)
+Mock.mock(/\/api\/problemset\/(?!\w)/, 'get', (options) => {
+
     const query = options.url.split('?')[1];
     const params = new URLSearchParams(query);
     const page = params.get('page_num');
     const page_size = params.get('page_size');
-    console.log({ page, page_size })
     if (page == 1) {
         return {
             err: null,
@@ -95,8 +94,7 @@ Mock.mock(/\/api\/problemset\//, 'get', (options) => {
 )
 
 // 提交题解
-Mock.mock(/\/api\/solution\/create\//, 'post', (options) => {
-    console.log(options)
+Mock.mock(/\/api\/solution\/create\//, 'post', () => {
     return {
         err: null,
         data: 'success'
@@ -104,8 +102,7 @@ Mock.mock(/\/api\/solution\/create\//, 'post', (options) => {
 })
 
 // 模拟获取详细题解
-Mock.mock(/\/api\/problem\/(\d+)\/solutions\/(\d+)\//, 'get', (options) => {
-    console.log(options.url)
+Mock.mock(/\/api\/problem\/(\d+)\/solutions\/(\d+)\//, 'get', () => {
     const data = {
         "user_info": {
             "id": 84,
@@ -130,8 +127,7 @@ Mock.mock(/\/api\/problem\/(\d+)\/solutions\/(\d+)\//, 'get', (options) => {
 })
 
 // 模拟获取一级评论
-Mock.mock(/\/api\/problem\/solutions\/(\d+)\/comments\/(?=\?)/, 'get', (options) => {
-    console.log(options.url)
+Mock.mock(/\/api\/problem\/solutions\/(\d+)\/comments\/(?=\?)/, 'get', () => {
     const data = {
         "count": 100,
         "comments": [
@@ -244,5 +240,13 @@ Mock.mock(/\/api\/problem\/create\//, 'post', () => {
     return {
         err: null,
         data: 'success'
+    }
+})
+
+// 模拟获取所有题目数量
+Mock.mock(/\/api\/problemset\/problem_num\//, 'get', () => {
+    return {
+        err: null,
+        data: [1,3,2,5,4,6]
     }
 })

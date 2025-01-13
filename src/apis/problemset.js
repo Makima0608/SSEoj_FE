@@ -72,3 +72,10 @@ export const postProblemAPI = (data) => {
         data: data
     })
 }
+
+// 获取每种难度的题目的数量
+export const getProblemNumAPI = () => {
+    return request({
+        url: '/api/problemset/problem_num/'
+    })
+}

@@ -1,5 +1,5 @@
 <template>
-    <ul v-infinite-scroll="loadComments" :infinite-scroll-disabled="disabled">
+    <ul v-infinite-scroll="loadComments" :infinite-scroll-disabled="disabled" infinite-scroll-distance="20">
         <li v-for="item in comments" :key="item.id" style="list-style-type: none;">
             <div class="comment-item">
                 <el-popover 
