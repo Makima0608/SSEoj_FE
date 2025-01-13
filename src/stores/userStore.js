@@ -51,12 +51,11 @@ export const useUserStore = defineStore('user', () => {
             // 如果是修改密码（传入的是旧密码和新密码）
             if (updatedInfo.oldPassword && updatedInfo.newPassword) {
                 await passwordChangeAPI(updateUserInfo.id,updatedInfo.oldPassword, updatedInfo.newPassword)
-                alert('密码修改成功！')
             }
-            console.log('User info updated successfully:', userInfo.value)
+
+            return true;
         } catch (error) {
-            console.error('Error updating user info:', error)
-            alert('用户信息更新失败！')
+            return false;
         }
     }
 

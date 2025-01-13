@@ -14,8 +14,8 @@ Mock.mock('http://localhost:8080/api/identity/login/', 'post', (options) => {
     };
   } else {
     return {
-      err: 'wrong password',
-      msg: '用户名或密码错误'
+      // err: 'wrong password',
+      // msg: '用户名或密码错误'
     };
   }
 });

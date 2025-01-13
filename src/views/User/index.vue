@@ -129,7 +129,7 @@
             </div>
             <div class="avatarChoose">
               <el-button type="success" plain @click="selectFile">选择文件</el-button>
-              <el-button type="info" plain @click="confirmChange">确认修改</el-button>
+              <el-button type="info" plain @click="changeAvatar">确认修改</el-button>
               <input type="file" ref="fileInput" style="display: none" @change="handleFileChange" accept=".jpg,.png" />
             </div>
           </div>
@@ -349,63 +349,46 @@ const sendVerification =async()=>{
 }
 
 const changeUsername = async () => {
-    try {
-        console.log(newUsername.value)
-        await userStore.updateUserInfo({ username: newUsername.value });  // 更新本地信息
-        await getUserInfo();
-        ElMessage.success('用户名修改成功！');
-    } catch (error) {
-        ElMessage.error('用户名修改失败！');
-    }
+  const res= await userStore.updateUserInfo({ username: newUsername.value });  // 更新本地信息
+  if(res){
+    ElMessage.success('用户名修改成功！');
+  }
+  else{
+    ElMessage.error('用户名修改失败！');
+  }
 };
 
 const changeProfile = async () => {
-    try {
-        await userStore.updateUserInfo({ profile: newProfile.value });  // 更新简介
-        await getUserInfo();
-        ElMessage.success('简介修改成功！');
-    } catch (error) {
-        console.error(error);
-        ElMessage.error('简介修改失败！');
-    }
+  const res= await userStore.updateUserInfo({ profile: newProfile.value });  // 更新本地信息
+  if(res){
+    ElMessage.success('简介修改成功！');
+  }
+  else{
+    ElMessage.error('简介修改失败！');
+  }
 };
 
 const changePassword = async () => {
-    try {
-        await userStore.updateUserInfo({id:userStore.userInfo.id, oldPassword: oldPassword.value, newPassword: newPassword.value });  // 更新密码
-        ElMessage.success('密码修改成功！');
-    } catch (error) {
-        console.error(error);
-        ElMessage.error('密码修改失败！');
-    }
+  const res= await userStore.updateUserInfo({id:userStore.userInfo.id, oldPassword: oldPassword.value, newPassword: newPassword.value });  // 更新密码
+  if(res){
+    ElMessage.success('简介修改成功！');
+  }
+  else{
+    ElMessage.error('简介修改失败！');
+  }
 };
 
 const handleForgotPassword = async () => {
-  try {
-    await userStore.passwordForget({email: email.value,verification_code:verificationCode.value, password_new:newPassword.value});
-    ElMessage.success('密码重置成功！');
-  } catch (error) {
-    console.error(error);
-    ElMessage.error('密码重置失败！');
+  const res= await userStore.passwordForget({email: email.value,verification_code:verificationCode.value, password_new:newPassword.value});
+  if(res){
+    ElMessage.success('简介修改成功！');
+  }
+  else{
+    ElMessage.error('简介修改失败！');
   }
 };
 
-const changeAvatar = async () => {
-  if (!base64File.value) {
-    ElMessage.error('请先选择一个文件');
-    return;
-  }
-  try {
-    // 假设 userStore 有一个 updateAvatar 方法用于上传头像
-    console.log(base64File.value);
-    await userStore.updateUserInfo({ avatar: base64File.value });
-    await getUserInfo();
-    ElMessage.success('头像上传成功');
-  } catch (error) {
-    console.error(error);
-    ElMessage.error('头像上传失败');
-  }
-};
+
 
 
 //上传头像
@@ -442,18 +425,17 @@ const handleFileChange = async (event) => {
   reader.readAsDataURL(file); // 读取文件并转换为 Base64
 };
 
-const confirmChange = async () => {
+const changeAvatar = async () => {
   if (!base64File.value) {
     ElMessage.error('请先选择一个文件');
     return;
   }
-
-  try {
-    changeAvatar(); // 调用 API 上传头像
-    ElMessage.success('头像修改成功');
+  const res = await userStore.updateUserInfo({ avatar: base64File.value });
+  if(res){
     avatarPreview.value = base64File.value; // 更新显示的头像
-  } catch (error) {
-    console.error(error);
+    ElMessage.success('头像修改成功');
+  }
+  else{
     ElMessage.error('头像修改失败');
   }
 };
