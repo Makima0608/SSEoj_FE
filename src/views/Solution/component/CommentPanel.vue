@@ -1,8 +1,8 @@
 <template>
-    <ul v-infinite-scroll="loadComments" :infinite-scroll-disabled="disabled">
+    <ul v-infinite-scroll="loadComments" :infinite-scroll-disabled="disabled" infinite-scroll-distance="20">
         <li v-for="item in comments" :key="item.id" style="list-style-type: none;">
             <div class="comment-item">
-                <el-popover 
+                <el-popover
                     @show="showUserInfoCard(item.user_info.id)"
                     @hide="userInfo = {}"
                     popper-style="background:transparent; border:none; box-shadow:none; margin-top:10px"
@@ -21,7 +21,7 @@
                 </el-popover>
                 <div class="comment-content" v-html="item.content"></div>
                 <div class="footer">
-                    <span class="comment-time" 
+                    <span class="comment-time"
                     style="font-size: 15px; color: #BBB; margin-right: 20px;"
                     >
                         {{ transformDate(item.create_time) }}
@@ -35,7 +35,7 @@
                 <div class="second-comment" v-if="secondLevelComments.get(item.id)?.expand">
                     <div v-for="subitem in secondLevelComments.get(item.id).comments" :key="subitem.id">
                         <div style="display: flex;">
-                            <el-popover 
+                            <el-popover
                                 @show="showUserInfoCard(subitem.user_info.id)"
                                 @hide="userInfo = {}"
                                 popper-style="background:transparent; border:none; box-shadow:none; margin-top:10px"
@@ -52,8 +52,8 @@
                                     <UserInfoCard :userInfo="userInfo" @update:subscribe="toggleFollow"/>
                                 </template>
                             </el-popover>
-                            <div style="margin-top: 13px; margin-left: 8px;" v-if="subitem.reply_to_id">reply to</div> 
-                            <el-popover 
+                            <div style="margin-top: 13px; margin-left: 8px;" v-if="subitem.reply_to_id">reply to</div>
+                            <el-popover
                                 @show="showUserInfoCard(subitem.user_info.id)"
                                 @hide="userInfo = {}"
                                 popper-style="background:transparent; border:none; box-shadow:none; margin-top:10px"
@@ -73,7 +73,7 @@
                         </div>
                         <div style="margin-left: 20px; margin-top: 6px;" v-html="subitem.content"></div>
                         <div class="footer">
-                            <span class="comment-time" 
+                            <span class="comment-time"
                             style="font-size: 15px; color: #BBB; margin-right: 20px;"
                             >
                                 {{ transformDate(subitem.create_time) }}
@@ -102,10 +102,10 @@
             <div v-if="item.id == commentWriterId" style="margin-top: 20px;">
                 <ReplyEditor :holder="replyHolder" @click:post="postComment"/>
             </div>
-            
+
             <el-divider />
         </li>
-        <div style="display: flex; align-items: center; 
+        <div style="display: flex; align-items: center;
         justify-content: center; font-size: 16px;">
             <p v-if="isLoading" style="color: #0cac0c;">Loading ...</p>
             <p v-if="noMore">No More</p>
@@ -154,7 +154,7 @@ const replyHolder = computed(() => {
 // 获取用户信息
 const showUserInfoCard = async(id) => {
    if (id == undefined)
-        return 
+        return
    const res = await getUserInfoAPI(id)
    userInfo.value = res.data
    console.log(userInfo.value)
@@ -303,10 +303,10 @@ onMounted(async() => {
 }
 
 .commentBtn {
-    margin-top: 10px; 
-    padding: 8px; 
-    border-radius: 4px; 
-    width: 70px; text-align: center; 
+    margin-top: 10px;
+    padding: 8px;
+    border-radius: 4px;
+    width: 70px; text-align: center;
     margin-left: auto; margin-right: 20px;
     cursor: pointer;
     background-color: #0cac0c;
