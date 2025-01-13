@@ -11,7 +11,7 @@
                 >
                     <template #reference>
                         <div class="userInfo" @click="jumpToUser(item.user_info.id)">
-                            <el-avatar :size="35" style="font-size: 12px;" :src="item.user_info.avatar">KL</el-avatar>
+                            <el-avatar :size="35" style="font-size: 12px;" :src="getAvatar(item.user_info.avatar)">KL</el-avatar>
                             <span style="margin-left: 5px;">{{ item.user_info.username }}</span>
                         </div>
                     </template>
