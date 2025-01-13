@@ -18,10 +18,14 @@
           <el-menu-item index="2">按时间</el-menu-item>
         </el-menu>
         <el-button plain type="info" @click="postDiscussion">发布帖子</el-button>
+        <div class="searchBar">
+            <input type="text" class="input" v-model="search_query" placeholder="">
+            <span class="iconfont icon-sousuo" @click="handleSearch"></span>
+        </div>
       </div>
       <div class="postList">
         <div class="infinite-list-wrapper" style="overflow: auto">
-          <ul v-infinite-scroll="load" class="list">
+          <ul  class="list">
             <li v-for="post in filteredPosts" :key="post.post_id" class="list-item" @click="goToDiscussion(post.post_id)">
               <ListItemContent
                 :avatar="post.avatar"
@@ -64,20 +68,21 @@ const pageSize = ref(30);
 const sortType = ref('likeDesc'); // 默认按热度排序
 // 获取 query 参数中的 keyword
 const keyword = computed(() => route.query.keyword || '');
+const search_query=ref('')
 
-const load = async () => {
-  if (disabled.value) return;
-  loading.value = true;
+// const load = async () => {
+//   if (disabled.value) return;
+//   loading.value = true;
 
-  try {
-    await postListStore.getPostList(params.value);
-    loadedCount.value = postListStore.postList.length;
-  } catch (err) {
-    console.error('Error loading data:', err);
-  } finally {
-    loading.value = false;
-  }
-};
+//   try {
+//     await postListStore.getPostList(params.value);
+//     loadedCount.value = postListStore.postList.length;
+//   } catch (err) {
+//     console.error('Error loading data:', err);
+//   } finally {
+//     loading.value = false;
+//   }
+// };
 
 const params = computed(() => ({
   page_num: currentPage.value || 1,
@@ -98,6 +103,27 @@ const handleSelect = (index) => {
   }
   else if(index === '1'){
     sortType.value = 'likeDesc'; // 按点赞数降序排序
+  }
+};
+
+const handleSearch = async() => {
+  if (search_query.value.trim()) {
+    await router.push({
+      path: '/discussion',
+      query: { keyword:search_query.value }
+    });
+    postListStore.clearPostList();
+    params.keyword=search_query.value;
+    await postListStore.getPostList(params.value);
+    count.value = postListStore.count; // 更新总数
+  } else {
+    await router.push({
+      path: '/discussion',
+    });
+    postListStore.clearPostList();
+    params.keyword=''
+    await postListStore.getPostList(params.value);
+    count.value = postListStore.count; // 更新总数
   }
 };
 
@@ -135,6 +161,7 @@ const postDiscussion = () => {
 onMounted(async () => {
   await postListStore.getPostList(params.value); // 等待数据加载
   count.value = postListStore.count; // 更新总数
+
 });
 </script>
 
@@ -152,7 +179,7 @@ onMounted(async () => {
 .filter {
     box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.4);
     min-width: 150px;
-    height: 200px;
+    height: 220px;
     margin-right: 20px;
     border-radius: 10px;
     display: flex;
@@ -193,6 +220,7 @@ onMounted(async () => {
 .infinite-list-wrapper {
 position: relative;
 margin-top: 25px; /* 与菜单之间的间距 */
+margin-bottom: 20px;
 width: 95%; /* 与 menu_main 的宽度一致 */
 text-align: center;
 height: 90%; /* 自动根据内容调整高度 */
@@ -242,5 +270,32 @@ background-color: white;  /* 选中项的背景色 */
 
 .pagination {
     align-self: flex-end;
+}
+
+.searchBar {
+  display: flex;
+  border: 1px solid #BBBBBB;
+  border-radius: 8px;
+  transition: .2s;
+  margin-top:10px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  width: 90%;
+  align-self: flex-end;
+}
+
+.searchBar:hover,
+.searchBar:focus-within {
+  border: 1.1px solid #282727;
+}
+
+.input {
+  margin: 0;
+  padding: 0px 8px;
+  font-size: 16px;
+  border: none;
+  outline: none;
+  height: 100%;
+  min-width: 10px;
 }
 </style>

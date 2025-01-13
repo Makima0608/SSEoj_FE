@@ -12,6 +12,26 @@ export const loginAPI = ({ email, password }) => {
     })
 }
 
+export const registerAPI = ({ email, password,username,verification_code }) => {
+  return request({
+      url: '/api/identity/register/',
+      method: 'POST',
+      data: {
+          email:email,
+          password:password,
+          username: username,
+          verification_code: verification_code,
+      }
+  })
+}
+
+export const getIdentityAPI = ({ email, type }) => {
+  return request({
+      url: '/api/identity/send_email/',
+      method: 'GET',
+  })
+}
+
 // 获取用户信息
 export const getUserInfoAPI = (id) => {
     return request({
