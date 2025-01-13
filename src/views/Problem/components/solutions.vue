@@ -36,7 +36,7 @@
                     <div class="solution-item">
                         <div class="title">
                             <span class="solution-title" @click="jumpToSolutionDetail(item.id)">{{ item.title }}</span>
-                            <span class="solution-time">{{ item.create_time }}</span>
+                            <span class="solution-time">{{ transformDate(item.create_time) }}</span>
                             <span class="iconfont icon-jiantouarrow487" @click="jumpToSolutionDetail(item.id)"></span>
                         </div>
 
@@ -49,7 +49,7 @@
                         >
                             <template #reference>
                                 <div class="userInfo" @click="jumpToUser(item.user_info.id)">
-                                    <el-avatar :size="25" style="font-size: 12px;" :src="item.avatar">KL</el-avatar>
+                                    <el-avatar :size="25" style="font-size: 12px;" :src="getAvatar(item.user_info.avatar)">KL</el-avatar>
                                     <span>{{ item.user_info.username }}</span>
                                 </div>
                             </template>
@@ -93,6 +93,8 @@ import { useTagsStore } from '@/stores/tagsStore';
 import { transNum } from '@/utils/data_calculate';
 import { likeSolutionAPI } from '@/apis/problem';
 import { subscribeUserAPI, getUserInfoAPI } from '@/apis/user';
+import { transformDate } from '@/utils/time';
+import { getAvatar } from '@/utils/basic';
 
 const userInfo = ref({})
 const showUserInfoCard = async(id) => {

@@ -15,7 +15,7 @@
             >
                 <template #reference>
                     <div class="userInfo" @click="jumpToUser(userInfo.id)">
-                        <el-avatar :size="30" style="font-size: 12px;" :src="userInfo.avatar">KL</el-avatar>
+                        <el-avatar :size="30" style="font-size: 12px;" :src="getAvatar(userInfo.avatar)">KL</el-avatar>
                         <span style="font-size: 16px;">{{ userInfo.username }}</span>
                     </div>
                 </template>
@@ -58,6 +58,7 @@ import { useTagsStore } from '@/stores/tagsStore';
 import { likeSolutionAPI } from '@/apis/problem';
 import ReplyEditor from '@/components/ReplyEditor.vue';
 import CommentPanel from './component/CommentPanel.vue';
+import { getAvatar } from '@/utils/basic';
 
 const route = useRoute()
 const router = useRouter()

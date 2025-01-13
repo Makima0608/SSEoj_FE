@@ -44,7 +44,7 @@
                             >
                                 <template #reference>
                                     <div class="userInfo" @click="jumpToUser(subitem.user_info.id)">
-                                        <el-avatar :size="25" style="font-size: 12px;" :src="subitem.user_info.avatar">KL</el-avatar>
+                                        <el-avatar :size="25" style="font-size: 12px;" :src="getAvatar(subitem.user_info.avatar)">KL</el-avatar>
                                         <span style="margin-left: 5px; font-size: 14px;">{{ subitem.user_info.username }}</span>
                                     </div>
                                 </template>
@@ -121,6 +121,7 @@ import { transNum } from '@/utils/data_calculate';
 import { subscribeUserAPI, getUserInfoAPI, } from '@/apis/user';
 import { transformDate } from '@/utils/time';
 import ReplyEditor from '@/components/ReplyEditor.vue';
+import { getAvatar } from '@/utils/basic';
 
 const props = defineProps(['id'])
 const isLoading = ref(false)

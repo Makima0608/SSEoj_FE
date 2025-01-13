@@ -16,5 +16,5 @@ const colorMap = {
  */
 
 export function getDifficultColor(diff) {
-    return colorMap[diff] || 'red';  // 默认红色
+    return colorMap[diff] || colorMap[0];  // 默认红色
 }

@@ -40,7 +40,7 @@
                     </div>
                 </div>
                 <div class="creator-info" @click="console.log(111)">
-                    <el-avatar :size="30" style="font-size: 12px;">KL</el-avatar>
+                    <el-avatar :size="30" style="font-size: 12px;" :src="getAvatar(plistItem.user_info.avatar)">KL</el-avatar>
                     <span>{{ plistItem.user_info.username }}</span>
                 </div>
                 <div class="progress-num">
@@ -65,6 +65,7 @@ import { computed, onMounted, ref } from 'vue';
 import { getProblemListAPI } from "@/apis/problemlist";
 import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
+import { getAvatar } from '@/utils/basic';
 
 const router = useRouter()
 const problemlist = ref([])
