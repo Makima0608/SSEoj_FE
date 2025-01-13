@@ -206,8 +206,8 @@ Mock.mock(/\/api\/problem\/solutions\/(\d+)\/comments\/(\d+)\//, 'get', ()=> {
                 "content": "nostrud occaecat consectetur",
                 "create_time": "2024-08-12 09:39:48",
                 "like_count": 100,
-                "reply_to_id": 81,
-                "reply_to_name": "哀诚"
+                "reply_to_id": null,
+                "reply_to_name":null
             },
             {
                 "id": 97,
@@ -233,6 +233,14 @@ Mock.mock(/\/api\/problem\/solutions\/(\d+)\/comments\/(\d+)\//, 'get', ()=> {
 
 // 模拟发布评论
 Mock.mock(/\/api\/problem\/solutions\/comment\/new\//, 'post', ()=>{
+    return {
+        err: null,
+        data: 'success'
+    }
+})
+
+// 模拟发布题目
+Mock.mock(/\/api\/problem\/create\//, 'post', () => {
     return {
         err: null,
         data: 'success'

@@ -63,3 +63,12 @@ export const likeSolutionCommentAPI = (id, is_good) => {
         }
     })
 }
+
+// 发布题目
+export const postProblemAPI = (data) => {
+    return request({
+        url: `/api/problem/create/`,
+        method: 'POST',
+        data: data
+    })
+}
