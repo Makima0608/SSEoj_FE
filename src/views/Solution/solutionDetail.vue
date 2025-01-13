@@ -11,6 +11,7 @@
                 @show="showUserInfoCard(userInfo.id)"
                 popper-style="background:transparent; border:none; box-shadow:none; margin-top:10px"
                 :show-arrow="false"
+                show-after="500"
             >
                 <template #reference>
                     <div class="userInfo" @click="jumpToUser(userInfo.id)">
@@ -27,23 +28,28 @@
         <div class="footer">
             <span :class="solutionDetail.is_like? 'iconfont icon-BxsLike':'iconfont icon-BxLike'" @click="toggleLike"></span>
             <span>{{ transNum(solutionDetail.like_count) }}</span>
-            <span class="iconfont icon-comment"></span>
-            <span>{{ transNum(solutionDetail.comment_count) }}</span>
             <span class="create-time">发布时间：{{ transformDate(solutionDetail.create_time) }}</span>
         </div>
-        <div class="comment">
-            <ReplyEditor />
-        </div>  
-        <div class="comments">
-        
+    </div>
+    <div class="comment-wrapper">
+        <div>
+            <span style="border-left: 3px solid black; 
+            font-size: 25px; padding-left: 10px; margin-right: 5px;">
+                评论
+            </span>
+            <span style="font-size: 17px;">{{ transNum(solutionDetail.comment_count) }}</span>
         </div>
+        <div style="margin-top: 10px;">
+            <ReplyEditor @click:post="postComment"/>
+        </div>  
+        <CommentPanel :id="sid" class="comment-panel"/>
     </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { getSolutionDetailAPI } from '@/apis/problemset';
+import { getSolutionDetailAPI, commentSolutionAPI } from '@/apis/problemset';
 import layoutNav from '../Layout/components/layoutNav.vue';
 import { subscribeUserAPI, getUserInfoAPI } from '@/apis/user';
 import { transformDate } from '@/utils/time';
@@ -51,7 +57,7 @@ import { transNum } from '@/utils/data_calculate';
 import { useTagsStore } from '@/stores/tagsStore';
 import { likeSolutionAPI } from '@/apis/problem';
 import ReplyEditor from '@/components/ReplyEditor.vue';
-import TEditor from '@/components/TEditor.vue';
+import CommentPanel from './component/CommentPanel.vue';
 
 const route = useRoute()
 const router = useRouter()
@@ -71,7 +77,7 @@ const jumpToUser = (id) => {
     userWindow.location.href = userProfileUrl
 }
 
-// 
+// 显示用户信息
 const showUserInfoCard = async(id) => {
    if (id == undefined)
         return 
@@ -79,16 +85,30 @@ const showUserInfoCard = async(id) => {
    userInfoCard.value = res.data
 }
 
+// 关注用户
 const toggleFollow = (msg) => {
     userInfoCard.value.is_subscribe = msg
     userInfoCard.value.subscribers_count += msg? 1: -1
     subscribeUserAPI(userInfoCard.value.id, msg)
 }
 
+// 点赞评论
 const toggleLike = () => {
     solutionDetail.value.is_like = !solutionDetail.value.is_like
     solutionDetail.value.like_count += solutionDetail.value.is_like? 1: -1
     likeSolutionAPI(solutionDetail.value.id, solutionDetail.value.is_like)
+}
+
+// 发布评论
+const postComment = async(content) => {
+    const data = {
+        id: sid,
+        content: content,
+        reply_to_id: null,
+        under_comment_id: null
+    }
+    await commentSolutionAPI(data)
+    console.log(data)
 }
 
 onMounted(async() => {
@@ -103,7 +123,7 @@ onMounted(async() => {
 
 <style scoped>
 .wrapper {
-    width: 80%;
+    width: 70%;
     margin: 20px auto;
     border: 1px solid #333;
     padding: 20px;
@@ -132,4 +152,9 @@ onMounted(async() => {
 .create-time {
     color: #BBB
 }
+.comment-wrapper{
+    width: 70%;
+    margin: auto;
+}
+
 </style>

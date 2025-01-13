@@ -47,7 +47,7 @@
                         />
                     </template>
                 </el-popover>
-                <el-button @click="router.push('/problem/create')">发布题目</el-button>
+                <el-button class="postProblemBtn" @click="router.push('/problem/create')">发布题目</el-button>
             </div>
 
             <div class="problemset">
@@ -212,7 +212,7 @@ onMounted(async () => {
 .filter {
     box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.4);
     min-width: 150px;
-    height: 200px;
+    height: 190px;
     margin-right: 20px;
     border-radius: 10px;
     display: flex;
@@ -220,6 +220,7 @@ onMounted(async () => {
     z-index: 10;
     flex-shrink: 1;
     position: relative;
+    align-items: center;
 }
 
 .search-box,
@@ -295,6 +296,16 @@ onMounted(async () => {
     padding: 2px 5px;
     font-size: 14px;
     color: black;
+}
+
+.postProblemBtn {
+    top: 210px;
+    height: 40px;
+    width: 150px;
+    border-radius: 8px;
+    color: rgb(2, 143, 167);
+    position: absolute;
+    box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.2);
 }
 
 .problemset {

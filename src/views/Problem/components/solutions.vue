@@ -45,6 +45,7 @@
                             @hide="userInfo = {}"
                             popper-style="background:transparent; border:none; box-shadow:none; margin-top:10px"
                             :show-arrow="false"
+                            show-after="500"
                         >
                             <template #reference>
                                 <div class="userInfo" @click="jumpToUser(item.user_info.id)">
@@ -69,7 +70,7 @@
                                 @click="toggleLike(item)"></span>
                             <span>{{ transNum(item.like_count) }}</span>
                             <span class="iconfont icon-comment"></span>
-                            <span>{{ item.comment_count }}</span>
+                            <span>{{ transNum(item.comment_count) }}</span>
                         </div>
                     </div>
                     <el-divider />
@@ -411,6 +412,7 @@ onMounted(async () => {
 .icon-comment {
     font-size: 20px;
     margin-right: 6px;
+    cursor: pointer;
 }
 
 .icon-BxLike+span,
