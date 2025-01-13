@@ -61,8 +61,8 @@
                                 show-after=500
                             >
                                 <template #reference>
-                                    <div class="userInfo" @click="jumpToUser(subitem.user_info.id)">
-                                        <span style="margin-left: 8px; font-size: 14px; color: #0cac0c;">@{{ subitem.user_info.username }}</span>
+                                    <div class="userInfo" @click="jumpToUser(subitem.reply_to_id)">
+                                        <span style="margin-left: 8px; font-size: 14px; color: #0cac0c;">@{{ subitem.reply_to_name }}</span>
                                     </div>
                                 </template>
                                 <template #default>
@@ -86,7 +86,9 @@
                     <el-pagination
                         :hide-on-single-page="true"
                         :total="secondLevelComments.get(item.id).count"
+                        :page-size="secondLevelComments.get(item.id).page_size"
                         layout="prev, pager, next"
+                        @current-change="(val) => handleCurrentChange(val, item.id)"
                     />
                 </div>
                 <div v-if="item.comments_count && !secondLevelComments.get(item.id)?.expand" class="expand-comment" @click="expand2ndComment(item.id)">
@@ -202,6 +204,16 @@ const postComment = async(content) => {
     }
     await commentSolutionAPI(data)
     console.log(data)
+}
+const handleCurrentChange = async(val, id) => {
+    // const res = await getSolution2ndCommentAPI(props.id, val, 8)
+    // secondLevelComments.value.set(id, {
+    //     count: res.data.count,
+    //     comments: res.data.comments,
+    //     expand: true,
+    //     page_num: val,
+    //     page_size: 8
+    // })
 }
 
 // 无限列表加载评论
