@@ -12,12 +12,14 @@ export const usePostListStore = defineStore('postList', () => {
     const res = await getPostListAPI(params); // 获取帖子数据
     count.value = res.data.count; // 更新帖子总数
     // 对每个 post 的 avatar 进行解码处理
+    console.log(res.data.post_list); // 查看整个数据结构，确认 avatar 字段的值
     postList.value = res.data.post_list.map(post => {
       return {
         ...post, // 保留其他字段不变
         avatar: `data:image/png;base64, ${post.avatar}`, // 对 avatar 字段进行解码
       };
     });
+    console.log( postList.value); // 查看整个数据结构，确认 avatar 字段的值
   };
 
   const getMyPost = async () => {

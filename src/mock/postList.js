@@ -20,7 +20,7 @@ Mock.mock(/\/api\/post\/list(\?.*)?/, 'get', (options) => {
                       "post_title": "当小划拨全部",
                       "user_id": 66,
                       "username": "焦敬彪",
-                      "avatar": "https://avatars.githubusercontent.com/u/17516427",
+                      "avatar": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/0u1lToAAAAASUVORK5CYII=",
                       "like_count": 9,
                       "comment_count": 10,
                       "is_good": false,

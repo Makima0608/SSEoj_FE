@@ -28,7 +28,11 @@ export const registerAPI = ({ email, password,username,verification_code }) => {
 export const getIdentityAPI = ({ email, type }) => {
   return request({
       url: '/api/identity/send_email/',
-      method: 'GET',
+      method: 'POST',
+      data:{
+        email: email,
+        type: type,
+      }
   })
 }
 
