@@ -215,14 +215,14 @@
       </div>
     </div>
 
-    <el-dialog v-model="dialogFormVisible" title="Fogotten Your Passwords?" width="500" top="300px">
+    <el-dialog v-model="dialogFormVisible" title="Fogotten Your Passwords?" width="500" top="300px" >
       <el-form :model="form">
         <el-form-item label="邮箱" :label-width="formLabelWidth">
           <el-input v-model="email" autocomplete="off" />
         </el-form-item>
         <el-form-item v-model="verificationCode" label="邮箱验证码" :label-width="formLabelWidth"  class="emailVerification">
           <el-input v-model="verificationCode" autocomplete="off"/>
-          <el-button type="success" plain  class="btnSend">发送</el-button>
+          <el-button type="success" plain  class="btnSend" @click="sendVerification">发送</el-button>
         </el-form-item>
         <el-form-item label="新密码" :label-width="formLabelWidth">
           <el-input v-model="forgetPassword" autocomplete="off" />
@@ -231,7 +231,7 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="dialogFormVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false && handleForgotPassword(verificationCode, forgetPassword)">
+          <el-button type="primary" @click="dialogFormVisible = false && handleForgotPassword">
             Confirm
           </el-button>
         </div>
@@ -254,6 +254,7 @@ import {getCreateProblemListAPI, getDefaultProblemListAPI } from '@/apis/user'
 import { getProblemListAPI } from "@/apis/problemlist";
 import { useTagsStore } from '@/stores/tagsStore';
 import { getDifficultColor } from '@/utils/color';
+import { getIdentityAPI } from '@/apis/user';
 
 const router = useRouter()
 const route = useRoute()
@@ -333,15 +334,28 @@ const filteredPosts = computed(() => {
   return postListStore.postList.filter((post) => post.user_id === 1);
 });
 
+const sendVerification =async()=>{
+  if(email.value.trim()){
+    try {
+      await getIdentityAPI({email:email.value,type:1});
+      ElMessage.success('验证码发送成功');
+    } catch (error) {
+      ElMessage.error('验证码发送失败');
+    }
+  }
+  else{
+    ElMessage.error('邮箱不能为空!!!');
+  }
+}
+
 const changeUsername = async () => {
     try {
         console.log(newUsername.value)
         await userStore.updateUserInfo({ username: newUsername.value });  // 更新本地信息
         await getUserInfo();
-        alert('用户名修改成功！');
+        ElMessage.success('用户名修改成功！');
     } catch (error) {
-        console.error(error);
-        alert('用户名修改失败！');
+        ElMessage.error('用户名修改失败！');
     }
 };
 
@@ -349,30 +363,30 @@ const changeProfile = async () => {
     try {
         await userStore.updateUserInfo({ profile: newProfile.value });  // 更新简介
         await getUserInfo();
-        alert('简介修改成功！');
+        ElMessage.success('简介修改成功！');
     } catch (error) {
         console.error(error);
-        alert('简介修改失败！');
+        ElMessage.error('简介修改失败！');
     }
 };
 
 const changePassword = async () => {
     try {
         await userStore.updateUserInfo({id:userStore.userInfo.id, oldPassword: oldPassword.value, newPassword: newPassword.value });  // 更新密码
-        alert('密码修改成功！');
+        ElMessage.success('密码修改成功！');
     } catch (error) {
         console.error(error);
-        alert('密码修改失败！');
+        ElMessage.error('密码修改失败！');
     }
 };
 
-const handleForgotPassword = async (email, verificationCode, newPassword) => {
+const handleForgotPassword = async () => {
   try {
-    await userStore.passwordForget({email,verificationCode, newPassword});
-    alert('密码重置成功！');
+    await userStore.passwordForget({email: email.value,verification_code:verificationCode.value, password_new:newPassword.value});
+    ElMessage.success('密码重置成功！');
   } catch (error) {
     console.error(error);
-    alert('密码重置失败！');
+    ElMessage.error('密码重置失败！');
   }
 };
 
