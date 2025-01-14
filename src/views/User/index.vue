@@ -222,7 +222,14 @@
         </el-form-item>
         <el-form-item v-model="verificationCode" label="邮箱验证码" :label-width="formLabelWidth"  class="emailVerification">
           <el-input v-model="verificationCode" autocomplete="off"/>
-          <el-button type="success" plain  class="btnSend" @click="sendVerification">发送</el-button>
+          <el-button
+          :disabled="isDisabled"
+          type="success"
+          plain
+          class="btnSend"
+          @click="sendVerification">
+          {{ isDisabled ? countdown + '秒' : '发送' }}
+        </el-button>
         </el-form-item>
         <el-form-item label="新密码" :label-width="formLabelWidth">
           <el-input v-model="forgetPassword" autocomplete="off" />
@@ -305,6 +312,12 @@ const test_params = computed(() => ({
     sort_type: sort_type.value || "idAsc"
 }))
 
+
+// 定义响应式变量
+const isDisabled = ref(false);  // 按钮是否禁用
+const countdown = ref(15);      // 倒计时秒数
+let timer = null;               // 用于存储定时器
+
 // const testProblemList = ref(
 //   [
 //     { id: 1, title: 'Problem 1', problem_count: 10, isPubilc: true },
@@ -335,10 +348,23 @@ const filteredPosts = computed(() => {
 });
 
 const sendVerification =async()=>{
+  if (isDisabled.value) return;  // 如果按钮已经禁用，点击无效
   if(email.value.trim()){
     try {
       await getIdentityAPI({email:email.value,type:1});
       ElMessage.success('验证码发送成功');
+
+      // 开始倒计时
+      isDisabled.value = true;
+      timer = setInterval(() => {
+        if (countdown.value > 0) {
+          countdown.value--;
+        } else {
+          clearInterval(timer); // 倒计时结束，清除定时器
+          isDisabled.value = false; // 重新启用按钮
+          countdown.value = 15; // 重置倒计时
+        }
+      }, 1000);
     } catch (error) {
       ElMessage.error('验证码发送失败');
     }
@@ -369,22 +395,28 @@ const changeProfile = async () => {
 };
 
 const changePassword = async () => {
-  const res= await userStore.updateUserInfo({id:userStore.userInfo.id, oldPassword: oldPassword.value, newPassword: newPassword.value });  // 更新密码
-  if(res){
-    ElMessage.success('简介修改成功！');
+  if(newPassword.value===confirmPassword.value){
+      const res= await userStore.updateUserInfo({id:userStore.userInfo.id, oldPassword: oldPassword.value, newPassword: newPassword.value });  // 更新密码
+    if(res){
+      ElMessage.success('密码修改成功！');
+    }
+    else{
+      ElMessage.error('密码修改失败！');
+    }
   }
   else{
-    ElMessage.error('简介修改失败！');
+    ElMessage.error('两次输入的新密码不一致!');
+    return;
   }
 };
 
 const handleForgotPassword = async () => {
   const res= await userStore.passwordForget({email: email.value,verification_code:verificationCode.value, password_new:newPassword.value});
   if(res){
-    ElMessage.success('简介修改成功！');
+    ElMessage.success('密码修改成功！');
   }
   else{
-    ElMessage.error('简介修改失败！');
+    ElMessage.error('密码修改失败！');
   }
 };
 
@@ -465,15 +497,18 @@ const calcProgress = (pass_count, problem_count) => {
 }
 
 // 重新获取用户
-const getUserInfo = async ()=>{
-  await userStore.getUserInfo(id)
-}
+// const getUserInfo = async ()=>{
+//   await userStore.getUserInfo(id)
+// }
 
 const rowSelected = (row) => {
     router.push(`/problem/${row.id}/description`)
 }
 
 onMounted(async () => {
+  if (timer) {
+    clearInterval(timer);
+  }
   await postListStore.getPostList(params.value); // 等待数据加载
   await userStore.getPractice(id);
   userStore.practiceInfo.forEach((practice) => {

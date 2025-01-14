@@ -160,7 +160,15 @@ Mock.mock(/\/api\/user\/password_change\//, 'put', ()=>{
     }
 })
 
-Mock.mock(/\/api\/user\/password_forgot\//, 'put', ()=>{
+Mock.mock(/\/api\/user\/password_forget\//, 'put', ()=>{
+    return {
+        err: null,
+        data: 'success'
+    }
+})
+
+
+Mock.mock(/\/api\/identity\/send_email\//, 'post', ()=>{
     return {
         err: null,
         data: 'success'
