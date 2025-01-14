@@ -224,3 +224,11 @@ Mock.mock(/\/api\/problem\/star\//, 'post', () => {
     data: 'success'
   }
 })
+
+// 模拟加入学习计划
+Mock.mock(/\/api\/study_plan\/add\//, 'post', () => {
+  return {
+    err: null,
+    data: 'success'
+  }
+})

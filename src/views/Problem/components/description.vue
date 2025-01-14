@@ -32,7 +32,9 @@
                     >
                     </span>
                 </div>
-                
+                <div class="study-plan-block" @click="addToStudyPlan">
+                    + 加入做题计划
+                </div>
             </div>
         </div>
 
@@ -143,7 +145,7 @@ import { getProblemDescAPI } from "@/apis/problem";
 import { getCreateProblemListAPI } from '@/apis/user';
 import { useUserStore } from '@/stores/userStore';
 import { starToDefaultProblemAPI } from '@/apis/problem';
-import { starToProblemListAPI } from '@/apis/problem';
+import { starToProblemListAPI, addToStudyPlanAPI } from '@/apis/problem';
 import '@/assets/base-el-tag.css'
 
 const route = useRoute()
@@ -193,6 +195,12 @@ const confirmStar = async() => {
     }
     starDefault.value = false
     starFormVisible.value = false
+}
+
+// 加入做题计划
+const addToStudyPlan = async() => {
+    await addToStudyPlanAPI(id)
+    ElMessage.success('加入成功')
 }
 
 onMounted(async () => {
@@ -249,18 +257,19 @@ const showStarForm = () => {
     display: flex;
     flex-direction: column;
     color: #696666;
-    font-size: 15px;
+    font-size: 12px;
     padding-top: 10px;
     gap: 5px;
 }
-.cardRight .star-block {
+.cardRight .star-block, .study-plan-block  {
     margin: 0px 0px 0px auto; display: flex; 
     align-items: center;
     color: #009999;
     transition: opacity .3s linear;
     cursor: pointer;
+    font-size: 15px;
 }
-.cardRight .star-block:hover {
+.cardRight .star-block:hover, .study-plan-block:hover {
     opacity: 60%;
 }
 

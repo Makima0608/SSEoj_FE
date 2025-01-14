@@ -75,8 +75,11 @@
                     </div>
                     <el-divider />
                 </li>
-                <p v-if="isLoading">Loading ...</p>
-                <p v-if="noMore">No More</p>
+                <div style="display: flex; align-items: center;
+                justify-content: center; font-size: 16px;">
+                    <p v-if="isLoading" style="color: #0cac0c;">Loading ...</p>
+                    <p v-if="noMore">No More</p>
+                </div>
             </ul>
         </el-scrollbar>
     </div>

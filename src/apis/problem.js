@@ -63,3 +63,14 @@ export const starToProblemListAPI = (data) => {
         data: data
     })
 }
+
+// 加入做题计划
+export const addToStudyPlanAPI = (id) => {
+    return request({
+        url: '/api/study_plan/add/',
+        method: 'POST',
+        data: {
+            id: id
+        }
+    })
+}
