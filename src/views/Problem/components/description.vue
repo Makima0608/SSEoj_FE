@@ -91,13 +91,16 @@
         <el-dialog v-model="starFormVisible" style="width: 400px;">
             <div style="font-size: 20px; font-weight: 500; margin-bottom: 20px;">我的收藏</div>
             <el-scrollbar height="200px">
-                <el-checkbox-group v-model="starList">
-                    <el-checkbox label="默认题单" size="large" :value=-1 >
+                <div style="margin-left: 20px;">
+                    <el-checkbox label="默认题单" size="large" v-model="starDefault" >
                         <template #default>
                             <span class="iconfont icon-suoding1"></span>
                             <span style="margin-left: 3px; font-size:15px">默认题单</span>
                         </template>
                     </el-checkbox>
+                </div>
+                
+                <el-checkbox-group v-model="starList">
                     <el-checkbox v-for="(item, index) in problemlists" 
                         :key="index" 
                         :value="item.id"
@@ -120,7 +123,10 @@
                     </el-checkbox>
                 </el-checkbox-group>
             </el-scrollbar>
-            <el-button @click="confirmStar">确定</el-button>
+            <div style="display: flex; flex-direction: row;">
+                <el-button @click="confirmStar" >确定</el-button>
+            </div>
+            
         </el-dialog>
     </div>
 
@@ -136,6 +142,8 @@ import { getDifficultColor } from '@/utils/color';
 import { getProblemDescAPI } from "@/apis/problem";
 import { getCreateProblemListAPI } from '@/apis/user';
 import { useUserStore } from '@/stores/userStore';
+import { starToDefaultProblemAPI } from '@/apis/problem';
+import { starToProblemListAPI } from '@/apis/problem';
 import '@/assets/base-el-tag.css'
 
 const route = useRoute()
@@ -147,6 +155,7 @@ const starFormVisible = ref(false)
 const tagsStore = useTagsStore()
 const userStore = useUserStore()
 const problemlists = ref([])
+const starDefault = ref(false)
 const starList = ref([])
 
 const getProblemDesc = async (id) => {
@@ -164,8 +173,25 @@ const getCreateProblemList = async() => {
     const res = await getCreateProblemListAPI(userStore.userInfo.id)
     problemlists.value = res.data
 }
-const confirmStar = () => {
+
+// 确认收藏
+const confirmStar = async() => {
     console.log(starList.value)
+    if (starDefault.value) {
+        await starToDefaultProblemAPI(id)
+    }
+    
+    for (let item of starList.value) {
+        await starToProblemListAPI({
+            problem_id: id,
+            problemlist_id: item
+        });
+    }
+    if (starDefault.value || starList.value) {
+        ElMessage.success('收藏成功')
+    }
+    starDefault.value = false
+    problemDesc.value.star_status = true
     starFormVisible.value = false
 }
 
@@ -327,10 +353,13 @@ const showStarForm = () => {
     display: flex;
     flex-direction: column;
 }
-.el-dialog .el-button {
+.el-button {
     justify-content: flex-end;
-    margin-left: auto;
     margin-top: 20px;
+    margin-left: 260px;
+    display: flex;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 .el-checkbox-group {
     display: flex;
