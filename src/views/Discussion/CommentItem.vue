@@ -45,6 +45,8 @@
                               <template #reference>
                                   <div class="userInfo" @click="jumpToUser(subitem.user_info.id)">
                                       <el-avatar :size="25" style="font-size: 12px;" :src="getAvatar(subitem.user_info.avatar)">BB</el-avatar>
+
+
                                       <span style="margin-left: 5px; font-size: 14px;">{{ subitem.user_info.username }}</span>
                                   </div>
                               </template>

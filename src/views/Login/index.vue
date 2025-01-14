@@ -167,6 +167,7 @@ const sendVerification =async(email,type)=>{
 }
 
 const handleForgotPassword = async () => {
+
   if(!email_forgot.value.trim()||!verificationCode_forgot.value.trim()||!forgetPassword.value.trim()){
     ElMessage.error('请输入完整信息!!')
   }
@@ -190,6 +191,7 @@ const handleForgotPassword = async () => {
     }
     else{
       ElMessage.error('两次输入的密码不一致！')
+
     }
   }
 
