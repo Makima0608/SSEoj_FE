@@ -135,5 +135,13 @@ Mock.mock(/\/api\/problemlist\/(?=\?)/, 'get', (options) => {
 }
 )
 
+// 模拟创建题单
+Mock.mock(/\/api\/problemlist\/create\//, 'post', () => {
+    return {
+        err: null,
+        data: 'success'
+    }
+})
+
 
 

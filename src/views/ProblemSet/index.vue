@@ -8,7 +8,7 @@
                     <span class="iconfont icon-sousuo"></span>
                     <span class="filter-text">搜索</span>
                     <input class="searchInput" type="text" style="display: none;" placeholder="search something..."
-                        v-model="keyword" @keydown.enter="console.log('search', keyword)" />
+                        v-model="keyword" @keydown.enter="searchProblem" />
                     <!-- </div> -->
                 </div>
                 <el-popover 
@@ -169,6 +169,10 @@ const handleOutSideClick = (e) => {
     }
 }
 document.addEventListener('click', handleOutSideClick)
+// 搜索题目
+const searchProblem = async () => {
+    await getProblemSet(params.value)
+}
 
 // 更新筛选参数
 const handleCurrentChange = async () => {

@@ -17,14 +17,14 @@
                     :value="item.value"
                 />
             </el-select>
-            <button>创建</button>
+            <button @click="createProblemList">创建</button>
         </div>
         <div class="profile">
             <div class="node">题单名称：</div>
             <input class="title" type="text" placeholder="请输入标题" v-model="title">
             <div class="node">题单简介：</div>
             <div style="margin: 0px 0px 30px auto; width: 90%;">
-                <FEditor />
+                <FEditor ref="summaryRef"/>
             </div>
             
         </div>
@@ -64,7 +64,7 @@
                         scope.row.difficulty }}</span>
                     </template>
             </el-table-column>
-            <el-table-column fixed="right" label="Operations" min-width="80">
+            <el-table-column fixed="right" label="Operations" width="130">
                 <template #default="scope">
                     <el-button
                     link
@@ -89,28 +89,33 @@ import { useTagsStore } from '@/stores/tagsStore';
 import { getDifficultColor } from '@/utils/color';
 import FEditor from '@/components/FEditor.vue';
 import { getRatio } from '@/utils/data_calculate';
+import { createProblemListAPI } from '@/apis/problemlist';
+import { ElMessage } from 'element-plus';
+import { useRouter } from 'vue-router';
   
 const tagsStore = useTagsStore()
+const router = useRouter()
 
 const type = ref(true)
 const title = ref('')
 const problems = ref([])
 const keyword = ref('')
+const summaryRef = ref(null)
 
 const querySearchAsync = async(queryString, cb) => {
     const res = await getProblemSetAPI({keyword: queryString})
     cb(res.data.problems)
 }
-
+// 添加题目
 const handleSelect = (item) => {
     problems.value.push(item)
     keyword.value = ''
 }
-
+// 删除题目
 const deleteRow = (index) => {
     problems.value.splice(index, 1)
 }
-
+// 题单类型选项
 const selectOptions = [
     {
         label: '公开',
@@ -121,6 +126,22 @@ const selectOptions = [
         value: false
     }
 ]
+
+const createProblemList = async() => {
+    if (!title.value.trim()) {
+        ElMessage.warning('标题不能为空')
+        return
+    }
+    const data = {
+        title: title.value,
+        summary: summaryRef.value.getContent(),
+        type: type.value,
+        problems: problems.value.map(item => item.id)
+    }
+    await createProblemListAPI(data)
+    ElMessage.success('创建成功')
+    router.push('/problemlist')
+}
 
 onMounted(async() => {
     await tagsStore.getTags()
@@ -145,6 +166,7 @@ onMounted(async() => {
 .header {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
 }
 .header button {
     width: 100px;
