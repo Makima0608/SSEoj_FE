@@ -123,6 +123,7 @@ const postComment = async(content) => {
   }
   if(data.content !=''){
     await commentPostAPI(data)
+    ElMessage.success("评论成功")
   }
   else{
     ElMessage.error("内容不能为空")
@@ -137,8 +138,8 @@ const postComment = async(content) => {
 const handleLike= async(id, is_good) => {
   const change = !is_good
   await likePostAPI({id, change});
-  postStore.post.like_count += is_good ? -1 : 1
-  postStore.post.is_good = is_good
+  postStore.post.like_count += postStore.post.is_good ? -1 : 1
+  postStore.post.is_good = !postStore.post.is_good
 }
 
 
