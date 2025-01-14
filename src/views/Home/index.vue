@@ -76,7 +76,7 @@
           <label>SCHEDULE</label>
           <label v-if="myPlan.length===0">Nothing here...</label>
           <ul v-else v-infinite-scroll="load" class="plans" style="overflow: auto">
-            <li v-for="plan in myPlan" :key="plan.id" class="infinite-list-item">
+            <li v-for="plan in myPlan" :key="plan.id" class="infinite-list-item" @click="goToProblem(plan.id)">
               <span class="planId">{{ plan.id }}</span>
               <span class="planName">{{ plan.name }}</span>
               <span v-if="plan.problem_status" class="iconfont icon-duigou1" style="text-align: center; font-size: 20px;"></span>
@@ -162,6 +162,9 @@ const testPlan=ref([
   },
 ])
 
+const goToProblem =(planId) =>{
+  router.replace(`/problem/${planId}/description`);
+}
 
 // 监听菜单切换
 const handleSelect = async (index) => {

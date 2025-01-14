@@ -163,14 +163,24 @@ const sendVerification =async(email,type)=>{
 }
 
 const handleForgotPassword = async () => {
-  const res = await userStore.passwordForget({email: email_forgot.value, password_new: forgetPassword.value, verification_code:verificationCode_forgot.value});
-  console.log(res)
-  if(res){
-    ElMessage.success('密码修改成功！');
-    dialogFormVisible.value = false;
+  if(email.value.trim()||verificationCode_forgot.value.trim()||forgetPassword.value.trim()){
+    ElMessage.error('请输入完整信息!!')
   }
   else{
-    ElMessage.error('密码修改失败！');
+    const publicKeyPem = `-----BEGIN PUBLIC KEY-----
+  MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKHP3hnFtL1g3bpgDMFAma1MofY9UmInthR8vK5Q9/dYcfdqvzLFRdRCPdeefqGO+BIFfLeCKJi4odn61XJEvp8CAwEAAQ==
+  -----END PUBLIC KEY-----`
+    const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
+    const encrypted = forge.util.encode64(publicKey.encrypt(forgetPassword.value));
+    const res = await userStore.passwordForget({email: email_forgot.value, password_new: encrypted, verification_code:verificationCode_forgot.value});
+    console.log(res)
+    if(res){
+      ElMessage.success('密码修改成功！');
+      dialogFormVisible.value = false;
+    }
+    else{
+      ElMessage.error('密码修改失败！');
+    }
   }
 
 };
