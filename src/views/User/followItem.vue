@@ -1,7 +1,7 @@
 <template>
   <div class="list-item-content">
     <div class="avatarContainer">
-      <img :src="avatar" alt="Avatar" class="follow_avatar" />
+      <img :src="getAvatar(avatar)" alt="Avatar" class="follow_avatar" />
     </div>
 
     <div class="follow_content">
@@ -24,7 +24,7 @@
 <script setup>
 import { ref } from 'vue';
 import { transformDate, getDate} from '@/utils/time';
-
+import { getAvatar } from '@/utils/basic';
 
 defineProps({
   avatar: { type: String, required: true }, // 用户头像的 URL

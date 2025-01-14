@@ -145,9 +145,9 @@ const filteredPosts = computed(() => {
   return sortedPosts;
 });
 
-// const handleCurrentChange = (val) => {
-//   postListStore.getPostList(params.value);
-// };
+const handleCurrentChange = (val) => {
+  postListStore.getPostList(params.value);
+};
 
 const goToDiscussion = (postId) => {
   router.replace(`/discussion/${postId}`);
