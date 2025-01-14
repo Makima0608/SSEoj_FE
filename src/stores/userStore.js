@@ -50,7 +50,7 @@ export const useUserStore = defineStore('user', () => {
 
             // 如果是修改密码（传入的是旧密码和新密码）
             if (updatedInfo.oldPassword && updatedInfo.newPassword) {
-                await passwordChangeAPI({id:updateUserInfo.id, password_before: updatedInfo.oldPassword, password_new:updatedInfo.newPassword})
+                await passwordChangeAPI({id:updatedInfo.id, password_before: updatedInfo.oldPassword, password_new:updatedInfo.newPassword})
             }
 
             return true;
