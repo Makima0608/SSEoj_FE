@@ -26,7 +26,7 @@
     <div v-if="activeMenuIndex==='1'|| activeMenuIndex==='2'" class="infomationContainer">
       <!-- 原来的 infomationContainer 内容 -->
       <div class="userHeader">
-        <el-avatar :src="userStore.getAvatar()" class="userAvatar" />
+        <el-avatar :src="avatarPreview" class="userAvatar" />
         <div class="userContainer">
           <div class="nameContainer">
             <label class="userName">{{ userStore.userInfo.username }}</label>
