@@ -1,7 +1,7 @@
 <template>
   <div class="list-item-content">
     <div class="user_content">
-      <img :src="avatar" alt="Avatar" class="avatar" />
+      <img :src="getAvatar(avatar)" class="avatar" />
       <h3 class="username">{{ username }}</h3>
     </div>
     <div class="post_content">
@@ -21,7 +21,7 @@
 <script setup>
 import { ref } from 'vue';
 import { transformDate, getDate} from '@/utils/time';
-
+import { getAvatar } from '@/utils/basic';
 
 defineProps({
   avatar: { type: String, required: true }, // 用户头像的 URL
