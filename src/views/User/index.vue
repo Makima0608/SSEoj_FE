@@ -707,7 +707,7 @@ onMounted(async () => {
   console.log(otherUserInfo.value)
   avatarPreview.value = userStore.getAvatar()
 
-  await postListStore.getMyPost(id); // 等待数据加载
+  await postListStore.getMyPost({user_id: id}); // 等待数据加载
   // console.log(postListStore.postList.value)
 
 
