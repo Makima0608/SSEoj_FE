@@ -138,6 +138,7 @@ const postComment = async(content) => {
 const handleLike= async(id, is_good) => {
   const change = !is_good
   await likePostAPI({id, change});
+  console.log({id,change});
   postStore.post.like_count += postStore.post.is_good ? -1 : 1
   postStore.post.is_good = !postStore.post.is_good
 }
