@@ -71,9 +71,9 @@
       </div>
       <div v-if="activeMenuIndex==='1'&&!showFollow" class="listContainer">
         <!-- 如果没有任何东西就nothing -->
-        <label v-if="!myPost">Nothing here.....</label>
+        <label v-if="postListStore.postList.length===0">Nothing here.....</label>
         <ul  v-infinite-scroll="load" style="overflow: auto;" class="list" :infinite-scroll-disabled="disabled">
-          <li v-for="post in myPost" :key="post.post_id" class="list-item">
+          <li v-for="post in postListStore.postList" :key="post.post_id" class="list-item">
             <ListItemContent
               :avatar="post.avatar"
               :title="post.post_title"
@@ -284,7 +284,7 @@
       <label>我创建的</label>
       <div class="problemlist">
         <!-- 如果没有任何东西就nothing -->
-        <label v-if="!createdProblemlist">Nothing here.....</label>
+        <label v-if="createdProblemlist.length===0">Nothing here.....</label>
         <div v-else v-for="plistItem in createdProblemlist" :key="plistItem.id" class="problemlist-item">
 
             <div class="problemlist-header" >
@@ -372,6 +372,8 @@ import { getRatio } from '@/utils/data_calculate';
 import {getFollowingAPI ,getFollowerAPI} from'@/apis/user';
 import {  getMyPostAPI } from '@/apis/postList'; // 假设你有一个获取帖子的 API 方法
 import {deletePostAPI} from '@/apis/post';
+import forge from 'node-forge';
+
 
 
 const router = useRouter()
@@ -650,6 +652,7 @@ const changeAvatar = async () => {
 
 // 获取创建的题单
 const getCreatedProblemList = async (id) => {
+  console.log('--------', createdProblemlist.value)
   const res = await getCreateProblemListAPI(id)
   createdProblemlist.value = res.data
   console.log('--------', createdProblemlist.value)
@@ -704,11 +707,12 @@ onMounted(async () => {
   console.log(otherUserInfo.value)
   avatarPreview.value = userStore.getAvatar()
 
-  const myPostResult = await getMyPostAPI(); // 等待数据加载
-  myPost.value = myPostResult.data
-  console.log(myPost.value)
+  await postListStore.getMyPost(id); // 等待数据加载
+  // console.log(postListStore.postList.value)
+
 
   await userStore.getPractice(id);
+  // console.log('3')
 
   userStore.practiceInfo.forEach((practice) => {
     tryCount.value++; // 每遍历一个元素，尝试计数加 1

@@ -22,9 +22,9 @@ export const usePostListStore = defineStore('postList', () => {
     console.log( postList.value); // 查看整个数据结构，确认 avatar 字段的值
   };
 
-  const getMyPost = async () => {
+  const getMyPost = async (params) => {
     if (!has_next.value) return;
-    const res = await getMyPostAPI(); // 获取帖子数据
+    const res = await getMyPostAPI(params); // 获取帖子数据
     count.value += res.data.posts.length; // 更新帖子总数
     has_next.value = res.data.has_next;
     // 对每个 post 的 avatar 进行解码处理

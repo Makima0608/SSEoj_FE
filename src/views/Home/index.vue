@@ -178,7 +178,7 @@ const handleSelect = async (index) => {
     await postListStore.getSubscribePost(); // 等待数据加载
   }
   else {
-    await postListStore.getMyPost(); // 等待数据加载
+    await postListStore.getMyPost(userStore.userInfo.id); // 等待数据加载
   }
 };
 

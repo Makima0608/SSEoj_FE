@@ -20,6 +20,7 @@ import layoutNav from '../Layout/components/layoutNav.vue';
 import { onMounted, ref } from 'vue';
 import { usePostStore } from '@/stores/postStore';
 import { ElMessage } from 'element-plus';
+import router from '@/router';
 
 // 引用编辑器的 ref
 const FEditorRef = ref(null);
@@ -48,6 +49,7 @@ const postDiscussion = async () => {
     // console.log(result)
     // if (!result.err) {
     ElMessage.success('发布成功！');
+    router.push(`/discussion/`)
     // } else {
     //   ElMessage.error('发布失败，请重试');
     // }
