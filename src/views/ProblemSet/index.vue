@@ -11,7 +11,7 @@
                         v-model="keyword" @keydown.enter="searchProblem" />
                     <!-- </div> -->
                 </div>
-                <el-popover 
+                <el-popover
                     :show-arrow="false"
                     trigger="click"
                     placement="right"
@@ -23,15 +23,15 @@
                         </div>
                     </template>
                     <template #default>
-                        <diffView 
+                        <diffView
                             :numList="numList"
                             :selected-diff="min_diff"
                             @select-diff="selectDiff"
                         />
                     </template>
                 </el-popover>
-                
-                <el-popover 
+
+                <el-popover
                     :show-arrow="false"
                     trigger="click"
                     placement="right-start"
@@ -44,8 +44,8 @@
                         </div>
                     </template>
                     <template #default>
-                        <tagView :tagTree="tagsStore.tagTree" 
-                            :selectedTag="selectedTag" 
+                        <tagView :tagTree="tagsStore.tagTree"
+                            :selectedTag="selectedTag"
                             @selectTag="addTag"
                             @closeTag="deleteTag"
                         />
@@ -107,7 +107,7 @@ import { useRouter } from 'vue-router';
 import tagView from './components/tagView.vue';
 import diffView from './components/diffView.vue';
 import { getRatio } from '@/utils/data_calculate';
-import { useKeywordStore } from '@/stores/keywordStore';
+// import { useKeywordStore } from '@/stores/keywordStore';
 
 const router = useRouter()
 const tagsStore = useTagsStore()
