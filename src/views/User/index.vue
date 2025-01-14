@@ -26,7 +26,7 @@
     <div v-if="activeMenuIndex==='1'|| activeMenuIndex==='2'" class="infomationContainer">
       <!-- 原来的 infomationContainer 内容 -->
       <div class="userHeader">
-        <el-avatar :src="userStore.getAvatar()" class="userAvatar" />
+        <el-avatar :src="avatarPreview" class="userAvatar" />
         <div class="userContainer">
           <div class="nameContainer">
             <label class="userName">{{ userStore.userInfo.username }}</label>
@@ -238,7 +238,7 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="dialogFormVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false && handleForgotPassword">
+          <el-button type="primary" @click="handleForgotPassword">
             Confirm
           </el-button>
         </div>
@@ -257,12 +257,14 @@ import ListItemContent from '@/views/Discussion/ListItemContent.vue';
 import { ElMessage } from 'element-plus'; // 引入 Element Plus 提示组件
 import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
-import {getCreateProblemListAPI, getDefaultProblemListAPI } from '@/apis/user'
+import {getCreateProblemListAPI, getDefaultProblemListAPI,getUserInfoAPI } from '@/apis/user'
 import { getProblemListAPI } from "@/apis/problemlist";
 import { useTagsStore } from '@/stores/tagsStore';
 import { getDifficultColor } from '@/utils/color';
 import { getIdentityAPI } from '@/apis/user';
 import { getRatio } from '@/utils/data_calculate';
+
+
 
 const router = useRouter()
 const route = useRoute()
@@ -376,6 +378,10 @@ const sendVerification =async()=>{
 }
 
 const changeUsername = async () => {
+  if(!newUsername.value.trim()){
+    ElMessage.error('用户名不能为空!!!');
+    return;
+  }
   const res= await userStore.updateUserInfo({ username: newUsername.value });  // 更新本地信息
   if(res){
     ElMessage.success('用户名修改成功！');
@@ -386,6 +392,10 @@ const changeUsername = async () => {
 };
 
 const changeProfile = async () => {
+  if(!newProfile.value.trim()){
+    ElMessage.error('简介不能为空!!!');
+    return;
+  }
   const res= await userStore.updateUserInfo({ profile: newProfile.value });  // 更新本地信息
   if(res){
     ElMessage.success('简介修改成功！');
@@ -396,8 +406,18 @@ const changeProfile = async () => {
 };
 
 const changePassword = async () => {
+  if(!newPassword.value.trim() || !oldPassword.value.trim() || !newPassword.value.trim()){
+    ElMessage.error('信息不能为空!!!');
+    return;
+  }
   if(newPassword.value===confirmPassword.value){
-      const res= await userStore.updateUserInfo({id:userStore.userInfo.id, oldPassword: oldPassword.value, newPassword: newPassword.value });  // 更新密码
+    const publicKeyPem = `-----BEGIN PUBLIC KEY-----
+  MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKHP3hnFtL1g3bpgDMFAma1MofY9UmInthR8vK5Q9/dYcfdqvzLFRdRCPdeefqGO+BIFfLeCKJi4odn61XJEvp8CAwEAAQ==
+  -----END PUBLIC KEY-----`
+    const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
+    const encryptedNew = forge.util.encode64(publicKey.encrypt(newPassword.value));
+    const encryptedOld = forge.util.encode64(publicKey.encrypt(oldPassword.value));
+    const res= await userStore.updateUserInfo({id:userStore.userInfo.id, oldPassword: encryptedOld, newPassword: encryptedNew });  // 更新密码
     if(res){
       ElMessage.success('密码修改成功！');
     }
@@ -412,9 +432,19 @@ const changePassword = async () => {
 };
 
 const handleForgotPassword = async () => {
-  const res= await userStore.passwordForget({email: email.value,verification_code:verificationCode.value, password_new:newPassword.value});
+  if(!email.value.trim() || !verificationCode.value.trim() || !forgetPassword.value.trim()){
+    ElMessage.error('信息不能为空!!!');
+    return;
+  }
+  const publicKeyPem = `-----BEGIN PUBLIC KEY-----
+MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKHP3hnFtL1g3bpgDMFAma1MofY9UmInthR8vK5Q9/dYcfdqvzLFRdRCPdeefqGO+BIFfLeCKJi4odn61XJEvp8CAwEAAQ==
+-----END PUBLIC KEY-----`
+  const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
+  const encrypted = forge.util.encode64(publicKey.encrypt(forgetPassword.value));
+  const res= await userStore.passwordForget({email: email.value,verification_code:verificationCode.value, password_new:encrypted});
   if(res){
     ElMessage.success('密码修改成功！');
+    dialogFormVisible = false
   }
   else{
     ElMessage.error('密码修改失败！');
@@ -510,8 +540,11 @@ onMounted(async () => {
   if (timer) {
     clearInterval(timer);
   }
+  const res = await getUserInfoAPI(id);
+  userStore.userInfo = res.data;
   await postListStore.getPostList(params.value); // 等待数据加载
   await userStore.getPractice(id);
+
   userStore.practiceInfo.forEach((practice) => {
     tryCount.value++; // 每遍历一个元素，尝试计数加 1
     if (practice.pass_status === true) {
