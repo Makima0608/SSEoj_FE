@@ -4,6 +4,7 @@
     <header>
       <h2 class="logo">SSEOJ</h2>
     </header>
+    <background style="position: fixed; top: 100px; left: 30px; width: 500px;"/>
     <div class="pane">
       <div class="wrapper" :class="{ active }">
         <!-- Login Form -->
@@ -104,9 +105,11 @@
       </template>
     </el-dialog>
   </div>
+  
 </template>
 
 <script setup>
+import background from '../Layout/components/background.vue';
 import { ref, onMounted } from 'vue';
 import { ElMessage } from 'element-plus';
 import { useUserStore } from '@/stores/userStore';

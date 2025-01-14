@@ -101,7 +101,7 @@ const langs = {
   'C': cpp(),
   'C++': cpp(),
   'Java': java(),
-  'Python': python()
+  'Python3': python()
 }
 
 // 修改语言

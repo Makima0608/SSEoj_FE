@@ -291,7 +291,7 @@ watch(
 .editor {
     position: relative;
     min-width: 400px;
-    height: calc(100vh - 300px);
+    height: calc(100vh - 220px);
     /* overflow-y: auto; */
     margin-left: 10px;
     margin-right: 10px;
