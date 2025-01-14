@@ -220,14 +220,14 @@ const postComment = async(content) => {
   console.log(data)
 }
 const handleCurrentChange = async(val, id) => {
-  // const res = await getSolution2ndCommentAPI(props.id, val, 8)
-  // secondLevelComments.value.set(id, {
-  //     count: res.data.count,
-  //     comments: res.data.comments,
-  //     expand: true,
-  //     page_num: val,
-  //     page_size: 8
-  // })
+  const res = await getSecondCommentAPI(props.id, val, 8)
+  secondLevelComments.value.set(id, {
+      count: res.data.count,
+      comments: res.data.comments,
+      expand: true,
+      page_num: val,
+      page_size: 8
+  })
 }
 
 // 无限列表加载评论

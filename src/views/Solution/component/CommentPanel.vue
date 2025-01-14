@@ -174,7 +174,7 @@ const getSolution1stComment = async() => {
 }
 // 展开二级评论
 const expand2ndComment = async(comment_id) => {
-    const res = await getSolution2ndCommentAPI(props.id, 1, 8)
+    const res = await getSolution2ndCommentAPI(props.id, comment_id, 1, 8)
     secondLevelComments.value.set(comment_id, {
         count: res.data.count,
         comments: res.data.comments,
@@ -208,14 +208,14 @@ const postComment = async(content) => {
     console.log(data)
 }
 const handleCurrentChange = async(val, id) => {
-    // const res = await getSolution2ndCommentAPI(props.id, val, 8)
-    // secondLevelComments.value.set(id, {
-    //     count: res.data.count,
-    //     comments: res.data.comments,
-    //     expand: true,
-    //     page_num: val,
-    //     page_size: 8
-    // })
+    const res = await getSolution2ndCommentAPI(props.id, id, val, 8)
+    secondLevelComments.value.set(id, {
+        count: res.data.count,
+        comments: res.data.comments,
+        expand: true,
+        page_num: val,
+        page_size: 8
+    })
 }
 
 // 无限列表加载评论
