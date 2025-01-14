@@ -145,9 +145,9 @@ const filteredPosts = computed(() => {
   return sortedPosts;
 });
 
-const handleCurrentChange = (val) => {
-  postListStore.getPostList(params.value);
-};
+// const handleCurrentChange = (val) => {
+//   postListStore.getPostList(params.value);
+// };
 
 const goToDiscussion = (postId) => {
   router.replace(`/discussion/${postId}`);
@@ -157,6 +157,8 @@ const postDiscussion = () => {
   const url = '/discussion/create';
   window.open(url, '_blank');
 };
+
+
 
 onMounted(async () => {
   await postListStore.getPostList(params.value); // 等待数据加载
