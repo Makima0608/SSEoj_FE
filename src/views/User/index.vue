@@ -372,6 +372,7 @@ import { getRatio } from '@/utils/data_calculate';
 import {getFollowingAPI ,getFollowerAPI} from'@/apis/user';
 import {  getMyPostAPI } from '@/apis/postList'; // 假设你有一个获取帖子的 API 方法
 import {deletePostAPI} from '@/apis/post';
+import forge from 'node-forge';
 
 
 const router = useRouter()
