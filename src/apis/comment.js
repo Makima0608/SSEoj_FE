@@ -33,7 +33,7 @@ export const commentPostAPI = (params) => {
     data: {
       id:params.id,
       content: params.content,
-      reply_to_id: params.parent_id,
+      reply_to_id: params.reply_to_id,
       under_comment_id: params.under_comment_id
     }
   })
