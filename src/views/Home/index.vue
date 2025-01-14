@@ -271,6 +271,7 @@ onMounted(async () => {
 
 .wrapper_post{
 width: 75%;
+height: 800px;
 background:transparent;
 border-radius: 12px;
 backdrop-filter: blur(20px);
@@ -322,7 +323,7 @@ margin-top: 25px; /* 与菜单之间的间距 */
 margin-bottom: 25px; /* 与菜单之间的间距 */
 width: 95%; /* 与 menu_main 的宽度一致 */
 text-align: center;
-height: 80%; /* 自动根据内容调整高度 */
+/* 自动根据内容调整高度 */
 }
 .infinite-list-wrapper .list {
 padding: 0;

@@ -60,7 +60,7 @@
                         @row-click="rowSelected">
                         <el-table-column label="状态" width="80">
                             <template #default="scope">
-                                <span v-if="scope.row.status" class="iconfont icon-duigou1" style="text-align: center; font-size: 20px;"></span>
+                                <span v-if="scope.row.pass_status" class="iconfont icon-duigou1" style="text-align: center; font-size: 20px;"></span>
                             </template>
                         </el-table-column>
 

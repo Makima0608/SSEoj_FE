@@ -305,7 +305,8 @@ import layoutNav from '@/views/Layout/components/layoutNav.vue';
 import { useUserStore } from '@/stores/userStore';
 import { usePostListStore } from '@/stores/postListStore';
 import ListItemContent from '@/views/Discussion/ListItemContent.vue';
-import followItem from '@/views/User/followItem.vue/';
+// import followItem from '@/views/User/followItem.vue/';
+import followItem from './followItem.vue';
 import { ElMessage } from 'element-plus'; // 引入 Element Plus 提示组件
 import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';

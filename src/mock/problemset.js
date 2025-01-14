@@ -14,7 +14,7 @@ Mock.mock(/\/api\/problemset\/(?!\w)/, 'get', (options) => {
                 count: 100,
                 problems: [
                     {
-                        "status": true,
+                        "pass_status": true,
                         "id": 1001,
                         "name": "你好，世界",
                         "tags": [
@@ -27,7 +27,7 @@ Mock.mock(/\/api\/problemset\/(?!\w)/, 'get', (options) => {
                         "difficulty": 5
                     },
                     {
-                        "status": false,
+                        "pass_status": false,
                         "id": 1001,
                         "name": "你好，世界",
                         "tags": [
@@ -40,7 +40,7 @@ Mock.mock(/\/api\/problemset\/(?!\w)/, 'get', (options) => {
                         "difficulty": 5
                     },
                     {
-                        "status": true,
+                        "pass_status": true,
                         "id": 1001,
                         "name": "你好，世界",
                         "tags": [
@@ -53,7 +53,7 @@ Mock.mock(/\/api\/problemset\/(?!\w)/, 'get', (options) => {
                         "difficulty": 5
                     },
                     {
-                        "status": false,
+                        "pass_status": false,
                         "id": 1001,
                         "name": "你好，世界",
                         "tags": [
@@ -75,7 +75,7 @@ Mock.mock(/\/api\/problemset\/(?!\w)/, 'get', (options) => {
             data: {
                 count: 100,
                 problems: [{
-                    "status": true,
+                    "pass_status": true,
                     "id": 1002,
                     "name": "A+B",
                     "tags": [
@@ -97,7 +97,7 @@ Mock.mock(/\/api\/problemset\/(?!\w)/, 'get', (options) => {
                 count: 10,
                 problems: [
                     {
-                        "status": false,
+                        "pass_status": false,
                         "id": 1001,
                         "name": "你好，世界",
                         "tags": [
