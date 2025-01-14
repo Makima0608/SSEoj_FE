@@ -54,7 +54,7 @@
                             </el-popover>
                             <div style="margin-top: 13px; margin-left: 8px;" v-if="subitem.reply_to_id">reply to</div>
                             <el-popover
-                                @show="showUserInfoCard(subitem.user_info.id)"
+                                @show="showUserInfoCard(subitem.reply_to_id)"
                                 @hide="userInfo = {}"
                                 popper-style="background:transparent; border:none; box-shadow:none; margin-top:10px"
                                 show-arrow=false
