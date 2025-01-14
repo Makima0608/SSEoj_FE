@@ -130,3 +130,47 @@ Mock.mock(/\/api\/user\/(\d+)\/default_problemlist\//, 'get', (options) => {
         }
     }
 })
+
+
+Mock.mock(/\/api\/user\/user_name_change\//, 'put', ()=>{
+    return {
+        err: null,
+        data: 'success'
+    }
+})
+
+Mock.mock(/\/api\/user\/profile_change\//, 'put', ()=>{
+    return {
+        err: null,
+        data: 'success'
+    }
+})
+
+Mock.mock(/\/api\/user\/avatar_change\//, 'put', ()=>{
+    return {
+        err: null,
+        data: 'success'
+    }
+})
+
+Mock.mock(/\/api\/user\/password_change\//, 'put', ()=>{
+    return {
+        err: null,
+        data: 'success'
+    }
+})
+
+Mock.mock(/\/api\/user\/password_forget\//, 'put', ()=>{
+    return {
+        err: null,
+        data: 'success'
+    }
+})
+
+
+Mock.mock(/\/api\/identity\/send_email\//, 'post', ()=>{
+    return {
+        err: null,
+        data: 'success'
+    }
+})

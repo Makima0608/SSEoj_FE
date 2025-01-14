@@ -78,7 +78,14 @@
         </el-form-item>
         <el-form-item v-model="verificationCode_forgot" label="邮箱验证码" :label-width="formLabelWidth"  class="emailVerification">
           <el-input v-model="verificationCode_forgot" autocomplete="off"/>
-          <el-button type="success" plain  class="btnSend" @click="sendVerification(email_forgot,1)">发送</el-button>
+          <el-button
+            :disabled="isDisabled"
+            type="success"
+            plain
+            class="btnSend"
+            @click="sendVerification(email_forgot,1)">
+            {{ isDisabled ? countdown + '秒' : '发送' }}
+          </el-button>
         </el-form-item>
         <el-form-item label="新密码" :label-width="formLabelWidth">
           <el-input v-model="forgetPassword" autocomplete="off" />
@@ -87,7 +94,7 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="dialogFormVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false && handleForgotPassword">
+          <el-button type="primary" @click="handleForgotPassword">
             Confirm
           </el-button>
         </div>
@@ -123,11 +130,29 @@ const email_forgot=ref('');
 const verificationCode_forgot=ref('');
 const forgetPassword=ref('')
 
+// 定义响应式变量
+const isDisabled = ref(false);  // 按钮是否禁用
+const countdown = ref(15);      // 倒计时秒数
+let timer = null;               // 用于存储定时器
+
 const sendVerification =async(email,type)=>{
+  if (isDisabled.value) return;  // 如果按钮已经禁用，点击无效
   if(email.trim()){
     try {
       await getIdentityAPI({email:email,type:type});
       ElMessage.success('验证码发送成功');
+
+      // 开始倒计时
+      isDisabled.value = true;
+      timer = setInterval(() => {
+        if (countdown.value > 0) {
+          countdown.value--;
+        } else {
+          clearInterval(timer); // 倒计时结束，清除定时器
+          isDisabled.value = false; // 重新启用按钮
+          countdown.value = 15; // 重置倒计时
+        }
+      }, 1000);
     } catch (error) {
       ElMessage.error('验证码发送失败');
     }
@@ -138,13 +163,16 @@ const sendVerification =async(email,type)=>{
 }
 
 const handleForgotPassword = async () => {
-  try {
-    await userStore.passwordForget({email: email_forgot.value, password_new: forgetPassword.value, verification_code:verificationCode_forgot.value});
-    ElMessage.success('密码重置成功！');
-  } catch (error) {
-    console.error(error);
-    ElMessage.error('密码重置失败！');
+  const res = await userStore.passwordForget({email: email_forgot.value, password_new: forgetPassword.value, verification_code:verificationCode_forgot.value});
+  console.log(res)
+  if(res){
+    ElMessage.success('密码修改成功！');
+    dialogFormVisible.value = false;
   }
+  else{
+    ElMessage.error('密码修改失败！');
+  }
+
 };
 
 // Methods
@@ -202,6 +230,10 @@ const showLogin = (event) => {
 
 // Mounted lifecycle hook for dynamically loading external scripts
 onMounted(() => {
+  if (timer) {
+    clearInterval(timer);
+  }
+
   const scriptModule = document.createElement('script');
   scriptModule.type = 'module';
   scriptModule.src = 'https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js';

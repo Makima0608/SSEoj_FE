@@ -1,5 +1,5 @@
 <template>
-  <ul v-infinite-scroll="loadComments" :infinite-scroll-disabled="disabled">
+  <ul v-infinite-scroll="loadComments" :infinite-scroll-disabled="disabled" infinite-scroll-distance="20">
       <li v-for="item in comments" :key="item.id" style="list-style-type: none;">
           <div class="comment-item">
               <el-popover
@@ -52,7 +52,7 @@
                                   <UserInfoCard :userInfo="userInfo" @update:subscribe="toggleFollow"/>
                               </template>
                           </el-popover>
-                          <div style="margin-top: 13px; margin-left: 8px;">reply to</div>
+                          <div style="margin-top: 13px; margin-left: 8px;" v-if="subitem.reply_to_id">reply to</div>
                           <el-popover
                               @show="showUserInfoCard(subitem.user_info.id)"
                               @hide="userInfo = {}"
@@ -62,7 +62,7 @@
                           >
                               <template #reference>
                                   <div class="userInfo" @click="jumpToUser(subitem.reply_to_id)">
-                                      <span style="margin-left: 8px; font-size: 14px; color: #0cac0c;">@{{ subitem.reply_to_name }}</span>
+                                      <span style="margin-left: 8px; font-size: 14px; color: #0cac0c;" v-if="subitem.reply_to_id">@{{ subitem.reply_to_name }}</span>
                                   </div>
                               </template>
                               <template #default>
