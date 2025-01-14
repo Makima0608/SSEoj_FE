@@ -708,7 +708,7 @@ onMounted(async () => {
   avatarPreview.value = userStore.getAvatar()
 
 
-  const result = await getMyPostAPI(id); // 等待数据加载
+  const result = await getMyPostAPI({user_id: id}); // 等待数据加载
   myPost.value = result.data.posts;
   // console.log(postListStore.postList.value)
 
