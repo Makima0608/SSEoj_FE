@@ -257,12 +257,13 @@ import ListItemContent from '@/views/Discussion/ListItemContent.vue';
 import { ElMessage } from 'element-plus'; // 引入 Element Plus 提示组件
 import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
-import {getCreateProblemListAPI, getDefaultProblemListAPI } from '@/apis/user'
+import {getCreateProblemListAPI, getDefaultProblemListAPI,getUserInfoAPI } from '@/apis/user'
 import { getProblemListAPI } from "@/apis/problemlist";
 import { useTagsStore } from '@/stores/tagsStore';
 import { getDifficultColor } from '@/utils/color';
 import { getIdentityAPI } from '@/apis/user';
 import { getRatio } from '@/utils/data_calculate';
+
 
 
 const router = useRouter()
@@ -539,8 +540,11 @@ onMounted(async () => {
   if (timer) {
     clearInterval(timer);
   }
+  const res = await getUserInfoAPI(id);
+  userStore.userInfo = res.data;
   await postListStore.getPostList(params.value); // 等待数据加载
   await userStore.getPractice(id);
+
   userStore.practiceInfo.forEach((practice) => {
     tryCount.value++; // 每遍历一个元素，尝试计数加 1
     if (practice.pass_status === true) {
