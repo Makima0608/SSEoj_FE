@@ -20,7 +20,8 @@
                     :value="item.value"
                 />
             </el-select>
-            <button @click="editProblemList">修改</button>
+            <button class="btn_edit" @click="editProblemList">修改</button>
+            <button class="btn_delete" @click="dialogVisible=true">删除该题单</button>
         </div>
         <div class="profile">
             <div class="node">题单名称：</div>
@@ -29,7 +30,7 @@
             <div style="margin: 0px 0px 30px auto; width: 90%;">
                 <FEditor ref="summaryRef"/>
             </div>
-            
+
         </div>
         <div class="autoComplete">
             <div>添加题目：</div>
@@ -39,7 +40,7 @@
                 :trigger-on-focus="false"
                 placeholder="请输入题目编号或名称"
                 clearable=true
-                @select="handleSelect"   
+                @select="handleSelect"
             >
                 <template #default="{ item }">
                     <span>{{ item.id }}.{{ item.name }}</span>
@@ -81,11 +82,27 @@
                 </template>
             </el-table-column>
         </el-table>
+        <el-dialog
+          v-model="dialogVisible"
+          title="WARNING"
+          width="500"
+          :before-close="handleClose"
+        >
+          <span>题单会被永久删除哦...</span>
+          <template #footer>
+            <div class="dialog-footer">
+              <el-button @click="dialogVisible = false">Cancel</el-button>
+              <el-button type="primary" @click="deleteProblemList">
+                Confirm
+              </el-button>
+            </div>
+          </template>
+        </el-dialog>
     </div>
-    
+
 </template>
 
-<script setup>
+<script  setup>
 import { onMounted, ref } from 'vue';
 import layoutNav from '../Layout/components/layoutNav.vue';
 import { getProblemSetAPI } from '@/apis/problemset';
@@ -93,10 +110,10 @@ import { useTagsStore } from '@/stores/tagsStore';
 import { getDifficultColor } from '@/utils/color';
 import FEditor from '@/components/FEditor.vue';
 import { getRatio } from '@/utils/data_calculate';
-import { editProblemListAPI, getProblemListDetailAPI } from '@/apis/problemlist';
-import { ElMessage } from 'element-plus';
+import { editProblemListAPI, getProblemListDetailAPI,deleteProblemListAPI } from '@/apis/problemlist';
+import { ElMessage,ElMessageBox } from 'element-plus';
 import { useRoute, useRouter } from 'vue-router';
-  
+
 const tagsStore = useTagsStore()
 const router = useRouter()
 const route = useRoute()
@@ -108,6 +125,7 @@ const problems = ref([])
 let originProblems = []
 const keyword = ref('')
 const summaryRef = ref(null)
+const dialogVisible = ref(false)
 
 const querySearchAsync = async(queryString, cb) => {
     const res = await getProblemSetAPI({keyword: queryString})
@@ -127,7 +145,7 @@ const selectOptions = [
     {
         label: '公开',
         value: true
-    }, 
+    },
     {
         label: '私有',
         value: false
@@ -153,6 +171,13 @@ const editProblemList = async() => {
     router.push('/problemlist')
 }
 
+const deleteProblemList = async() => {
+  await deleteProblemListAPI(id)
+  ElMessage.success("删除成功")
+  dialogVisible=false
+  router.push('/problemlist')
+}
+
 const getProblemListDetail = async() => {
     const res = await getProblemListDetailAPI(id)
     console.log()
@@ -165,7 +190,7 @@ const getProblemListDetail = async() => {
 onMounted(async() => {
     await tagsStore.getTags()
     await getProblemListDetail()
-}) 
+})
 </script>
 
 <style scoped>
@@ -189,7 +214,7 @@ onMounted(async() => {
     justify-content: flex-end;
     align-items: center;
 }
-.header button {
+.btn_edit {
     width: 100px;
     height: 30px;
     border-radius: 6px;
@@ -201,8 +226,24 @@ onMounted(async() => {
     transition: .2s;
     margin-left: 30px;
 }
-.header button:hover{
+.btn_delete{
+    width: 100px;
+    height: 30px;
+    border-radius: 6px;
+    background-color: #800000;
+    cursor: pointer;
+    border: none;
+    color: #FFFFFF;
+    font-size: 14px;
+    transition: .2s;
+    margin-left: 30px;
+}
+.btn_edit:hover{
     background-color: #009999;
+}
+
+.btn_delete:hover{
+    background-color: #f70c0c;
 }
 
 .profile {
@@ -227,4 +268,5 @@ onMounted(async() => {
     margin: 0px 0px 30px auto;
     width: 90%;
 }
+
 </style>

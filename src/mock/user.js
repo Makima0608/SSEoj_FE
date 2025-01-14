@@ -315,3 +315,104 @@ Mock.mock(/\/api\/user\/(\d+)\/create_problemlist\//, 'get', () => {
     }
 })
 
+
+Mock.mock(/\/api\/post\/my_post\//, 'get', () => {
+    const data = [
+      {
+        "post_id": 2,
+        "post_title": "差点儿影响力也不敢情箱子捧",
+        "user_id": 88,
+        "username": "泥沐宸",
+        "avatar": "https://avatars.githubusercontent.com/u/83853740",
+        "like_count": 59,
+        "comment_count": 32,
+        "is_good": true,
+        "create_time":"2024/5/17"
+    },
+    {
+      "post_id": 9,
+        "post_title": "aiaiai",
+        "user_id": 1,
+        "username": "KLmon",
+        "avatar": "https://avatars.githubusercontent.com/u/17516427",
+        "like_count": 1,
+        "comment_count": 10,
+        "is_good": false
+    },
+    {
+      "post_id": 10,
+        "post_title": "aiaiai",
+        "user_id": 1,
+        "username": "KLmon",
+        "avatar": "https://avatars.githubusercontent.com/u/17516427",
+        "like_count": 1,
+        "comment_count": 10,
+        "is_good": false
+    },
+    {
+      "post_id": 10,
+        "post_title": "aiaiai",
+        "user_id": 1,
+        "username": "KLmon",
+        "avatar": "https://avatars.githubusercontent.com/u/17516427",
+        "like_count": 1,
+        "comment_count": 10,
+        "is_good": false
+    },
+    {
+      "post_id": 10,
+        "post_title": "aiaiai",
+        "user_id": 1,
+        "username": "KLmon",
+        "avatar": "https://avatars.githubusercontent.com/u/17516427",
+        "like_count": 1,
+        "comment_count": 10,
+        "is_good": false
+    },
+    {
+      "post_id": 10,
+        "post_title": "aiaiai",
+        "user_id": 1,
+        "username": "KLmon",
+        "avatar": "https://avatars.githubusercontent.com/u/17516427",
+        "like_count": 1,
+        "comment_count": 10,
+        "is_good": false
+    },
+    {
+      "post_id": 10,
+        "post_title": "aiaiai",
+        "user_id": 1,
+        "username": "KLmon",
+        "avatar": "https://avatars.githubusercontent.com/u/17516427",
+        "like_count": 1,
+        "comment_count": 10,
+        "is_good": false
+    },
+    {
+      "post_id": 10,
+        "post_title": "aiaiai",
+        "user_id": 1,
+        "username": "KLmon",
+        "avatar": "https://avatars.githubusercontent.com/u/17516427",
+        "like_count": 1,
+        "comment_count": 10,
+        "is_good": false
+    },
+    {
+      "post_id": 10,
+        "post_title": "aiaiai",
+        "user_id": 1,
+        "username": "KLmon",
+        "avatar": "https://avatars.githubusercontent.com/u/17516427",
+        "like_count": 1,
+        "comment_count": 10,
+        "is_good": false
+    },
+    ]
+    return {
+        err: null,
+        data: data
+    }
+})
+

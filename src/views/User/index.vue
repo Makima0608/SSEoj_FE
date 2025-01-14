@@ -69,9 +69,9 @@
       </div>
       <div v-if="activeMenuIndex==='1'&&!showFollow" class="listContainer">
         <!-- 如果没有任何东西就nothing -->
-        <label v-if="filteredPosts.length === 0">Nothing here.....</label>
-        <ul v-else v-infinite-scroll="load" style="overflow: auto;" class="list" :infinite-scroll-disabled="disabled">
-          <li v-for="post in filteredPosts" :key="post.post_id" class="list-item"
+        <label v-if="!myPost">Nothing here.....</label>
+        <ul  v-infinite-scroll="load" style="overflow: auto;" class="list" :infinite-scroll-disabled="disabled">
+          <li v-for="post in myPost" :key="post.post_id" class="list-item"
           @click="router.push(`/discussion/${post.post_id}`)">
             <ListItemContent
               :avatar="post.avatar"
@@ -255,7 +255,7 @@
 
             <div class="problemlist-header" >
               <span class="problemlist-title" @click="router.push(`/problemlist/${plistItem.id}`)">{{ plistItem.id + '.' + plistItem.title }}</span>
-              <span class="iconfont icon-chilun" @click="router.push"></span>
+              <span class="iconfont icon-chilun" @click="router.push(`/problemlist/edit/${plistItem.id}`)"></span>
             </div>
             <div class= "info">
               <span class="problemCount">{{ 'Count:'+ plistItem.problem_count }}</span>
@@ -317,6 +317,7 @@ import { getDifficultColor } from '@/utils/color';
 import { getIdentityAPI } from '@/apis/user';
 import { getRatio } from '@/utils/data_calculate';
 import {getFollowingAPI ,getFollowerAPI} from'@/apis/user';
+import {  getMyPostAPI } from '@/apis/postList'; // 假设你有一个获取帖子的 API 方法
 
 
 const router = useRouter()
@@ -365,6 +366,8 @@ const problemlistCount = ref(0)
 const defaultProblemlist = ref([]);
 const starProblemList=ref([]);
 
+//我的发布
+const myPost=ref([])
 
 
 // 筛选参数
@@ -428,14 +431,11 @@ const selectFollow= (follow_id)=>{
 const load = () => {
   count.value += 2;
 };
-const params = computed(() => ({
-  page_num: currentPage.value || 1,
-  page_size: pageSize.value || 30,
-}));
 
-const filteredPosts = computed(() => {
-  return postListStore.postList.filter((post) => post.user_id === 1);
-});
+// const filteredPosts = computed(() => {
+//   console.log(postListStore.postList)
+//   return postListStore.postList.filter((post) => post.user_id === 1);
+// });
 
 const sendVerification =async()=>{
   if (isDisabled.value) return;  // 如果按钮已经禁用，点击无效
@@ -634,7 +634,11 @@ onMounted(async () => {
   otherUserInfo.value = res.data;
   console.log(otherUserInfo.value)
   avatarPreview.value = userStore.getAvatar()
-  await postListStore.getPostList(params.value); // 等待数据加载
+
+  const myPostResult = await getMyPostAPI(); // 等待数据加载
+  myPost.value = myPostResult.data
+  console.log(myPost.value)
+
   await userStore.getPractice(id);
 
   userStore.practiceInfo.forEach((practice) => {
@@ -1161,13 +1165,13 @@ background-color: white;  /* 选中项的背景色 */
 }
 
 .problemlist-item:hover {
-    cursor: pointer;
     transform: translateY(-5px);
     box-shadow: 2px 2px 6px 0px rgba(0, 0, 0, 0.4);
 }
 
 .problemlist-header {
     display: flex;
+    cursor: pointer;
 
 }
 
