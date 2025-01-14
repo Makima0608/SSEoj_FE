@@ -71,9 +71,9 @@
       </div>
       <div v-if="activeMenuIndex==='1'&&!showFollow" class="listContainer">
         <!-- 如果没有任何东西就nothing -->
-        <label v-if="postListStore.postList.length===0">Nothing here.....</label>
+        <label v-if="myPost.length===0">Nothing here.....</label>
         <ul  v-infinite-scroll="load" style="overflow: auto;" class="list" :infinite-scroll-disabled="disabled">
-          <li v-for="post in postListStore.postList" :key="post.post_id" class="list-item">
+          <li v-for="post in myPost" :key="post.post_id" class="list-item">
             <ListItemContent
               :avatar="post.avatar"
               :title="post.post_title"
@@ -707,7 +707,9 @@ onMounted(async () => {
   console.log(otherUserInfo.value)
   avatarPreview.value = userStore.getAvatar()
 
-  await postListStore.getMyPost(id); // 等待数据加载
+
+  const result = await getMyPostAPI(id); // 等待数据加载
+  myPost.value = result.data.posts;
   // console.log(postListStore.postList.value)
 
 
