@@ -189,9 +189,9 @@ const confirmStar = async() => {
     }
     if (starDefault.value || starList.value) {
         ElMessage.success('收藏成功')
+        problemDesc.value.star_status = true
     }
     starDefault.value = false
-    problemDesc.value.star_status = true
     starFormVisible.value = false
 }
 
