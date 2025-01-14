@@ -107,7 +107,7 @@ import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/userStore';
 import { getStudyPlanAPI } from "@/apis/user";
 import { getPostListAPI } from '@/apis/postList';
-import { useKeywordStore } from '@/stores/keywordStore';
+// import { useKeywordStore } from '@/stores/keywordStore';
 
 
 const userStore = useUserStore();
