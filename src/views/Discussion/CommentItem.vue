@@ -117,7 +117,8 @@
 
 <script setup>
 import { onMounted, ref, computed } from 'vue';
-import { getPrimaryCommentAPI, getSecondCommentAPI,commentPostAPI} from '@/apis/comment';
+import { getPrimaryCommentAPI, getSecondCommentAPI,commentPostAPI,likeCommentAPI} from '@/apis/comment';
+import { likePostAPI } from '@/apis/post';
 import { useRouter } from 'vue-router';
 import { transNum } from '@/utils/data_calculate';
 import { subscribeUserAPI, getUserInfoAPI, } from '@/apis/user';
@@ -211,7 +212,7 @@ const postComment = async(content) => {
   }
   if(data.content !=''){
     await commentPostAPI(data)
-    ElMessageBox.error("内容不能为空")
+    ElMessage.success("评论成功")
   }
   else{
     ElMessage.error("内容不能为空")
@@ -251,7 +252,7 @@ const jumpToUser = (id) => {
 
 // 点赞
 const toggleLike = async(item) => {
-  await likeSolutionCommentAPI(item.id, !item.is_good)
+  await likeCommentAPI(item.id, !item.is_good)
   item.like_count += item.is_good ? -1 : 1
   item.is_good = !item.is_good
 }

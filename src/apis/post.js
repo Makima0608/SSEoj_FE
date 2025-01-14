@@ -20,7 +20,7 @@ export const createPostAPI = (params) => {
 export const likePostAPI = (params) => {
   return request({
     url: `/api/post/good/`,
-    method: 'PUT',
+    method: 'POST',
     data:{
       post_title: params.title,
       post_content: params.content
