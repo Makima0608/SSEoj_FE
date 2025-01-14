@@ -19,8 +19,9 @@ export const getSubscribePostAPI = () => {
   })
 }
 
-export const getMyPostAPI = () => {
+export const getMyPostAPI = (params) => {
   return request({
     url: '/api/post/my_post/',
+    params,
 })
 }
