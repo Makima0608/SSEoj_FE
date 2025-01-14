@@ -639,8 +639,9 @@ const changeAvatar = async () => {
   const res = await userStore.updateUserInfo({ avatar: base64File.value });
   if(res){
     avatarPreview.value = base64File.value; // 更新显示的头像
+    const data = await getUserInfoAPI(id)
+    userStore.userInfo = data.data;
     ElMessage.success('头像修改成功');
-    location.reload();
   }
   else{
     ElMessage.error('头像修改失败');
@@ -687,9 +688,10 @@ const tryDelete= (post_id)=>{
   dialogFormVisible1.value = true;
 }
 
-const deletePost = async(id)=>{
-  await deletePostAPI(id);
+const deletePost = async(post_id)=>{
+  await deletePostAPI(post_id);
   ElMessage.success('删除成功');
+  await getMyPostAPI(id);
   dialogFormVisible1.value = false;
 }
 
