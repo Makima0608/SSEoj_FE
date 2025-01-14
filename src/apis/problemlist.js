@@ -37,3 +37,12 @@ export const transferProblemListAPI = (id) => {
         }
     })
 }
+
+// 创建题单
+export const createProblemListAPI = (data) => {
+    return request({
+        url: '/api/problemlist/create/',
+        method: 'POST',
+        data: data
+    })
+}
