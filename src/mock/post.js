@@ -19,3 +19,19 @@ Mock.mock(/\/api\/post\/(\d+)\/information/, 'get', (options) => {
       data: data
     };
 });
+
+
+Mock.mock(/\/api\/post\/good\//, 'post', () => {
+    return {
+        err: null,
+        data: 'success'
+    }
+})
+
+
+Mock.mock(/\/api\/post\/new\//, 'post', () => {
+    return {
+        err: null,
+        data: 'success'
+    }
+})
