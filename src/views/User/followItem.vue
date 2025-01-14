@@ -24,7 +24,8 @@
 <script setup>
 import { ref } from 'vue';
 import { transformDate, getDate} from '@/utils/time';
-import { getAvatar } from '@/utils/basic';
+import { getAvatar } from '@/utils/basic'
+
 
 defineProps({
   avatar: { type: String, required: true }, // 用户头像的 URL
