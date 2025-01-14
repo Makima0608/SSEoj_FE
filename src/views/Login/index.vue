@@ -90,6 +90,9 @@
         <el-form-item label="新密码" :label-width="formLabelWidth">
           <el-input v-model="forgetPassword" autocomplete="off" />
         </el-form-item>
+        <el-form-item label="再输入一遍" :label-width="formLabelWidth">
+          <el-input v-model="forgetPassword_again" autocomplete="off" />
+        </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
@@ -130,7 +133,7 @@ const formLabelWidth = '100px'
 const email_forgot=ref('');
 const verificationCode_forgot=ref('');
 const forgetPassword=ref('')
-
+const forgetPassword_again=ref('')
 // 定义响应式变量
 const isDisabled = ref(false);  // 按钮是否禁用
 const countdown = ref(15);      // 倒计时秒数
@@ -168,20 +171,25 @@ const handleForgotPassword = async () => {
     ElMessage.error('请输入完整信息!!')
   }
   else{
-    const publicKeyPem = `-----BEGIN PUBLIC KEY-----
-  MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKHP3hnFtL1g3bpgDMFAma1MofY9UmInthR8vK5Q9/dYcfdqvzLFRdRCPdeefqGO+BIFfLeCKJi4odn61XJEvp8CAwEAAQ==
-  -----END PUBLIC KEY-----`
-    const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
-    const encrypted = forge.util.encode64(publicKey.encrypt(forgetPassword.value));
-    console.log(encrypted)
-    const res = await userStore.passwordForget({email: email_forgot.value, password_new: encrypted, verification_code:verificationCode_forgot.value});
-    console.log(res)
-    if(res){
-      ElMessage.success('密码修改成功！');
-      dialogFormVisible.value = false;
+    if(forgetPassword.value!=forgetPassword_again.value){
+      const publicKeyPem = `-----BEGIN PUBLIC KEY-----
+    MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKHP3hnFtL1g3bpgDMFAma1MofY9UmInthR8vK5Q9/dYcfdqvzLFRdRCPdeefqGO+BIFfLeCKJi4odn61XJEvp8CAwEAAQ==
+    -----END PUBLIC KEY-----`
+      const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
+      const encrypted = forge.util.encode64(publicKey.encrypt(forgetPassword.value));
+      console.log(encrypted)
+      const res = await userStore.passwordForget({email: email_forgot.value, password_new: encrypted, verification_code:verificationCode_forgot.value});
+      console.log(res)
+      if(res){
+        ElMessage.success('密码修改成功！');
+        dialogFormVisible.value = false;
+      }
+      else{
+        ElMessage.error('密码修改失败！');
+      }
     }
     else{
-      ElMessage.error('密码修改失败！');
+      ElMessage.error('两次输入的密码不一致！')
     }
   }
 
