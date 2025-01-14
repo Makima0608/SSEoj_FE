@@ -35,7 +35,7 @@
             >
                <template #reference>
                   <div class="creator-info" @click="jumpToUser(problemListDetail.creator_info.id)">
-                     <el-avatar :src="problemListDetail.creator_info.avatar">KL</el-avatar>
+                     <el-avatar :src="getAvatar(problemListDetail.creator_info.avatar)">KL</el-avatar>
                      <span class="creator-name">{{ problemListDetail.creator_info.username }}</span>
                   </div>
                </template>
@@ -99,6 +99,7 @@ import { useTagsStore } from '@/stores/tagsStore';
 import { getDifficultColor } from '@/utils/color';
 import { getUserInfoAPI, subscribeUserAPI } from '@/apis/user';
 import { getRatio } from '@/utils/data_calculate';
+import { getAvatar } from '@/utils/basic';
 
 const loadComplete = ref(false)
 const route = useRoute()
@@ -139,7 +140,9 @@ const transferProblemList = () => {
 }
 // 计算进度条
 const calcProgress = (pass_count, problem_count) => {
-    return (pass_count / problem_count * 100).toFixed(1)
+   if (problem_count == 0)
+      return 0.0
+   return (pass_count / problem_count * 100).toFixed(1)
 }
 
 const hoverUserInfo = ref({})

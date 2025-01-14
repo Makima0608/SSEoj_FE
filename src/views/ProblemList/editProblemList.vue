@@ -171,7 +171,7 @@ onMounted(async() => {
 <style scoped>
 .wrapper {
     width: 80%;
-    margin: 30px auto 0px auto;
+    margin: 30px auto 60px auto;
 }
 .autoComplete {
     display: flex;

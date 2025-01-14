@@ -250,7 +250,7 @@
       <label>我创建的</label>
       <div class="problemlist">
         <!-- 如果没有任何东西就nothing -->
-        <label v-if="createdProblemlist.length === 0">Nothing here.....</label>
+        <label v-if="!createdProblemlist">Nothing here.....</label>
         <div v-else v-for="plistItem in createdProblemlist" :key="plistItem.id" class="problemlist-item"
           @click="router.push(`/problemlist/${plistItem.id}`)">
 
@@ -536,7 +536,7 @@ MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKHP3hnFtL1g3bpgDMFAma1MofY9UmInthR8vK5Q9/dYcfdq
   const res= await userStore.passwordForget({email: email.value,verification_code:verificationCode.value, password_new:encrypted});
   if(res){
     ElMessage.success('密码修改成功！');
-    dialogFormVisible = false
+    dialogFormVisible.value = false
   }
   else{
     ElMessage.error('密码修改失败！');
@@ -599,7 +599,8 @@ const changeAvatar = async () => {
 // 获取创建的题单
 const getCreatedProblemList = async (id) => {
   const res = await getCreateProblemListAPI(id)
-  createdProblemlist.value = res.data.problemlists
+  createdProblemlist.value = res.data
+  console.log('--------', createdProblemlist.value)
 }
 
 // 获取默认的收藏
