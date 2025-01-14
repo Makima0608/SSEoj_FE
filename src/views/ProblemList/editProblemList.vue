@@ -174,7 +174,7 @@ const editProblemList = async() => {
 const deleteProblemList = async() => {
   await deleteProblemListAPI(id)
   ElMessage.success("删除成功")
-  dialogVisible=false
+  dialogVisible.value = false
   router.push('/problemlist')
 }
 
