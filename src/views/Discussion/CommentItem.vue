@@ -221,7 +221,7 @@ const postComment = async(content) => {
   window.location.reload();
 }
 const handleCurrentChange = async(val, id) => {
-  const res = await getSecondCommentAPI(props.id, val, 8)
+  const res = await getSecondCommentAPI(props.id, id, val, 8)
   secondLevelComments.value.set(id, {
       count: res.data.count,
       comments: res.data.comments,
