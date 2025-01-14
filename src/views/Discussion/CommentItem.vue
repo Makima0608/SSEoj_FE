@@ -82,7 +82,7 @@
                           <span :class="subitem.is_good ? 'iconfont icon-BxsLike' : 'iconfont icon-BxLike'"
                               @click="toggleLike(subitem)"></span>
                           <span>{{ transNum(subitem.like_count) }}</span>
-                          <span class="replyBtn" @click="clickReply(item.id, subitem.id, subitem.user_info.username)">回复</span>
+                          <span class="replyBtn" @click="clickReply(item.id, subitem.user_info.id, subitem.user_info.username)">回复</span>
                       </div>
                   </div>
                   <el-pagination
@@ -196,10 +196,10 @@ const close2ndComment = (comment_id) => {
   secondLevelComments.value.set(comment_id, item)
 }
 // 点击回复
-const clickReply = (itemId, subitemId, username) => {
+const clickReply = (itemId, id, username) => {
   commentWriterId.value = itemId
   replyData.value.under_comment_id = itemId
-  replyData.value.reply_to_id = subitemId
+  replyData.value.reply_to_id = id
   replyData.value.reply_to_username = username
 }
 // 点击发布
@@ -218,16 +218,17 @@ const postComment = async(content) => {
     ElMessage.error("内容不能为空")
   }
   console.log(data)
+  window.location.reload();
 }
 const handleCurrentChange = async(val, id) => {
-  // const res = await getSolution2ndCommentAPI(props.id, val, 8)
-  // secondLevelComments.value.set(id, {
-  //     count: res.data.count,
-  //     comments: res.data.comments,
-  //     expand: true,
-  //     page_num: val,
-  //     page_size: 8
-  // })
+  const res = await getSecondCommentAPI(props.id, id, val, 8)
+  secondLevelComments.value.set(id, {
+      count: res.data.count,
+      comments: res.data.comments,
+      expand: true,
+      page_num: val,
+      page_size: 8
+  })
 }
 
 // 无限列表加载评论
@@ -252,10 +253,19 @@ const jumpToUser = (id) => {
 
 // 点赞
 const toggleLike = async(item) => {
-  await likeCommentAPI(item.id, !item.is_good)
+  await likeCommentAPI({comment_id: item.id, is_good: !item.is_good})
   item.like_count += item.is_good ? -1 : 1
   item.is_good = !item.is_good
 }
+
+// 新增发布刷新部分
+// **********
+// const add1stComment = (content) => {
+//   const item = {
+    
+//   }
+// }
+// **********
 
 onMounted(async() => {
   await getPost1stComment()

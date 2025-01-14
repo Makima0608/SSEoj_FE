@@ -89,6 +89,9 @@ const params = computed(() => ({
 
 // 计算进度条
 const calcProgress = (pass_count, problem_count) => {
+    if (problem_count == 0) {
+        return 0.0
+    }
     return (pass_count / problem_count * 100).toFixed(1)
 }
 

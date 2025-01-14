@@ -22,6 +22,9 @@ httpInstance.interceptors.request.use(config => {
 httpInstance.interceptors.response.use(
     res => {
         if (res.data.err != null) {
+            const userStore = useUserStore()
+            if (res.data.msg == '未登录' || res.data.msg == '无权查看')
+                userStore.clearUserInfo()
             ElMessage({
                 type: 'warning',
                 message: res.data.msg
@@ -35,7 +38,6 @@ httpInstance.interceptors.response.use(
     },
     e => {
         const useStore = useUserStore()
-        // console.log(e.response)
         ElMessage({
             type: 'warning',
             message: e.response.data.msg

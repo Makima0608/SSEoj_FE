@@ -44,3 +44,22 @@ export const submitProblemAPI = (data) => {
         data: data
     })
 }
+
+// 收藏至默认题单
+export const starToDefaultProblemAPI = (id) => {
+    return request({
+        url: '/api/problem/star/',
+        method: 'POST',
+        data: {
+            id: id
+        }
+    })
+}
+// 收藏至创建题单
+export const starToProblemListAPI = (data) => {
+    return request({
+        url: '/api/problemlist/add_problem/',
+        method: 'POST',
+        data: data
+    })
+}

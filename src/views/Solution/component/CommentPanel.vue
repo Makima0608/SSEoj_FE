@@ -81,7 +81,7 @@
                             <span :class="subitem.is_good ? 'iconfont icon-BxsLike' : 'iconfont icon-BxLike'"
                                 @click="toggleLike(subitem)"></span>
                             <span>{{ transNum(subitem.like_count) }}</span>
-                            <span class="replyBtn" @click="clickReply(item.id, subitem.id, subitem.user_info.username)">回复</span>
+                            <span class="replyBtn" @click="clickReply(item.id, subitem.user_info.id, subitem.user_info.username)">回复</span>
                         </div>
                     </div>
                     <el-pagination
@@ -174,7 +174,7 @@ const getSolution1stComment = async() => {
 }
 // 展开二级评论
 const expand2ndComment = async(comment_id) => {
-    const res = await getSolution2ndCommentAPI(props.id, 1, 8)
+    const res = await getSolution2ndCommentAPI(props.id, comment_id, 1, 8)
     secondLevelComments.value.set(comment_id, {
         count: res.data.count,
         comments: res.data.comments,
@@ -205,17 +205,18 @@ const postComment = async(content) => {
         under_comment_id: replyData.value.under_comment_id
     }
     await commentSolutionAPI(data)
-    console.log(data)
+    window.location.reload();
+    console.log("post comment", data)
 }
 const handleCurrentChange = async(val, id) => {
-    // const res = await getSolution2ndCommentAPI(props.id, val, 8)
-    // secondLevelComments.value.set(id, {
-    //     count: res.data.count,
-    //     comments: res.data.comments,
-    //     expand: true,
-    //     page_num: val,
-    //     page_size: 8
-    // })
+    const res = await getSolution2ndCommentAPI(props.id, id, val, 8)
+    secondLevelComments.value.set(id, {
+        count: res.data.count,
+        comments: res.data.comments,
+        expand: true,
+        page_num: val,
+        page_size: 8
+    })
 }
 
 // 无限列表加载评论

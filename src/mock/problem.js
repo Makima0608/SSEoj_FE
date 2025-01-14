@@ -210,3 +210,17 @@ Mock.mock(/\/api\/problem\/submit\//, 'post', () => {
     data: 'success'
   }
 })
+
+// 模拟收藏题目
+Mock.mock(/\/api\/problemlist\/add_problem\//, 'post', () => {
+  return {
+    err: null,
+    data: 'success'
+  }
+})
+Mock.mock(/\/api\/problem\/star\//, 'post', () => {
+  return {
+    err: null,
+    data: 'success'
+  }
+})

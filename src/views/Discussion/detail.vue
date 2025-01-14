@@ -55,7 +55,7 @@
         <!-- <div class="commentsList">
           <CommentItem :commentsData="commentStore.comments" @reply="handleReply" />
         </div> -->
-        <CommentItem :id="id" class="comment-panel"/>
+        <CommentItem :id="id" class="comment-panel" ref="commentItemRef"/>
       </div>
 
       <!-- <div class="pagination">
@@ -77,6 +77,7 @@ import { transformDate, getDate, getFullDate} from '@/utils/time';
 import ReplyEditor from '@/components/ReplyEditor.vue';
 import { commentPostAPI } from '@/apis/comment';
 import { likePostAPI } from '@/apis/post';
+import { ElMessage } from 'element-plus';
 
 const route = useRoute()
 const router = useRouter()
@@ -129,6 +130,7 @@ const postComment = async(content) => {
     ElMessage.error("内容不能为空")
   }
   console.log(data)
+  window.location.reload();
 }
 
 // const handleCurrentChange = (val) => {
@@ -143,6 +145,11 @@ const handleLike= async(id, is_good) => {
   postStore.post.is_good = !postStore.post.is_good
 }
 
+// 新增发布刷新部分
+// **********
+const commentItemRef = ref(null)
+
+// **********
 
 // 你可以在实际应用中替换为真实的 API 请求
 onMounted(async () => {

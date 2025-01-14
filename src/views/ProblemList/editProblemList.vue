@@ -1,7 +1,10 @@
 <template>
     <layoutNav />
     <div class="wrapper">
-
+        <div>
+            <span class="iconfont icon-chilun" style="font-size: 25px;"></span>
+            <span style="font-size: 25px; margin-left: 10px;">编辑题单</span>
+        </div>
         <div class="header">
             <div>题单类型：</div>
             <el-select
@@ -17,7 +20,7 @@
                     :value="item.value"
                 />
             </el-select>
-            <button @click="createProblemList">创建</button>
+            <button @click="editProblemList">修改</button>
         </div>
         <div class="profile">
             <div class="node">题单名称：</div>
@@ -90,16 +93,19 @@ import { useTagsStore } from '@/stores/tagsStore';
 import { getDifficultColor } from '@/utils/color';
 import FEditor from '@/components/FEditor.vue';
 import { getRatio } from '@/utils/data_calculate';
-import { createProblemListAPI } from '@/apis/problemlist';
+import { editProblemListAPI, getProblemListDetailAPI } from '@/apis/problemlist';
 import { ElMessage } from 'element-plus';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
   
 const tagsStore = useTagsStore()
 const router = useRouter()
+const route = useRoute()
+const id = route.params.id
 
 const type = ref(true)
 const title = ref('')
 const problems = ref([])
+let originProblems = []
 const keyword = ref('')
 const summaryRef = ref(null)
 
@@ -128,24 +134,37 @@ const selectOptions = [
     }
 ]
 
-const createProblemList = async() => {
+const editProblemList = async() => {
     if (!title.value.trim()) {
         ElMessage.warning('标题不能为空')
         return
     }
+    const problem_ids = problems.value.map(item => item.id)
+    const origin_ids = originProblems.map(item => item.id)
     const data = {
-        title: title.value,
+        name: title.value,
         summary: summaryRef.value.getContent(),
-        type: type.value,
-        problems: problems.value.map(item => item.id)
+        add: problem_ids.filter(item => !origin_ids.includes(item)),
+        delete: origin_ids.filter(item => !problem_ids.includes(item))
     }
-    await createProblemListAPI(data)
-    ElMessage.success('创建成功')
+    console.log(data)
+    await editProblemListAPI(id, data)
+    ElMessage.success('修改成功')
     router.push('/problemlist')
 }
 
+const getProblemListDetail = async() => {
+    const res = await getProblemListDetailAPI(id)
+    console.log()
+    title.value = res.data.name
+    type.value = res.data.is_public
+    problems.value = res.data.problems
+    originProblems = [...res.data.problems]
+    summaryRef.value.setContent(res.data.summary)
+}
 onMounted(async() => {
     await tagsStore.getTags()
+    await getProblemListDetail()
 }) 
 </script>
 
@@ -165,6 +184,7 @@ onMounted(async() => {
 }
 
 .header {
+    margin-top: 20px;
     display: flex;
     justify-content: flex-end;
     align-items: center;

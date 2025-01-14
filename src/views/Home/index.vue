@@ -211,8 +211,8 @@ const handleSearch = () => {
       });
     else{
       router.push({
-      path: '/discussion',
-      query: { keyword:search_query.value }
+        path: '/problemset',
+        query: { keyword: search_query.value },
       });
     }
   } else {

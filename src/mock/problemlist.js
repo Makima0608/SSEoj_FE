@@ -11,6 +11,7 @@ Mock.mock(/\/api\/problemlist\/(\d+)\//, 'get', (options) => {
         "star_status": true,
         "problem_count": 47,
         "pass_count": 11,
+        "is_public": true,
         "problems": [
             {
                 "pass_status": false,
@@ -91,7 +92,8 @@ Mock.mock(/\/api\/problemlist\/(?=\?)/, 'get', (options) => {
                         },
                         "problem_count": 71,
                         "pass_count": 60,
-                        "star_count": 25
+                        "star_count": 25,
+                        "is_public": true
                     },
                     {
                         "id": 42,
@@ -104,7 +106,8 @@ Mock.mock(/\/api\/problemlist\/(?=\?)/, 'get', (options) => {
                         },
                         "problem_count": 70,
                         "pass_count": 54,
-                        "star_count": 65
+                        "star_count": 65,
+                        "is_public": true
                     }
                 ]
             }
@@ -126,7 +129,8 @@ Mock.mock(/\/api\/problemlist\/(?=\?)/, 'get', (options) => {
                     },
                     "problem_count": 58,
                     "pass_count": 10,
-                    "star_count": 43
+                    "star_count": 43,
+                    "is_public": true
                 }
                 ]
             }
@@ -137,6 +141,14 @@ Mock.mock(/\/api\/problemlist\/(?=\?)/, 'get', (options) => {
 
 // 模拟创建题单
 Mock.mock(/\/api\/problemlist\/create\//, 'post', () => {
+    return {
+        err: null,
+        data: 'success'
+    }
+})
+
+// 模拟编辑题单
+Mock.mock(/\/api\/problemlist\/(\d+)\//, 'put', () => {
     return {
         err: null,
         data: 'success'

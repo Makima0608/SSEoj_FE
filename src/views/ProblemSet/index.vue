@@ -222,6 +222,8 @@ const selectDiff = async (diff) => {
 }
 
 onMounted(async () => {
+    const route = useRoute()
+    keyword.value = route.query.keyword
     await getProblemSet(params.value)
     await tagsStore.getTags()
     await getProblemNum()
