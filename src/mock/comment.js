@@ -78,8 +78,8 @@ Mock.mock(/\/api\/post\/(\d+)\/comments\/(\d+)\//, 'get', ()=> {
               "content": "nostrud occaecat consectetur",
               "create_time": "2024-08-12 09:39:48",
               "like_count": 100,
-              "reply_to_id": 81,
-              "reply_to_name": "哀诚"
+              "reply_to_id": null,
+              "reply_to_name": null,
           },
           {
               "id": 97,
@@ -92,8 +92,8 @@ Mock.mock(/\/api\/post\/(\d+)\/comments\/(\d+)\//, 'get', ()=> {
               "content": "proident aliqua minim eiusmod non",
               "create_time": "2025-04-10 01:42:05",
               "like_count": 66,
-              "reply_to_id": 97,
-              "reply_to_name": "厍榕融"
+              "reply_to_id": null,
+              "reply_to_name": null,
           }
       ]
   }

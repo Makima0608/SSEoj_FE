@@ -19,3 +19,11 @@ Mock.mock('http://localhost:8080/api/identity/login/', 'post', (options) => {
     };
   }
 });
+
+
+Mock.mock(/\/api\/identity\/register\//, 'post', ()=>{
+    return {
+        err: null,
+        data: 'success'
+    }
+})

@@ -25,6 +25,7 @@
                 </div>
             </template>
         </el-select>
+        <div @click="router.push('/problemlist/create')">创建我的题单</div>
     </div>
     <div class="wrapper">
         <div class="problemlist">
