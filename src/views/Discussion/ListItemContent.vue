@@ -1,7 +1,7 @@
 <template>
   <div class="list-item-content">
     <div class="user_content">
-      <img :src="getAvatar(avatar)" class="avatar" />
+      <img :src="avatar" class="avatar" />
       <h3 class="username">{{ username }}</h3>
     </div>
     <div class="post_content">

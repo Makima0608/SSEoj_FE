@@ -45,11 +45,12 @@ const postDiscussion = async () => {
 
     // 调用 store 方法发布帖子
     const result = await createPost({ post_title: title.value, post_content: content });
-    if (!result.err) {
-      ElMessage.success('发布成功！');
-    } else {
-      ElMessage.error('发布失败，请重试');
-    }
+    // console.log(result)
+    // if (!result.err) {
+    ElMessage.success('发布成功！');
+    // } else {
+    //   ElMessage.error('发布失败，请重试');
+    // }
   } catch (error) {
     ElMessage.error(error.message || '发布过程中出现错误，请稍后重试');
   }
