@@ -65,7 +65,7 @@
       <div class="rightContainer">
         <div class="noticeContainer">
           <label>NOTICE</label>
-          <ul v-infinite-scroll="load" class="noticeBar" style="overflow: auto">
+          <ul  class="noticeBar" style="overflow: auto">
             <li v-for="noticeItem in notices" :key="noticeItem.id" class="infinite-list-item">
               <span class="noticeId">{{ noticeItem.id }}</span>
               <span class="noticeContent">{{ noticeItem.content }}</span>
@@ -279,6 +279,7 @@ box-shadow:0 0 5px rgba(0, 0, 0, .5);
 display: flex;
 flex-direction: column; /* 子元素按列排列 */
 align-items: center; /* 水平居中对齐 */
+max-height: 800px;
 
 }
 
