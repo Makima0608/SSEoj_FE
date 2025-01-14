@@ -54,7 +54,8 @@ export const logoutAPI = () => {
 // 获取用户创建的题单
 export const getCreateProblemListAPI = (id) => {
     return request({
-        url: `/api/user/${id}/create_problemlist/`
+        url: `/api/user/${id}/create_problemlist/`,
+        method: 'GET',
     })
 }
 
@@ -62,6 +63,7 @@ export const getCreateProblemListAPI = (id) => {
 export const getDefaultProblemListAPI = (id) => {
   return request({
     url: `/api/user/${id}/default_problemlist/`,
+    method: 'GET',
   })
 }
 
@@ -145,3 +147,16 @@ export const getStudyPlanAPI= (id) =>{
   })
 }
 
+export const getFollowingAPI= (id) =>{
+  return request({
+    url: `/api/user/${id}/following/`,
+    method: 'GET',
+  })
+}
+
+export const getFollowerAPI= (id) =>{
+  return request({
+    url: `/api/user/${id}/follower/`,
+    method: 'GET',
+  })
+}

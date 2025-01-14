@@ -4,11 +4,11 @@
   <layoutNav />
   <div class="wrapper">
     <div class="menuContainer">
-      <el-menu
+      <el-menu v-if="!showFollow"
         :default-active="activeMenuIndex"
         class="menu"
         mode="vertical"
-        @select="handleSelect"
+        @select="handleSelect1"
         background-color="rgb(200, 200, 200);"
         text-color="grey"
         active-text-color="black"
@@ -19,25 +19,40 @@
         <el-menu-item index="2">题目收藏</el-menu-item>
         <el-menu-item index="3">我的题单</el-menu-item>
         <!-- <el-menu-item index="4">我的计划</el-menu-item> -->
-        <el-menu-item index="4">个人设置</el-menu-item>
+        <el-menu-item v-if="userStore.userInfo.id===otherUserInfo.id" index="4">个人设置</el-menu-item>
+      </el-menu>
+
+      <el-menu v-else
+        :default-active="activeMenuIndexFollow"
+        class="menu"
+        mode="vertical"
+        @select="handleSelect2"
+        background-color="rgb(200, 200, 200);"
+        text-color="grey"
+        active-text-color="black"
+        :ellipsis="false"
+      >
+
+        <el-menu-item index="1">粉丝</el-menu-item>
+        <el-menu-item index="2">关注</el-menu-item>
       </el-menu>
     </div>
 
-    <div v-if="activeMenuIndex==='1'|| activeMenuIndex==='2'" class="infomationContainer">
+    <div v-if="activeMenuIndex==='1'|| activeMenuIndex==='2' || showFollow" class="infomationContainer">
       <!-- 原来的 infomationContainer 内容 -->
       <div class="userHeader">
         <el-avatar :src="avatarPreview" class="userAvatar" />
         <div class="userContainer">
           <div class="nameContainer">
-            <label class="userName">{{ userStore.userInfo.username }}</label>
+            <label class="userName">{{ otherUserInfo.username }}</label>
             <div class="stasticContainer">
-              <div class="stasticItem">
+              <div class="stasticItem" @click="loadFollow">
                 <label>粉丝</label>
-                <span class="value">{{ userStore.userInfo.subscribers_count }}</span>
+                <span class="value">{{ otherUserInfo.subscribers_count }}</span>
               </div>
-              <div class="stasticItem">
+              <div class="stasticItem" @click="loadFollow">
                 <label>关注</label>
-                <span class="value">{{ userStore.userInfo.subscribing_count }}</span>
+                <span class="value">{{ otherUserInfo.subscribing_count }}</span>
               </div>
               <div class="stasticItem">
                 <label>提交</label>
@@ -49,10 +64,10 @@
               </div>
             </div>
           </div>
-          <label type="text" class="profile">{{ userStore.userInfo.profile }}</label>
+          <label type="text" class="profile">{{ otherUserInfo.profile }}</label>
         </div>
       </div>
-      <div v-if="activeMenuIndex==='1'" class="listContainer">
+      <div v-if="activeMenuIndex==='1'&&!showFollow" class="listContainer">
         <!-- 如果没有任何东西就nothing -->
         <label v-if="filteredPosts.length === 0">Nothing here.....</label>
         <ul v-else v-infinite-scroll="load" class="list" :infinite-scroll-disabled="disabled">
@@ -71,7 +86,49 @@
         </ul>
       </div>
 
-      <div v-else-if="activeMenuIndex ==='2'" class="starProblem">
+      <div v-if="showFollow&&activeMenuIndexFollow==='1'" class="listContainer">
+        <!-- 如果没有任何东西就nothing -->
+        <label v-if="followers.length === 0">你还没有粉丝...</label>
+        <ul v-else class="list">
+          <li v-for="follower in followers" :key="follower.id" class="list-item"
+          @click="selectFollow(follower.id)">
+            <followItem
+              :avatar="follower.avatar"
+              :profile="follower.profile"
+              :username="follower.username"
+              :isFollower="true"
+              :follower_is_mutual_following="follower.is_mutual_following"
+              :follower_is_followed_by_me="follower.is_followed_by_me"
+              :following_is_mutual_following="null"
+              :following_is_followed_by_me="null"
+
+            />
+          </li>
+        </ul>
+      </div>
+
+      <div v-if="showFollow && activeMenuIndexFollow==='2'" class="listContainer">
+        <!-- 如果没有任何东西就nothing -->
+        <label v-if="followings.length === 0">你还没关注别人...</label>
+        <ul v-else class="list">
+          <li v-for="following in followings" :key="following.id" class="list-item"
+          @click="selectFollow(following.id)">
+            <followItem
+              :avatar="following.avatar"
+              :profile="following.profile"
+              :username="following.username"
+              :isFollower="false"
+              :follower_is_mutual_following="null"
+              :follower_is_followed_by_me="null"
+              :following_is_mutual_following="following.is_mutual_following"
+              :following_is_followed_by_me="following.is_followed_by_me"
+
+            />
+          </li>
+        </ul>
+      </div>
+
+      <div v-if="activeMenuIndex ==='2'&&!showFollow" class="starProblem">
         <el-table :data="defaultProblemlist" stripe :row-style="{ height: '70px' }"
             @row-click="rowSelected">
             <el-table-column label="状态" width="80">
@@ -108,7 +165,7 @@
           <div class="nameSetContainer">
             <div class="nameInputContainer">
               <label>用户名</label>
-              <input v-model="newUsername" type="text" :placeholder="userStore.userInfo.username || 'Nothing here...'"/>
+              <input v-model="newUsername" type="text" :placeholder="otherUserInfo.username || 'Nothing here...'"/>
             </div>
             <el-button type="info" plain @click="changeUsername">确认修改</el-button>
           </div>
@@ -116,7 +173,7 @@
           <div class="profileSetContainer">
             <div class="profileInputContainer">
               <label>简介</label>
-              <input v-model="newProfile" type="text" :placeholder="userStore.userInfo.profile || 'Nothing here...'"/>
+              <input v-model="newProfile" type="text" :placeholder="otherUserInfo.profile || 'Nothing here...'"/>
             </div>
             <el-button type="info" plain @click="changeProfile">确认修改</el-button>
           </div>
@@ -254,6 +311,7 @@ import layoutNav from '@/views/Layout/components/layoutNav.vue';
 import { useUserStore } from '@/stores/userStore';
 import { usePostListStore } from '@/stores/postListStore';
 import ListItemContent from '@/views/Discussion/ListItemContent.vue';
+import followItem from '@/views/User/followItem.vue/';
 import { ElMessage } from 'element-plus'; // 引入 Element Plus 提示组件
 import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
@@ -263,11 +321,14 @@ import { useTagsStore } from '@/stores/tagsStore';
 import { getDifficultColor } from '@/utils/color';
 import { getIdentityAPI } from '@/apis/user';
 import { getRatio } from '@/utils/data_calculate';
-
+import {getFollowingAPI ,getFollowerAPI} from'@/apis/user';
 
 
 const router = useRouter()
 const route = useRoute()
+
+const otherUserInfo=ref({})
+
 const id = route.params.id
 const tagsStore = useTagsStore()
 const userStore = useUserStore();
@@ -279,6 +340,12 @@ const activeMenuIndex=ref('1');
 const dialogFormVisible=ref(false);
 const formLabelWidth = '100px'
 
+const showFollow= ref(false);
+const followings=ref([]);
+const followers=ref([]);
+const activeMenuIndexFollow=ref('1');
+
+
 const newUsername = ref('');
 const newProfile = ref('');
 const oldPassword = ref('');
@@ -287,7 +354,7 @@ const confirmPassword = ref('');
 const verificationCode = ref('');
 const forgetPassword = ref('');
 const email=ref('');
-const avatarPreview = ref(userStore.getAvatar()); // 默认显示当前用户头像
+const avatarPreview = ref(''); // 默认显示当前用户头像
 
 const tryCount = ref(0);
 const passCount = ref(0);
@@ -304,6 +371,7 @@ const defaultProblemlist = ref([]);
 const starProblemList=ref([]);
 
 
+
 // 筛选参数
 const keyword = ref(undefined)
 const sort_type = ref('idAsc')
@@ -314,6 +382,8 @@ const test_params = computed(() => ({
     keyword: keyword.value || undefined,
     sort_type: sort_type.value || "idAsc"
 }))
+
+
 
 
 // 定义响应式变量
@@ -334,9 +404,31 @@ let timer = null;               // 用于存储定时器
 
 
 // 监听菜单切换
-const handleSelect = (index) => {
+const handleSelect1 = (index) => {
   activeMenuIndex.value = index; // 更新当前选中的 menu
 };
+
+const handleSelect2 = (index) => {
+  activeMenuIndexFollow.value = index; // 更新当前选中的 menu
+};
+
+// 加载粉丝信息
+const loadFollow = async()=>{
+  showFollow.value=true;
+  // 获取当前用户的关注列表
+  const res1=await getFollowerAPI(id);
+  followers.value = res1.data;
+  const res2=await getFollowingAPI(id);
+  followings.value = res2.data;
+  console.log(followings.value)
+}
+
+const selectFollow= (follow_id)=>{
+  router.push(`/user/${follow_id}`)
+  activeMenuIndex.value = '1'
+  activeMenuIndexFollow.value = '1'
+  showFollow.value=false;
+}
 
 const load = () => {
   count.value += 2;
@@ -497,6 +589,7 @@ const changeAvatar = async () => {
   if(res){
     avatarPreview.value = base64File.value; // 更新显示的头像
     ElMessage.success('头像修改成功');
+    location.reload();
   }
   else{
     ElMessage.error('头像修改失败');
@@ -533,7 +626,8 @@ const calcProgress = (pass_count, problem_count) => {
 // }
 
 const rowSelected = (row) => {
-    router.push(`/problem/${row.id}/description`)
+    router.push(`/problem/${row.id}/description`);
+    location.reload();
 }
 
 onMounted(async () => {
@@ -541,7 +635,9 @@ onMounted(async () => {
     clearInterval(timer);
   }
   const res = await getUserInfoAPI(id);
-  userStore.userInfo = res.data;
+  otherUserInfo.value = res.data;
+  console.log(otherUserInfo.value)
+  avatarPreview.value = userStore.getAvatar()
   await postListStore.getPostList(params.value); // 等待数据加载
   await userStore.getPractice(id);
 
