@@ -156,7 +156,7 @@ const toggleFollow = (msg) => {
    hoverUserInfo.value.subscribers_count += msg? 1: -1
    subscribeUserAPI(hoverUserInfo.value.id, msg)
 }
-
+// 跳转用户界面
 const jumpToUser = (id) => {
     console.log(id)
     const userWindow = window.open('', '_blank')
