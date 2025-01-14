@@ -652,16 +652,15 @@ const changeAvatar = async () => {
 
 // 获取创建的题单
 const getCreatedProblemList = async (id) => {
-  console.log('--------', createdProblemlist.value)
+
   const res = await getCreateProblemListAPI(id)
   createdProblemlist.value = res.data
-  console.log('--------', createdProblemlist.value)
+
 }
 
 // 获取默认的收藏
 const getDefaultProblemList = async (id) => {
   const res = await getDefaultProblemListAPI(id)
-  console.log(res)
   defaultProblemlist.value = res.data.problems
 }
 
