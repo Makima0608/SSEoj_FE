@@ -107,6 +107,7 @@ import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/userStore';
 import { getStudyPlanAPI } from "@/apis/user";
 import { getPostListAPI } from '@/apis/postList';
+import { useKeywordStore } from '@/stores/keywordStore';
 
 
 const userStore = useUserStore();
@@ -210,9 +211,10 @@ const handleSearch = () => {
         query: { keyword:search_query.value }
       });
     else{
+      const keywordStore = useKeywordStore();
+      keywordStore.setKeyword(search_query.value);
       router.push({
         path: '/problemset',
-        query: { keyword: search_query.value },
       });
     }
   } else {

@@ -107,6 +107,7 @@ import { useRouter } from 'vue-router';
 import tagView from './components/tagView.vue';
 import diffView from './components/diffView.vue';
 import { getRatio } from '@/utils/data_calculate';
+import { useKeywordStore } from '@/stores/keywordStore';
 
 const router = useRouter()
 const tagsStore = useTagsStore()
@@ -222,8 +223,9 @@ const selectDiff = async (diff) => {
 }
 
 onMounted(async () => {
-    const route = useRoute()
-    keyword.value = route.query.keyword
+    const keywordStore = useKeywordStore()
+    keyword.value = keywordStore.keyword;
+    keywordStore.clearKeyword();
     await getProblemSet(params.value)
     await tagsStore.getTags()
     await getProblemNum()
