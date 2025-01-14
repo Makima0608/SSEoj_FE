@@ -21,7 +21,7 @@ export const starProblemListAPI = (id, is_star) => {
         url: '/api/problemlist/star/',
         method: 'POST',
         data: {
-            problem_id: id,
+            problemlist_id: id,
             is_star: is_star
         }
     })
