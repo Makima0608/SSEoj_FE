@@ -130,6 +130,7 @@ const postComment = async(content) => {
     ElMessage.error("内容不能为空")
   }
   console.log(data)
+  window.location.reload();
 }
 
 // const handleCurrentChange = (val) => {
