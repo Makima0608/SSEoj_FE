@@ -20,7 +20,7 @@
                     :value="item.value"
                 />
             </el-select>
-            <button @click="createProblemList">创建</button>
+            <button @click="editProblemList">修改</button>
         </div>
         <div class="profile">
             <div class="node">题单名称：</div>
@@ -36,6 +36,7 @@
             <el-autocomplete
                 v-model="keyword"
                 :fetch-suggestions="querySearchAsync"
+                :trigger-on-focus="false"
                 placeholder="请输入题目编号或名称"
                 clearable=true
                 @select="handleSelect"   
@@ -92,7 +93,7 @@ import { useTagsStore } from '@/stores/tagsStore';
 import { getDifficultColor } from '@/utils/color';
 import FEditor from '@/components/FEditor.vue';
 import { getRatio } from '@/utils/data_calculate';
-import { createProblemListAPI } from '@/apis/problemlist';
+import { editProblemListAPI, getProblemListDetailAPI } from '@/apis/problemlist';
 import { ElMessage } from 'element-plus';
 import { useRoute, useRouter } from 'vue-router';
   
@@ -104,6 +105,7 @@ const id = route.params.id
 const type = ref(true)
 const title = ref('')
 const problems = ref([])
+let originProblems = []
 const keyword = ref('')
 const summaryRef = ref(null)
 
@@ -132,24 +134,37 @@ const selectOptions = [
     }
 ]
 
-const createProblemList = async() => {
+const editProblemList = async() => {
     if (!title.value.trim()) {
         ElMessage.warning('标题不能为空')
         return
     }
+    const problem_ids = problems.value.map(item => item.id)
+    const origin_ids = originProblems.map(item => item.id)
     const data = {
-        title: title.value,
+        name: title.value,
         summary: summaryRef.value.getContent(),
-        type: type.value,
-        problems: problems.value.map(item => item.id)
+        add: problem_ids.filter(item => !origin_ids.includes(item)),
+        delete: origin_ids.filter(item => !problem_ids.includes(item))
     }
-    await createProblemListAPI(data)
-    ElMessage.success('创建成功')
+    console.log(data)
+    await editProblemListAPI(id, data)
+    ElMessage.success('修改成功')
     router.push('/problemlist')
 }
 
+const getProblemListDetail = async() => {
+    const res = await getProblemListDetailAPI(id)
+    console.log()
+    title.value = res.data.name
+    type.value = res.data.is_public
+    problems.value = res.data.problems
+    originProblems = [...res.data.problems]
+    summaryRef.value.setContent(res.data.summary)
+}
 onMounted(async() => {
     await tagsStore.getTags()
+    await getProblemListDetail()
 }) 
 </script>
 

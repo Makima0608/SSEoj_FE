@@ -33,6 +33,7 @@
             <el-autocomplete
                 v-model="keyword"
                 :fetch-suggestions="querySearchAsync"
+                :trigger-on-focus="false"
                 placeholder="请输入题目编号或名称"
                 clearable=true
                 @select="handleSelect"   

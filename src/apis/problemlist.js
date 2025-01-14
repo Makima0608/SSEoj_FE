@@ -46,3 +46,11 @@ export const createProblemListAPI = (data) => {
         data: data
     })
 }
+// 编辑题单
+export const editProblemListAPI = (problemlist_id, data) => {
+    return request({
+        url: `/api/problemlist/${problemlist_id}/`,
+        method: 'PUT',
+        data: data
+    })
+}
