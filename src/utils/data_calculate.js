@@ -28,3 +28,10 @@ export function transNum(n) {
     else
         return (n / 1000000).toFixed(1).toString + ' M'
 }
+
+export function getRatio(m, n) {
+    if (n == 0)
+        return '0.0%'
+    else 
+        return (m / n * 100).toFixed(1) + '%'
+}

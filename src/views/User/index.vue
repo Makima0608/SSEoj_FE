@@ -89,7 +89,7 @@
             </el-table-column>
             <el-table-column label="通过率">
                   <template #default="scope">
-                     <span>{{ (scope.row.pass_count / scope.row.attempt_count * 100).toFixed(1) + '%'
+                     <span>{{ getRatio(scope.row.pass_count, scope.row.attempt_count)
                         }}</span>
                   </template>
             </el-table-column>
@@ -255,6 +255,7 @@ import { getProblemListAPI } from "@/apis/problemlist";
 import { useTagsStore } from '@/stores/tagsStore';
 import { getDifficultColor } from '@/utils/color';
 import { getIdentityAPI } from '@/apis/user';
+import { getRatio } from '@/utils/data_calculate';
 
 const router = useRouter()
 const route = useRoute()
