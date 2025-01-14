@@ -134,9 +134,11 @@ const postComment = async(content) => {
 //   commentStore.getComments(page_params.value);
 // }
 
-const handleLike= (id, is_good) => {
+const handleLike= async(id, is_good) => {
   const change = !is_good
-  likePostAPI({id, en});
+  await likePostAPI({id, change});
+  postStore.post.like_count += is_good ? -1 : 1
+  postStore.post.is_good = is_good
 }
 
 
