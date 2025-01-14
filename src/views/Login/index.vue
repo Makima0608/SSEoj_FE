@@ -168,11 +168,11 @@ const sendVerification =async(email,type)=>{
 
 const handleForgotPassword = async () => {
 
-  if(!email_forgot.value.trim()||!verificationCode_forgot.value.trim()||!forgetPassword.value.trim()){
+  if(!email_forgot.value.trim()||!verificationCode_forgot.value.trim()||!forgetPassword.value.trim()||!forgetPassword_again.value.trim()){
     ElMessage.error('请输入完整信息!!')
   }
   else{
-    if(forgetPassword.value!=forgetPassword_again.value){
+    if(forgetPassword.value===forgetPassword_again.value){
       const publicKeyPem = `-----BEGIN PUBLIC KEY-----
     MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKHP3hnFtL1g3bpgDMFAma1MofY9UmInthR8vK5Q9/dYcfdqvzLFRdRCPdeefqGO+BIFfLeCKJi4odn61XJEvp8CAwEAAQ==
     -----END PUBLIC KEY-----`
