@@ -50,20 +50,19 @@ export const useUserStore = defineStore('user', () => {
 
             // 如果是修改密码（传入的是旧密码和新密码）
             if (updatedInfo.oldPassword && updatedInfo.newPassword) {
-                await passwordChangeAPI(updateUserInfo.id,updatedInfo.oldPassword, updatedInfo.newPassword)
-                alert('密码修改成功！')
+                await passwordChangeAPI({id:updateUserInfo.id, password_before: updatedInfo.oldPassword, password_new:updatedInfo.newPassword})
             }
-            console.log('User info updated successfully:', userInfo.value)
+
+            return true;
         } catch (error) {
-            console.error('Error updating user info:', error)
-            alert('用户信息更新失败！')
+            return false;
         }
     }
 
     const passwordForget = async (params) => {
         await passwordForgetAPI(params)
-        alert('重置密码邮件已发送，请查收并修改您的新密码！')
         console.log('Password forget successfully:', params)
+        return true
     }
 
     const getPractice = async (id) => {
