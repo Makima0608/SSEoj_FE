@@ -23,7 +23,7 @@ httpInstance.interceptors.response.use(
     res => {
         if (res.data.err != null) {
             const userStore = useUserStore()
-            if (res.data.msg == '未登录' || res.data.msg == '无权查看')
+            if (res.data.msg == '未登录' || res.data.msg == '无权查看' || res.data.msg == '请先登录')
                 userStore.clearUserInfo()
             ElMessage({
                 type: 'warning',
