@@ -11,7 +11,7 @@
               >
                   <template #reference>
                       <div class="userInfo" @click="jumpToUser(item.user_info.id)">
-                          <el-avatar :size="35" style="font-size: 12px;" :src="item.user_info.avatar">BB</el-avatar>
+                          <el-avatar :size="35" style="font-size: 12px;" :src="getAvatar(item.user_info.avatar)">BB</el-avatar>
                           <span style="margin-left: 5px;">{{ item.user_info.username }}</span>
                       </div>
                   </template>
@@ -44,7 +44,7 @@
                           >
                               <template #reference>
                                   <div class="userInfo" @click="jumpToUser(subitem.user_info.id)">
-                                      <el-avatar :size="25" style="font-size: 12px;" :src="subitem.user_info.avatar">KL</el-avatar>
+                                      <el-avatar :size="25" style="font-size: 12px;" :src="getAvatar(subitem.user_info.avatar)">KL</el-avatar>
                                       <span style="margin-left: 5px; font-size: 14px;">{{ subitem.user_info.username }}</span>
                                   </div>
                               </template>
@@ -122,6 +122,7 @@ import { subscribeUserAPI, getUserInfoAPI, } from '@/apis/user';
 import { transformDate } from '@/utils/time';
 import ReplyEditor from '@/components/ReplyEditor.vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
+import { getAvatar } from '@/utils/basic';
 
 const props = defineProps(['id'])
 const isLoading = ref(false)
@@ -249,8 +250,6 @@ const jumpToUser = (id) => {
 // 点赞
 const toggleLike = (item) => {
   likeSolutionCommentAPI(item.id, !item.is_good)
-  item.like_count += item.is_good ? -1 : 1
-  item.is_good = !item.is_good
 }
 
 onMounted(async() => {

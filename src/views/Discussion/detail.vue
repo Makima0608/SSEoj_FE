@@ -6,9 +6,9 @@
         <!-- 标题 -->
         <div class="titleContainer">
           <label>{{ postStore.post.post_title }}</label>
-          <div class="likeContainer">
-            <span v-if="!postStore.post.is_good" class="iconfont icon-BxLike" @click="handleLike()"></span>
-            <span v-else class="iconfont icon-BxsLike" @click="handleLike()"></span>
+          <div class="likeContainer" @click="handleLike(postStore.post.id,postStore.post.is_good)">
+            <span v-if="!postStore.post.is_good" class="iconfont icon-BxLike"></span>
+            <span v-else class="iconfont icon-BxsLike" ></span>
             <label class="likeCount">{{ postStore.post.like_count }}</label>
           </div>
           <div class="commentCount">
@@ -76,6 +76,7 @@ import CommentItem from '@/views/Discussion/CommentItem.vue';
 import { transformDate, getDate, getFullDate} from '@/utils/time';
 import ReplyEditor from '@/components/ReplyEditor.vue';
 import { commentPostAPI } from '@/apis/comment';
+import { likePostAPI } from '@/apis/post';
 
 const route = useRoute()
 const router = useRouter()
@@ -129,13 +130,13 @@ const postComment = async(content) => {
   console.log(data)
 }
 
-const handleCurrentChange = (val) => {
-  commentStore.getComments(page_params.value);
-}
+// const handleCurrentChange = (val) => {
+//   commentStore.getComments(page_params.value);
+// }
 
-const handleLike= () => {
-  const is_good = postStore.post.is_good
-  postStore.likePost({id, is_good})
+const handleLike= (id, is_good) => {
+  const change = !is_good
+  likePostAPI({id, en});
 }
 
 
