@@ -111,6 +111,7 @@ import { getIdentityAPI, registerAPI } from '@/apis/user';
 import 'element-plus/theme-chalk/el-message.css';
 import router from '@/router';
 import forge from 'node-forge';
+import { END_ALIGNMENT } from 'element-plus/es/components/virtual-list/src/defaults';
 
 // Data properties
 const email = ref('');
@@ -163,7 +164,7 @@ const sendVerification =async(email,type)=>{
 }
 
 const handleForgotPassword = async () => {
-  if(email.value.trim()||verificationCode_forgot.value.trim()||forgetPassword.value.trim()){
+  if(!email_forgot.value.trim()||!verificationCode_forgot.value.trim()||!forgetPassword.value.trim()){
     ElMessage.error('请输入完整信息!!')
   }
   else{
@@ -172,6 +173,7 @@ const handleForgotPassword = async () => {
   -----END PUBLIC KEY-----`
     const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
     const encrypted = forge.util.encode64(publicKey.encrypt(forgetPassword.value));
+    console.log(encrypted)
     const res = await userStore.passwordForget({email: email_forgot.value, password_new: encrypted, verification_code:verificationCode_forgot.value});
     console.log(res)
     if(res){

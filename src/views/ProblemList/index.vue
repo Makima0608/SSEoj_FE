@@ -25,6 +25,9 @@
                 </div>
             </template>
         </el-select>
+        <div @click="router.push('/problemlist/create')" class="createProblemList">
+            <span class="iconfont icon-tianjia" style="font-size: 16px; margin-right: 5px;"></span>创建我的题单
+        </div>
     </div>
     <div class="wrapper">
         <div class="problemlist">
@@ -261,5 +264,14 @@ onMounted(async () => {
 
 .el-progress {
     margin-top: 10px;
+}
+.createProblemList {
+    color: #3A4C7A;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity .3s linear;
+}
+.createProblemList:hover {
+    opacity: 60%;
 }
 </style>

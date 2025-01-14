@@ -2,7 +2,7 @@ import Mock from 'mockjs'
 
 // 获取题库
 Mock.mock(/\/api\/problemset\/(?!\w)/, 'get', (options) => {
-
+    console.log(options.url)
     const query = options.url.split('?')[1];
     const params = new URLSearchParams(query);
     const page = params.get('page_num');
@@ -86,6 +86,41 @@ Mock.mock(/\/api\/problemset\/(?!\w)/, 'get', (options) => {
                     "attempt_count": 1000,
                     "difficulty": 3
                 },
+                ]
+            }
+        }
+    }
+    else {
+        return {
+            err: null,
+            data: {
+                count: 10,
+                problems: [
+                    {
+                        "status": false,
+                        "id": 1001,
+                        "name": "你好，世界",
+                        "tags": [
+                            1,
+                            2,
+                            3
+                        ],
+                        "pass_count": 550,
+                        "attempt_count": 1000,
+                        "difficulty": 5
+                    },
+                    {
+                        "status": true,
+                        "id": 1002,
+                        "name": "A+B",
+                        "tags": [
+                            3,
+                            4
+                        ],
+                        "pass_count": 666,
+                        "attempt_count": 1000,
+                        "difficulty": 3
+                    }
                 ]
             }
         }

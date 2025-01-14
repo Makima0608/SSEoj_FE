@@ -44,7 +44,7 @@
                           >
                               <template #reference>
                                   <div class="userInfo" @click="jumpToUser(subitem.user_info.id)">
-                                      <el-avatar :size="25" style="font-size: 12px;" :src="getAvatar(subitem.user_info.avatar)">KL</el-avatar>
+                                      <el-avatar :size="25" style="font-size: 12px;" :src="getAvatar(subitem.user_info.avatar)">BB</el-avatar>
                                       <span style="margin-left: 5px; font-size: 14px;">{{ subitem.user_info.username }}</span>
                                   </div>
                               </template>
@@ -54,7 +54,7 @@
                           </el-popover>
                           <div style="margin-top: 13px; margin-left: 8px;" v-if="subitem.reply_to_id">reply to</div>
                           <el-popover
-                              @show="showUserInfoCard(subitem.user_info.id)"
+                              @show="showUserInfoCard(subitem.reply_to_id)"
                               @hide="userInfo = {}"
                               popper-style="background:transparent; border:none; box-shadow:none; margin-top:10px"
                               show-arrow=false

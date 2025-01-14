@@ -8,7 +8,7 @@
                     <span class="iconfont icon-sousuo"></span>
                     <span class="filter-text">搜索</span>
                     <input class="searchInput" type="text" style="display: none;" placeholder="search something..."
-                        v-model="keyword" @keydown.enter="console.log('search', keyword)" />
+                        v-model="keyword" @keydown.enter="searchProblem" />
                     <!-- </div> -->
                 </div>
                 <el-popover 
@@ -72,13 +72,13 @@
                                     }}</span>
                             </template>
                         </el-table-column>
-                        <el-table-column label="通过率">
+                        <el-table-column label="通过率" width="80">
                             <template #default="scope">
-                                <span>{{ (scope.row.pass_count / scope.row.attempt_count * 100).toFixed(1) + '%'
+                                <span>{{ getRatio(scope.row.pass_count, scope.row.attempt_count)
                                     }}</span>
                             </template>
                         </el-table-column>
-                        <el-table-column label="难度">
+                        <el-table-column label="难度" width="80">
                             <template #default="scope">
                                 <span :style="{ color: getDifficultColor(scope.row.difficulty) }">Lv.{{
                                     scope.row.difficulty }}</span>
@@ -106,6 +106,7 @@ import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
 import tagView from './components/tagView.vue';
 import diffView from './components/diffView.vue';
+import { getRatio } from '@/utils/data_calculate';
 
 const router = useRouter()
 const tagsStore = useTagsStore()
@@ -168,6 +169,10 @@ const handleOutSideClick = (e) => {
     }
 }
 document.addEventListener('click', handleOutSideClick)
+// 搜索题目
+const searchProblem = async () => {
+    await getProblemSet(params.value)
+}
 
 // 更新筛选参数
 const handleCurrentChange = async () => {

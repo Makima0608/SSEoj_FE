@@ -17,6 +17,7 @@ import SolutionDetail from '@/views/Solution/solutionDetail.vue'
 import ProblemlistDetail from '@/views/ProblemList/problemlistDetail.vue'
 import CreateDiscussion from '@/views/Discussion/createDiscussion.vue'
 import CreateProblem from '@/views/ProblemSet/createProblem.vue'
+import CreateProblemList from '@/views/ProblemList/createProblemList.vue'
 
 
 
@@ -140,6 +141,11 @@ const router = createRouter({
       path: '/problem/create',
       name: 'createProblem',
       component: CreateProblem
+    },
+    {
+      path: '/problemlist/create',
+      name: 'createProblemList',
+      component: CreateProblemList
     },
     {
       path: '/:patchMatch(.*)*',
