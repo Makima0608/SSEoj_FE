@@ -54,7 +54,6 @@ Mock.mock(/\/api\/user\/subscribe\//, 'post', (options) => {
 })
 
 
-
 Mock.mock(/\/api\/user\/(\d+)\/practice\//, 'get', (options) => {
     console.log(options.url)
     return {
@@ -93,8 +92,6 @@ Mock.mock(/\/api\/user\/(\d+)\/practice\//, 'get', (options) => {
     }
 })
 
-
-
 Mock.mock(/\/api\/user\/(\d+)\/default_problemlist\//, 'get', (options) => {
     // console.log(options.body)
     return {
@@ -131,7 +128,6 @@ Mock.mock(/\/api\/user\/(\d+)\/default_problemlist\//, 'get', (options) => {
     }
 })
 
-
 Mock.mock(/\/api\/user\/user_name_change\//, 'put', ()=>{
     return {
         err: null,
@@ -167,10 +163,48 @@ Mock.mock(/\/api\/user\/password_forget\//, 'put', ()=>{
     }
 })
 
-
 Mock.mock(/\/api\/identity\/send_email\//, 'post', ()=>{
     return {
         err: null,
         data: 'success'
+    }
+})
+
+Mock.mock(/\/api\/user\/(\d+)\/create_problemlist\//, 'get', () => {
+    const data = [
+        {
+            "id": 15,
+            "title": "好啊噢捏当反而干脆逐步也许每当哎呀1414141414141415252525252525",
+            "problem_count": 13,
+            "type": true
+        },
+        {
+            "id": 63,
+            "title": "哎当只要抿操作画穿过哪个搡",
+            "problem_count": 86,
+            "type": false
+        },
+        {
+            "id": 43,
+            "title": "关于与此同时统统并且一同划拨到一边敲拨",
+            "problem_count": 80,
+            "type": true
+        },
+        {
+            "id": 42,
+            "title": "关于与此同时统统并且一同划拨到一边敲拨",
+            "problem_count": 80,
+            "type": true
+        },
+        {
+            "id": 41,
+            "title": "关于与此同时统统并且一同划拨到一边敲拨",
+            "problem_count": 80,
+            "type": true
+        }
+    ]
+    return {
+        err: null,
+        data: data
     }
 })

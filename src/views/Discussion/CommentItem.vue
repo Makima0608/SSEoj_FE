@@ -80,7 +80,7 @@
                           <span :class="subitem.is_good ? 'iconfont icon-BxsLike' : 'iconfont icon-BxLike'"
                               @click="toggleLike(subitem)"></span>
                           <span>{{ transNum(subitem.like_count) }}</span>
-                          <span class="replyBtn" @click="clickReply(item.id, subitem.id, subitem.user_info.username)">回复</span>
+                          <span class="replyBtn" @click="clickReply(item.id, subitem.user_info.id, subitem.user_info.username)">回复</span>
                       </div>
                   </div>
                   <el-pagination
@@ -192,10 +192,10 @@ const close2ndComment = (comment_id) => {
   secondLevelComments.value.set(comment_id, item)
 }
 // 点击回复
-const clickReply = (itemId, subitemId, username) => {
+const clickReply = (itemId, id, username) => {
   commentWriterId.value = itemId
   replyData.value.under_comment_id = itemId
-  replyData.value.reply_to_id = subitemId
+  replyData.value.reply_to_id = id
   replyData.value.reply_to_username = username
 }
 // 点击发布
@@ -252,6 +252,15 @@ const toggleLike = (item) => {
   item.like_count += item.is_good ? -1 : 1
   item.is_good = !item.is_good
 }
+
+// 新增发布刷新部分
+// **********
+// const add1stComment = (content) => {
+//   const item = {
+    
+//   }
+// }
+// **********
 
 onMounted(async() => {
   await getPost1stComment()

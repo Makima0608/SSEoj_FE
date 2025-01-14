@@ -4,7 +4,15 @@
     <div v-if="loadComplete">
         <div class="pCard">
             <div class="cardLeft">
-                <div class="pId">{{ id }}</div>
+                <div class="pId">
+                    {{ id }}
+                    <span 
+                        v-if="problemDesc.pass_status" 
+                        class="iconfont icon-duigou1"
+                        style="margin-left: 6px; font-size: 18px;"
+                    ></span>
+                    
+                </div>
                 <div class="pName" :style="{ 'border-bottom': `3px solid ${getDifficultColor(problemDesc.difficulty)}` }">{{ problemDesc.name }}
                 </div>
                 <div class="source">题目来源：{{ problemDesc.source }}</div>
@@ -16,6 +24,15 @@
             <div class="cardRight">
                 <div>时间限制：{{ transTime(problemDesc.time_limit) }}</div>
                 <div>内存限制：{{ transMem(problemDesc.memory_limit) }}</div>
+                <div class="star-block" @click="showStarForm">
+                    <span>+ 收藏</span>
+                    <span 
+                        :class="problemDesc.star_status? 'iconfont icon-shoucang': 'iconfont icon-shoucangdanse'"
+                        style="font-size: 22px; margin-left: 4px;"
+                    >
+                    </span>
+                </div>
+                
             </div>
         </div>
 
@@ -69,6 +86,42 @@
                 </el-collapse-item>
             </el-collapse>
         </div>
+
+
+        <el-dialog v-model="starFormVisible" style="width: 400px;">
+            <div style="font-size: 20px; font-weight: 500; margin-bottom: 20px;">我的收藏</div>
+            <el-scrollbar height="200px">
+                <el-checkbox-group v-model="starList">
+                    <el-checkbox label="默认题单" size="large" :value=-1 >
+                        <template #default>
+                            <span class="iconfont icon-suoding1"></span>
+                            <span style="margin-left: 3px; font-size:15px">默认题单</span>
+                        </template>
+                    </el-checkbox>
+                    <el-checkbox v-for="(item, index) in problemlists" 
+                        :key="index" 
+                        :value="item.id"
+                        size="large"
+                    >
+                        <template #default>
+                            <span v-if="!item.type" class="iconfont icon-suoding1"></span>
+                            <span 
+                                style="
+                                    display: inline-block; 
+                                    white-space: nowrap; 
+                                    overflow: hidden; 
+                                    text-overflow: ellipsis;
+                                    width: 200px;
+                                    margin-left: 3px;
+                                    font-size: 15px;
+                                "
+                            >{{ item.title }}</span>
+                        </template>
+                    </el-checkbox>
+                </el-checkbox-group>
+            </el-scrollbar>
+            <el-button @click="confirmStar">确定</el-button>
+        </el-dialog>
     </div>
 
 </template>
@@ -81,6 +134,8 @@ import { ElMessage } from 'element-plus';
 import { useTagsStore } from '@/stores/tagsStore';
 import { getDifficultColor } from '@/utils/color';
 import { getProblemDescAPI } from "@/apis/problem";
+import { getCreateProblemListAPI } from '@/apis/user';
+import { useUserStore } from '@/stores/userStore';
 import '@/assets/base-el-tag.css'
 
 const route = useRoute()
@@ -88,8 +143,11 @@ const loadComplete = ref(false)
 const id = route.params.id
 
 const problemDesc = ref({})
-
+const starFormVisible = ref(false)
 const tagsStore = useTagsStore()
+const userStore = useUserStore()
+const problemlists = ref([])
+const starList = ref([])
 
 const getProblemDesc = async (id) => {
     const res = await getProblemDescAPI(id)
@@ -97,9 +155,24 @@ const getProblemDesc = async (id) => {
     console.log(problemDesc)
 }
 
+// 获取自己创建题单
+const getCreateProblemList = async() => {
+    console.log(userStore?.userInfo?.id)
+    if (!userStore?.userInfo?.id) {
+        ElMessage.warning('请先登录')
+    }
+    const res = await getCreateProblemListAPI(userStore.userInfo.id)
+    problemlists.value = res.data
+}
+const confirmStar = () => {
+    console.log(starList.value)
+    starFormVisible.value = false
+}
+
 onMounted(async () => {
     await getProblemDesc(id)
     await tagsStore.getTags()
+    await getCreateProblemList()
     loadComplete.value = true
 })
 
@@ -125,6 +198,10 @@ const copyText = async (txt) => {
     }
 }
 
+const showStarForm = () => {
+    starFormVisible.value = true
+}
+
 </script>
 
 <style scoped>
@@ -143,9 +220,22 @@ const copyText = async (txt) => {
 }
 
 .cardRight {
+    display: flex;
+    flex-direction: column;
     color: #696666;
     font-size: 15px;
     padding-top: 10px;
+    gap: 5px;
+}
+.cardRight .star-block {
+    margin: 0px 0px 0px auto; display: flex; 
+    align-items: center;
+    color: #009999;
+    transition: opacity .3s linear;
+    cursor: pointer;
+}
+.cardRight .star-block:hover {
+    opacity: 60%;
 }
 
 .pId {
@@ -232,5 +322,19 @@ const copyText = async (txt) => {
     padding: 4px 10px 4px 10px;
     margin: 4px 4px 4px 4px;
     color: black;
+}
+.el-dialog {
+    display: flex;
+    flex-direction: column;
+}
+.el-dialog .el-button {
+    justify-content: flex-end;
+    margin-left: auto;
+    margin-top: 20px;
+}
+.el-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
 }
 </style>
