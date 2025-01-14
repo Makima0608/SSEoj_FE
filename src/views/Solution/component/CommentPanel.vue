@@ -205,7 +205,8 @@ const postComment = async(content) => {
         under_comment_id: replyData.value.under_comment_id
     }
     await commentSolutionAPI(data)
-    console.log(data)
+    window.location.reload();
+    console.log("post comment", data)
 }
 const handleCurrentChange = async(val, id) => {
     // const res = await getSolution2ndCommentAPI(props.id, val, 8)

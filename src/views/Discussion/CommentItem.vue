@@ -218,6 +218,7 @@ const postComment = async(content) => {
     ElMessage.error("内容不能为空")
   }
   console.log(data)
+  window.location.reload();
 }
 const handleCurrentChange = async(val, id) => {
   // const res = await getSolution2ndCommentAPI(props.id, val, 8)
