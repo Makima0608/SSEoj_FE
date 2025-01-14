@@ -259,14 +259,8 @@
             </div>
             <div class= "info">
               <span class="problemCount">{{ 'Count:'+ plistItem.problem_count }}</span>
-              <el-switch
-                class="ml-2"
-                v-model="isPubilc"
-                inline-prompt
-                active-text="Public"
-                inactive-text="Private"
-                style="--el-switch-on-color: black; --el-switch-off-color: grey"
-              />
+              <span v-if="plistItem.type" class="isPublic">PRIVATE</span>
+              <span v-if="!plistItem.type" class="isPublic">PUBLIC</span>
             </div>
         </div>
       </div>
@@ -1216,6 +1210,10 @@ background-color: white;  /* 选中项的背景色 */
   column-gap: 40px;
   min-height: 150px;
   /* background: green; */
+}
+
+.isPublic{
+  margin-left: 50px;
 }
 
 </style>
