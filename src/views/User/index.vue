@@ -70,7 +70,7 @@
       <div v-if="activeMenuIndex==='1'&&!showFollow" class="listContainer">
         <!-- 如果没有任何东西就nothing -->
         <label v-if="filteredPosts.length === 0">Nothing here.....</label>
-        <ul v-else v-infinite-scroll="load" class="list" :infinite-scroll-disabled="disabled">
+        <ul v-else v-infinite-scroll="load" style="overflow: auto;" class="list" :infinite-scroll-disabled="disabled">
           <li v-for="post in filteredPosts" :key="post.post_id" class="list-item"
           @click="router.push(`/discussion/${post.post_id}`)">
             <ListItemContent
@@ -89,7 +89,7 @@
       <div v-if="showFollow&&activeMenuIndexFollow==='1'" class="listContainer">
         <!-- 如果没有任何东西就nothing -->
         <label v-if="followers.length === 0">你还没有粉丝...</label>
-        <ul v-else class="list">
+        <ul v-infinite-scroll="" style="overflow: auto;" v-else class="list">
           <li v-for="follower in followers" :key="follower.id" class="list-item"
           @click="selectFollow(follower.id)">
             <followItem
@@ -110,7 +110,7 @@
       <div v-if="showFollow && activeMenuIndexFollow==='2'" class="listContainer">
         <!-- 如果没有任何东西就nothing -->
         <label v-if="followings.length === 0">你还没关注别人...</label>
-        <ul v-else class="list">
+        <ul  v-infinite-scroll="load" style="overflow: auto;" v-else class="list">
           <li v-for="following in followings" :key="following.id" class="list-item"
           @click="selectFollow(following.id)">
             <followItem
@@ -251,22 +251,16 @@
       <div class="problemlist">
         <!-- 如果没有任何东西就nothing -->
         <label v-if="!createdProblemlist">Nothing here.....</label>
-        <div v-else v-for="plistItem in createdProblemlist" :key="plistItem.id" class="problemlist-item"
-          @click="router.push(`/problemlist/${plistItem.id}`)">
+        <div v-else v-for="plistItem in createdProblemlist" :key="plistItem.id" class="problemlist-item">
 
-            <div class="problemlist-header">
-              <span class="problemlist-title">{{ plistItem.id + '.' + plistItem.title }}</span>
+            <div class="problemlist-header" >
+              <span class="problemlist-title" @click="router.push(`/problemlist/${plistItem.id}`)">{{ plistItem.id + '.' + plistItem.title }}</span>
+              <span class="iconfont icon-chilun" @click="router.push"></span>
             </div>
             <div class= "info">
               <span class="problemCount">{{ 'Count:'+ plistItem.problem_count }}</span>
-              <el-switch
-                class="ml-2"
-                v-model="isPubilc"
-                inline-prompt
-                active-text="Public"
-                inactive-text="Private"
-                style="--el-switch-on-color: black; --el-switch-off-color: grey"
-              />
+              <span v-if="plistItem.type" class="isPublic">PRIVATE</span>
+              <span v-if="!plistItem.type" class="isPublic">PUBLIC</span>
             </div>
         </div>
       </div>
@@ -783,7 +777,7 @@ onMounted(async () => {
   backdrop-filter: blur(20px);
   box-shadow:0 0 5px rgba(0, 0, 0, .5);
   background: transparent;
-  max-height: 700px;
+  max-height: 600px;
   min-height: 300px;
   padding:5px;
   display: flex;
@@ -1218,5 +1212,16 @@ background-color: white;  /* 选中项的背景色 */
   min-height: 150px;
   /* background: green; */
 }
+
+.isPublic{
+  margin-left: 50px;
+}
+
+.icon-chilun{
+  margin-left: 20px;
+  font-size: 25px;
+}
+
+
 
 </style>

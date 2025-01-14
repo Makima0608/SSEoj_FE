@@ -199,6 +199,79 @@ Mock.mock(/\/api\/user\/(\d+)\/following\//, 'get', ()=>{
           "is_following_me": true,
           "is_followed_by_me": true
         },
+
+        {
+          "id": 10,
+          "username": "dasdasdad",
+          "avatar": "base64",
+          "profile": "这个人很勤快很21312312312312快很勤快很勤快",
+          "is_mutual_following": true,
+          "is_following_me": true,
+          "is_followed_by_me": true
+        },
+        {
+          "id": 10,
+          "username": "dasdasdad",
+          "avatar": "base64",
+          "profile": "这个人很勤快很21312312312312快很勤快很勤快",
+          "is_mutual_following": true,
+          "is_following_me": true,
+          "is_followed_by_me": true
+        },
+        {
+          "id": 10,
+          "username": "dasdasdad",
+          "avatar": "base64",
+          "profile": "这个人很勤快很21312312312312快很勤快很勤快",
+          "is_mutual_following": true,
+          "is_following_me": true,
+          "is_followed_by_me": true
+        },
+        {
+          "id": 10,
+          "username": "dasdasdad",
+          "avatar": "base64",
+          "profile": "这个人很勤快很21312312312312快很勤快很勤快",
+          "is_mutual_following": true,
+          "is_following_me": true,
+          "is_followed_by_me": true
+        },
+        {
+          "id": 10,
+          "username": "dasdasdad",
+          "avatar": "base64",
+          "profile": "这个人很勤快很21312312312312快很勤快很勤快",
+          "is_mutual_following": true,
+          "is_following_me": true,
+          "is_followed_by_me": true
+        },
+        {
+          "id": 10,
+          "username": "dasdasdad",
+          "avatar": "base64",
+          "profile": "这个人很勤快很21312312312312快很勤快很勤快",
+          "is_mutual_following": true,
+          "is_following_me": true,
+          "is_followed_by_me": true
+        },
+        {
+          "id": 10,
+          "username": "dasdasdad",
+          "avatar": "base64",
+          "profile": "这个人很勤快很21312312312312快很勤快很勤快",
+          "is_mutual_following": true,
+          "is_following_me": true,
+          "is_followed_by_me": true
+        },
+        {
+          "id": 10,
+          "username": "dasdasdad",
+          "avatar": "base64",
+          "profile": "这个人很勤快很21312312312312快很勤快很勤快",
+          "is_mutual_following": true,
+          "is_following_me": true,
+          "is_followed_by_me": true
+        },
       ]
     }
 })

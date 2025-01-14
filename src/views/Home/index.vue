@@ -65,7 +65,7 @@
       <div class="rightContainer">
         <div class="noticeContainer">
           <label>NOTICE</label>
-          <ul v-infinite-scroll="load" class="noticeBar" style="overflow: auto">
+          <ul  class="noticeBar" style="overflow: auto">
             <li v-for="noticeItem in notices" :key="noticeItem.id" class="infinite-list-item">
               <span class="noticeId">{{ noticeItem.id }}</span>
               <span class="noticeContent">{{ noticeItem.content }}</span>
@@ -107,7 +107,7 @@ import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/userStore';
 import { getStudyPlanAPI } from "@/apis/user";
 import { getPostListAPI } from '@/apis/postList';
-import { useKeywordStore } from '@/stores/keywordStore';
+// import { useKeywordStore } from '@/stores/keywordStore';
 
 
 const userStore = useUserStore();
@@ -271,6 +271,7 @@ onMounted(async () => {
 
 .wrapper_post{
 width: 75%;
+height: 800px;
 background:transparent;
 border-radius: 12px;
 backdrop-filter: blur(20px);
@@ -278,6 +279,7 @@ box-shadow:0 0 5px rgba(0, 0, 0, .5);
 display: flex;
 flex-direction: column; /* 子元素按列排列 */
 align-items: center; /* 水平居中对齐 */
+max-height: 800px;
 
 }
 
@@ -321,7 +323,7 @@ margin-top: 25px; /* 与菜单之间的间距 */
 margin-bottom: 25px; /* 与菜单之间的间距 */
 width: 95%; /* 与 menu_main 的宽度一致 */
 text-align: center;
-height: 80%; /* 自动根据内容调整高度 */
+/* 自动根据内容调整高度 */
 }
 .infinite-list-wrapper .list {
 padding: 0;
