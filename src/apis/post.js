@@ -28,3 +28,13 @@ export const likePostAPI = (params) => {
     }
   })
 }
+
+export const deletePostAPI = (params) => {
+  return request({
+    url: `/api/post/delete/`,
+    method: 'DELETE',
+    data:{
+      post_id:params
+    }
+  })
+}

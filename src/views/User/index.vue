@@ -35,7 +35,9 @@
 
         <el-menu-item index="1">粉丝</el-menu-item>
         <el-menu-item index="2">关注</el-menu-item>
+        <el-menu-item index="3">做题情况</el-menu-item>
       </el-menu>
+      <el-button v-if="showFollow" plain type="info" class="btn_back" @click="showFollow=false">返回</el-button>
     </div>
 
     <div v-if="activeMenuIndex==='1'|| activeMenuIndex==='2' || showFollow" class="infomationContainer">
@@ -71,8 +73,7 @@
         <!-- 如果没有任何东西就nothing -->
         <label v-if="!myPost">Nothing here.....</label>
         <ul  v-infinite-scroll="load" style="overflow: auto;" class="list" :infinite-scroll-disabled="disabled">
-          <li v-for="post in myPost" :key="post.post_id" class="list-item"
-          @click="router.push(`/discussion/${post.post_id}`)">
+          <li v-for="post in myPost" :key="post.post_id" class="list-item">
             <ListItemContent
               :avatar="post.avatar"
               :title="post.post_title"
@@ -81,7 +82,9 @@
               :commentCount="post.comment_count"
               :likeCount="post.like_count"
               v-model="selectedPost"
+              @click="router.push(`/discussion/${post.post_id}`)"
             />
+            <el-button plain type="danger" class="btn_delete" @click="tryDelete(post.post_id)">DELETE</el-button>
           </li>
         </ul>
       </div>
@@ -130,6 +133,37 @@
 
       <div v-if="activeMenuIndex ==='2'&&!showFollow" class="starProblem">
         <el-table :data="defaultProblemlist" stripe :row-style="{ height: '70px' }"
+            @row-click="rowSelected">
+            <el-table-column label="状态" width="80">
+               <template #default="scope">
+                  <span v-if="scope.row.pass_status" class="iconfont icon-duigou1" style="text-align: center; font-size: 20px;"></span>
+               </template>
+            </el-table-column>
+            <el-table-column prop="id" label="编号" width="100" />
+            <el-table-column prop="name" label="题目名称" />
+            <el-table-column label="标签">
+               <template #default="scope">
+                  <span v-for="tagId in scope.row.tags" :key="tagId">{{ tagsStore.idToTag(tagId) + " "
+                     }}</span>
+               </template>
+            </el-table-column>
+            <el-table-column label="通过率">
+                  <template #default="scope">
+                     <span>{{ getRatio(scope.row.pass_count, scope.row.attempt_count)
+                        }}</span>
+                  </template>
+            </el-table-column>
+            <el-table-column label="难度">
+                  <template #default="scope">
+                     <span :style="{ color: getDifficultColor(scope.row.difficulty) }">Lv.{{
+                        scope.row.difficulty }}</span>
+                  </template>
+            </el-table-column>
+         </el-table>
+      </div>
+
+      <div v-if="activeMenuIndexFollow ==='3'&& showFollow" class="starProblem">
+        <el-table :data="userStore.practiceInfo" stripe :row-style="{ height: '70px' }"
             @row-click="rowSelected">
             <el-table-column label="状态" width="80">
                <template #default="scope">
@@ -211,7 +245,7 @@
 
           <div class="btnContainer">
             <el-button type="info" plain @click="changePassword">修改密码</el-button>
-            <el-button type="success" plain  @click="dialogFormVisible = true">忘记密码</el-button>
+            <el-button type="success" plain  @click="dialogFormVisible2 = true">忘记密码</el-button>
           </div>
         </div>
     </div>
@@ -266,7 +300,26 @@
       </div>
     </div>
 
-    <el-dialog v-model="dialogFormVisible" title="Fogotten Your Passwords?" width="500" top="300px" >
+    <!-- 删除帖子弹窗 -->
+    <el-dialog
+      v-model="dialogFormVisible1"
+      title="WARNING"
+      width="500"
+      :before-close="handleClose"
+    >
+      <span>帖子会被永久删除哦...</span>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="dialogFormVisible1 = false">Cancel</el-button>
+          <el-button type="primary" @click="deletePost(deletePostId)">
+            Confirm
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
+
+    <!-- 忘记密码弹窗 -->
+    <el-dialog v-model="dialogFormVisible2" title="Fogotten Your Passwords?" width="500" top="300px" >
       <el-form :model="form">
         <el-form-item label="邮箱" :label-width="formLabelWidth">
           <el-input v-model="email" autocomplete="off" />
@@ -288,7 +341,7 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">Cancel</el-button>
+          <el-button @click="dialogFormVisible2 = false">Cancel</el-button>
           <el-button type="primary" @click="handleForgotPassword">
             Confirm
           </el-button>
@@ -318,6 +371,7 @@ import { getIdentityAPI } from '@/apis/user';
 import { getRatio } from '@/utils/data_calculate';
 import {getFollowingAPI ,getFollowerAPI} from'@/apis/user';
 import {  getMyPostAPI } from '@/apis/postList'; // 假设你有一个获取帖子的 API 方法
+import {deletePostAPI} from '@/apis/post';
 
 
 const router = useRouter()
@@ -333,7 +387,8 @@ const count = ref(0);
 const currentPage = ref(1);
 const pageSize = ref(30);
 const activeMenuIndex=ref('1');
-const dialogFormVisible=ref(false);
+const dialogFormVisible1=ref(false);
+const dialogFormVisible2=ref(false);
 const formLabelWidth = '100px'
 
 const showFollow= ref(false);
@@ -368,6 +423,7 @@ const starProblemList=ref([]);
 
 //我的发布
 const myPost=ref([])
+const deletePostId=ref('');
 
 
 // 筛选参数
@@ -531,7 +587,7 @@ MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKHP3hnFtL1g3bpgDMFAma1MofY9UmInthR8vK5Q9/dYcfdq
   const res= await userStore.passwordForget({email: email.value,verification_code:verificationCode.value, password_new:encrypted});
   if(res){
     ElMessage.success('密码修改成功！');
-    dialogFormVisible.value = false
+    dialogFormVisible2.value = false
   }
   else{
     ElMessage.error('密码修改失败！');
@@ -623,7 +679,18 @@ const calcProgress = (pass_count, problem_count) => {
 
 const rowSelected = (row) => {
     router.push(`/problem/${row.id}/description`);
-    location.reload();
+    // location.reload();
+}
+
+const tryDelete= (post_id)=>{
+  deletePostId.value=post_id ;
+  dialogFormVisible1.value = true;
+}
+
+const deletePost = async(id)=>{
+  await deletePostAPI(id);
+  ElMessage.success('删除成功');
+  dialogFormVisible1.value = false;
 }
 
 onMounted(async () => {
@@ -1226,6 +1293,14 @@ background-color: white;  /* 选中项的背景色 */
   font-size: 25px;
 }
 
+.btn_back{
+  margin: auto;
+  width: 100px;
 
+}
+
+.btn_delete{
+  margin-left: 20px;
+}
 
 </style>
