@@ -54,3 +54,10 @@ export const editProblemListAPI = (problemlist_id, data) => {
         data: data
     })
 }
+
+export const deleteProblemListAPI = (problemlist_id) => {
+  return request({
+    url: `/api/problemlist/${problemlist_id}/`,
+    method: 'DELETE'
+  })
+}
