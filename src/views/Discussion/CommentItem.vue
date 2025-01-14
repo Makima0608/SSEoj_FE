@@ -250,8 +250,10 @@ const jumpToUser = (id) => {
 }
 
 // 点赞
-const toggleLike = (item) => {
-  likeSolutionCommentAPI(item.id, !item.is_good)
+const toggleLike = async(item) => {
+  await likeSolutionCommentAPI(item.id, !item.is_good)
+  item.like_count += item.is_good ? -1 : 1
+  item.is_good = !item.is_good
 }
 
 onMounted(async() => {
