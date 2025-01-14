@@ -174,3 +174,35 @@ Mock.mock(/\/api\/identity\/send_email\//, 'post', ()=>{
         data: 'success'
     }
 })
+
+Mock.mock(/\/api\/user\/(\d+)\/follower\//, 'get', ()=>{
+    return {
+      data: [
+        {
+          "id": 10,
+          "username": "a11111",
+          "avatar": "base64",
+          "profile": "这个人很勤快很21312312312312快很勤快很勤快",
+          "is_mutual_following": true,
+          "is_following_me": true,
+          "is_followed_by_me": true
+        },
+      ]
+    }
+})
+
+Mock.mock(/\/api\/user\/(\d+)\/following\//, 'get', ()=>{
+    return {
+      data: [
+        {
+          "id": 10,
+          "username": "dasdasdad",
+          "avatar": "base64",
+          "profile": "这个人很勤快很21312312312312快很勤快很勤快",
+          "is_mutual_following": true,
+          "is_following_me": true,
+          "is_followed_by_me": true
+        },
+      ]
+    }
+})
