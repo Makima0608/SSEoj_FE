@@ -1,7 +1,10 @@
 <template>
     <layoutNav />
     <div class="wrapper">
-
+        <div>
+            <span class="iconfont icon-chilun" style="font-size: 25px;"></span>
+            <span style="font-size: 25px; margin-left: 10px;">编辑题单</span>
+        </div>
         <div class="header">
             <div>题单类型：</div>
             <el-select
@@ -166,6 +169,7 @@ onMounted(async() => {
 }
 
 .header {
+    margin-top: 20px;
     display: flex;
     justify-content: flex-end;
     align-items: center;
