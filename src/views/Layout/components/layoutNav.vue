@@ -16,9 +16,7 @@
                     </template>
                     <template #default>
                         <div class="avatarDropdown">
-                            <p>111</p>
-                            <p>222</p>
-                            <p>333</p>
+                            <p @click="router.push(`/user/${userStore.userInfo.id}`)">个人主页</p>
                             <p @click="logout">退出登录</p>
                         </div>
                     </template>

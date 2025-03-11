@@ -565,6 +565,8 @@ const changePassword = async () => {
     const res= await userStore.updateUserInfo({id:userStore.userInfo.id, oldPassword: encryptedOld, newPassword: encryptedNew });  // 更新密码
     if(res){
       ElMessage.success('密码修改成功！');
+      userStore.clearUserInfo()
+      router.push('/login')
     }
     else{
       ElMessage.error('密码修改失败！');
@@ -590,6 +592,8 @@ MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKHP3hnFtL1g3bpgDMFAma1MofY9UmInthR8vK5Q9/dYcfdq
   if(res){
     ElMessage.success('密码修改成功！');
     dialogFormVisible2.value = false
+    userStore.clearUserInfo()
+    router.push('/login')
   }
   else{
     ElMessage.error('密码修改失败！');
